@@ -5,12 +5,19 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const mongoose = require('mongoose');
 
-
+//import file di api
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var caricaDati = require('./routes/caricaDati');
 var login = require('./routes/login');
-mongoose.connect('mongodb+srv://fraCok:fraCok@cluster0.c9u75.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', { useNewUrlParser: true, useUnifiedTopology: true })
+var addUser = require('./routes/addUser');
+var addEvent = require('./routes/addEvent');
+var addFavorite = require('./routes/addFavorite');
+
+//connesione al database
+mongoose.connect(`mongodb+srv://fraCok:fraCok@cluster0.c9u75.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`);
+
+
 var app = express();
 
 // view engine setup
@@ -27,6 +34,10 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/caricaDati',caricaDati);
 app.use('/login',login);
+app.use('/addUser',addUser);
+app.use('/addEvent',addEvent);
+app.use('/addFavorite',addFavorite);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
