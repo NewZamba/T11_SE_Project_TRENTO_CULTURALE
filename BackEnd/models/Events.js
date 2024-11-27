@@ -7,8 +7,7 @@ const event_schema = new Schema({
     location_event: {type: String, required: true},
     date_event: {type: Date, required: true},
     tag_event: {
-        type: Enumerator, 
-        enum: ['tag1', 'tag2', 'tag3'], 
+        type: Number,
         required: true
     },
     description_event: {type: String, required: true},
