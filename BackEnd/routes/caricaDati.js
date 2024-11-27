@@ -6,7 +6,8 @@ const mongoose = require("mongoose");
 /* GET users listing. */
 router.get('/', function(req, res, next)
 {
-    mongoose.connect('mongodb+srv://fraCok:fraCok@cluster0.c9u75.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', { useNewUrlParser: true, useUnifiedTopology: true })
+    const url = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.c9u75.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
+    mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
         .then(() => {
             console.log("Connessione al database riuscita");
             // Creazione di un oggetto fittizio
