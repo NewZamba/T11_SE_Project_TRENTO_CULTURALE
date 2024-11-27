@@ -18,10 +18,10 @@ router.post('/', async function (req, res, next) {
         }
         // Se email e password sono corrette
         res.body = JSON.stringify(user);
-        res.status(200).json({message: "Login riuscito", user});
+        return res.status(200).json({message: "Login riuscito", user});
     } catch (error) {
         console.error("Errore durante il login:", error);
-        res.status(500).json({message: "Errore del server"});
+        return res.status(500).json({message: "Errore del server"});
     }
 });
 
