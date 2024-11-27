@@ -3,14 +3,14 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-
+const mongoose = require('mongoose');
 
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var caricaDati = require('./routes/caricaDati');
 var login = require('./routes/login');
-
+mongoose.connect('mongodb+srv://fraCok:fraCok@cluster0.c9u75.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', { useNewUrlParser: true, useUnifiedTopology: true })
 var app = express();
 
 // view engine setup
