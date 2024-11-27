@@ -11,7 +11,7 @@ router.get('/', function(req, res, next)
             console.log("Connessione al database riuscita");
             // Creazione di un oggetto fittizio
             const fakeEvent = new Events({
-                id_event: 101,
+                id_event: 103,
                 name_event: "Workshop Tecnologico",
                 location_event: "Roma, Centro Congressi",
                 date_event: new Date('2024-12-20'),
