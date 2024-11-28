@@ -14,7 +14,7 @@ router.post('/', async function (req, res, next) {
         }
         // Controlla se la password è corretta
         if (user.pass_user !== password) {
-            return res.status(401).json({message: "Password errat"});
+            return res.status(401).json({message: "Password errata"});
         }
         // Se email e password sono corrette
         res.body = JSON.stringify(user);
