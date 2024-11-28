@@ -13,6 +13,8 @@ var login = require('./routes/login');
 var addUser = require('./routes/addUser');
 var addEvent = require('./routes/addEvent');
 var addFavorite = require('./routes/addFavorite');
+var users = require('./routes/users');
+var events = require('./routes/events');
 
 //connesione al database
 mongoose.connect(`mongodb+srv://fraCok:fraCok@cluster0.c9u75.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`);
@@ -31,13 +33,13 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
 app.use('/caricaDati',caricaDati);
 app.use('/login',login);
 app.use('/addUser',addUser);
 app.use('/addEvent',addEvent);
 app.use('/addFavorite',addFavorite);
-
+app.use('/users',users);
+app.use('/events',events);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

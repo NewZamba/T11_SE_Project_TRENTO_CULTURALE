@@ -1,10 +1,16 @@
 var express = require('express');
 var router = express.Router();
+var User = require("../models/User");
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
+router.get('/', async function (req, res, next) {
 
-  res.send('respond with aq resource');
+  const lstUser = await User.find();
+  if (lstUser) {
+    return res.status(200).json(lstUser);
+  } else {
+    return res.status(404).json({message: 'No user found'});
+  }
 });
 
 module.exports = router;
