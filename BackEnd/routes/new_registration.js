@@ -21,7 +21,6 @@ router.post('/', async function (req, res, next) {
 
         // Crea un nuovo user
         const user = new User({
-            id_user: Date.now(),
             name_user,
             surname_user,
             email_user,
