@@ -9,20 +9,6 @@ router.post('/', async function (req, res, next) {
     try {
         const {name_user, surname_user, email_user, pass_user } = req.body;
 
-        // Check if all required fields are provided
-        if (!name_user) {
-            return res.status(200).json({ message: "Il campo nome è obbligatorio" });
-        }
-        if (!surname_user) {
-            return res.status(200).json({ message: "Il campo cognome è obbligatorio" });
-        }
-        if (!email_user) {
-            return res.status(200).json({ message: "Il campo email è obbligatorio" });
-        }
-        if (!pass_user) {
-            return res.status(200).json({ message: "Il campo password è obbligatorio" });
-        }
-
         // Controlla se e' una nuova email
         const existingUser = await User.findOne({email_user: email_user});
         if (existingUser) {
@@ -35,7 +21,6 @@ router.post('/', async function (req, res, next) {
 
         // Crea un nuovo user
         const user = new User({
-            id_user: Date.now(),
             name_user,
             surname_user,
             email_user,

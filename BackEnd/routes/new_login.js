@@ -22,6 +22,12 @@ router.post('/', async function (req, res, next) {
             return res.status(401).json({ message: "Password errata"});
         }
 
+        // Set user session
+        req.session.user = {
+            id: user._id,
+            email: user.email_user
+        };
+
         // Se email e password sono corrette
         res.body = JSON.stringify(user);
         return res.status(200).json({message: "Login riuscito", user});

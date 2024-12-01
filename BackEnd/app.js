@@ -1,9 +1,11 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const session = require('express-session');
 const mongoose = require('mongoose');
+const crypto = require('crypto');
 
 //import file di api
 var indexRouter = require('./routes/index');
@@ -16,18 +18,28 @@ var users = require('./routes/users');
 var events = require('./routes/events');
 var newRegistration = require('./routes/new_registration');
 var newLogin = require('./routes/new_login');
-var newLogin_jwt = require('./routes/new_login_jwt');
+var newP = require('./routes/new_profile');
 
 //connesione al database
 const url = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.c9u75.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 mongoose.connect(url);
-
 
 var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
+
+// Crea una sessione (biscotti temporanei)
+app.use(session({
+  secret: crypto.randomBytes(32).toString('hex'),
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 60 * 60 * 1000, // 1 hour in milliseconds
+    secure: false //TODO: false per i test, True per quando il progetto e' finito
+  }
+}));
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -45,7 +57,7 @@ app.use('/users',users);
 app.use('/events',events);
 app.use('/new_registration',newRegistration);
 app.use('/new_login',newLogin);
-app.use('/new_login_jwt',newLogin_jwt);
+app.use('/new_p',newP);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
