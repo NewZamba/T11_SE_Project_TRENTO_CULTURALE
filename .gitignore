@@ -29,13 +29,16 @@ replay_pid*
 /BackEnd/node_modules
 /BackEnd/package-lock.json
 /BackEnd/.env
+!/BackEnd/.env.example
 
 /FrontEnd/.idea
 /FrontEnd/node_modules
 /FrontEnd/package-lock.json
 /FrontEnd/.env
+!/FrontEnd/.env.example
 
 /.idea
 /node_modules
 /package-lock.json
 /.env
+!/.env.example
