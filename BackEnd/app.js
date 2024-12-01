@@ -16,9 +16,8 @@ var addEvent = require('./routes/addEvent');
 var addFavorite = require('./routes/addFavorite');
 var users = require('./routes/users');
 var events = require('./routes/events');
-var newRegistration = require('./routes/new_registration');
-var newLogin = require('./routes/new_login');
-var newP = require('./routes/new_profile');
+var registration = require('./routes/registration');
+var isLoggedTest = require('./routes/isLoggedTest');
 
 //connesione al database
 const url = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.c9u75.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
@@ -55,9 +54,8 @@ app.use('/addEvent',addEvent);
 app.use('/addFavorite',addFavorite);
 app.use('/users',users);
 app.use('/events',events);
-app.use('/new_registration',newRegistration);
-app.use('/new_login',newLogin);
-app.use('/new_p',newP);
+app.use('/registration',registration);
+app.use('/isLoggedTest',isLoggedTest);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
