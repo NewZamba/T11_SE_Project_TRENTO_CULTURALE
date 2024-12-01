@@ -2,11 +2,13 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const evaluation_schema = new Schema({
-    id_comment: {type: Number, required: true},
     comment: {type: String, required: true},
+    id_event: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Event',
+        required: true},
     rating: {
         type: Number,
-        enum: [1, 2, 3, 4, 5],
         required: true
     }
 });
