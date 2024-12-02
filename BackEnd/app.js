@@ -7,74 +7,60 @@ const session = require('express-session');
 const mongoose = require('mongoose');
 const crypto = require('crypto');
 const cors = require('cors');
-const passport = require("passport");
 
 //import file di api
-const users = require('./routes/users');
-const events = require('./routes/events');
-const verificaUserType = require('./routes/verificaUserType');
-const auth = require('./routes/auth');
-const bookings = require('./routes/bookings');
-const suggEvents = require('./routes/suggEvents');
-const comments = require('./routes/comments');
-const evaluation = require('./routes/evaluations');
-const convertEvent = require('./routes/convertEvent');
-const tags = require('./routes/tags');
-const form = require('./routes/form');
+var indexRouter = require('./routes/index');
+var caricaDati = require('./routes/caricaDati');
+var login = require('./routes/login');
+var addUser = require('./routes/addUser');
+var addEvent = require('./routes/addEvent');
+var addFavorite = require('./routes/addFavorite');
+var users = require('./routes/users');
+var events = require('./routes/events');
+var registration = require('./routes/registration');
+var isLoggedTest = require('./routes/isLoggedTest');
+
 
 //connesione al database
-let url;
-if (process.env.DB_USERNAME && process.env.DB_PASSWORD) {
-    url = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.c9u75.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
-}
+const url = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.c9u75.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 mongoose.connect(url);
 
+var app = express();
 
-const app = express();
-
-// Crea una sessione (biscotti temporanei) parte 1
-app.use(session({
-    secret: crypto.randomBytes(32).toString('hex'),
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-        maxAge: 60 * 60 * 1000, // 1 hour in milliseconds
-        secure: false //TODO: false per i test, True per quando il progetto e' finito
-    }
-}));
-// biscotti parte 2
-app.use(passport.initialize());
-app.use(passport.session());
+// enable cors
+app.use(cors())
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
-const corsOptions = {
-    origin: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true
-};
+// Crea una sessione (biscotti temporanei)
+app.use(session({
+  secret: crypto.randomBytes(32).toString('hex'),
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 60 * 60 * 1000, // 1 hour in milliseconds
+    secure: false //TODO: false per i test, True per quando il progetto e' finito
+  }
+}));
 
-app.use(cors(corsOptions))
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use('/', indexRouter);
+app.use('/caricaDati',caricaDati);
+app.use('/login',login);
+app.use('/addUser',addUser);
+app.use('/addEvent',addEvent);
+app.use('/addFavorite',addFavorite);
 app.use('/users',users);
 app.use('/events',events);
-app.use('/verificaUserType',verificaUserType);
-app.use('/auth',auth);
-app.use('/bookings', bookings);
-app.use('/suggEvents', suggEvents);
-app.use('/evaluation', evaluation);
-app.use('/convertEvent', convertEvent);
-app.use('/tags', tags);
-app.use('/comments', comments);
-app.use('/form', form);
+app.use('/registration',registration);
+app.use('/isLoggedTest',isLoggedTest);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
