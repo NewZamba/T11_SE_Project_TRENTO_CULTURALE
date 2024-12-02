@@ -1,11 +1,15 @@
 <script>
 import PASS from './password.vue';
 import USER from './user.vue';
+import TITLE from './title.vue';
+import BTN_SIGN_UP from '../Sign_Up/SignUpBtn.vue';
 
   export default {
     components: {
       USER,
-      PASS
+      PASS,
+      TITLE,
+      BTN_SIGN_UP,
     },
     data() {
       return {
@@ -34,12 +38,21 @@ import USER from './user.vue';
             })
             .then(response => {
                 if (!response.ok) {
-                  alert('ciao');
+                  // controllo il tipo di user e vado alla sua pagina home
+                  // logica per vedere il tipo di utente
+                  /*if () {                                   //user home
+                    ROUTER.push('/UserHome');
+                  } else if () {                            // data analyst home
+                    ROUTER.push('/DataAnalystHome');
+                  } else if () {                            // moderator home
+                    ROUTER.push('/ModeratorHome');
+                  }*/
+                  this.$router.push('/UserHome');
                 }
-                return response.json(); 
+                return response.json();
               })
             .catch(error => {
-              console.error('Errore:', error); 
+              alert(error.message);
             });
           } catch (error) {
             alert(error);
@@ -52,21 +65,40 @@ import USER from './user.vue';
 
 <template>
 
-  <USER ref="userComponent" />
-  <PASS ref="passComponent" />
+   <div class="login">
 
-  <div class="box">
-    <div class="btn btn-one" role="button" @click="loginUtente">
-      <span>LOGIN</span>
-    </div>
-  </div>
+      <TITLE />
+
+      <USER ref="userComponent" />
+      <PASS ref="passComponent" />
+
+      <div class="box">
+        <div class="btn btn-one" role="button" @click="loginUtente">
+          <span>LOGIN</span>
+        </div>
+      </div>
+
+     <BTN_SIGN_UP />
+
+   </div>
 
 </template>
 
-<style scoped> 
+<style scoped>
 
-  .box { 
-    background-color: #85daff; 
+  .login {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #85daff;
+    box-sizing: border-box;
+    padding: 20%;
+    gap: 20px;
+  }
+
+  .box {
+    background-color: #85daff;
   }
 
   .btn {
@@ -76,7 +108,7 @@ import USER from './user.vue';
     width: 250px;
     cursor: pointer;
   }
-  
+
   .btn-one {
     color: #FFF;
     transition: all 0.3s;
@@ -111,8 +143,8 @@ import USER from './user.vue';
   }
 
   .btn-one:hover::before {
-    opacity: 1; 
-    transform: scale(1, 1); 
+    opacity: 1;
+    transform: scale(1, 1);
   }
 
   .btn-one::after {
@@ -128,7 +160,7 @@ import USER from './user.vue';
   }
 
   .btn-one:hover::after {
-    opacity: 0; 
+    opacity: 0;
     transform: scale(0.1, 1);
   }
 </style>

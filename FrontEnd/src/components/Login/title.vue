@@ -1,13 +1,25 @@
-<script setup>  
+<script>
+  export default {
+    components: {
+    },
+    data() {
+      return {
+
+      };
+    },
+    methods: {
+    }
+  };
+
 </script>
 
-<template> 
+<template>
   <button class="slide">TRENTO CULTURALE</button>
 </template>
 
-<style scoped lang="scss"> 
-  button { 
-    height: 100px;
+<style scoped lang="scss">
+button {
+  height: 100px;
     width: 400px;
     padding: 2%; 
     position: relative;
