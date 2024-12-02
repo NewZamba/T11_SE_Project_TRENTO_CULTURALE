@@ -13,7 +13,8 @@
   };
 </script>
 
-<template> 
+<template>
+
   <form> 
     <div> 
       <label class="user">USER:</label>
