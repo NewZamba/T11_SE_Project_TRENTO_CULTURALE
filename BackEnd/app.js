@@ -6,6 +6,7 @@ const logger = require('morgan');
 const session = require('express-session');
 const mongoose = require('mongoose');
 const crypto = require('crypto');
+const cors = require('cors');
 
 //import file di api
 var indexRouter = require('./routes/index');
@@ -19,11 +20,15 @@ var events = require('./routes/events');
 var registration = require('./routes/registration');
 var isLoggedTest = require('./routes/isLoggedTest');
 
+
 //connesione al database
 const url = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.c9u75.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 mongoose.connect(url);
 
 var app = express();
+
+// enable cors
+app.use(cors())
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

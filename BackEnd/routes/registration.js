@@ -7,7 +7,8 @@ const bcrypt = require('bcrypt');
 /* POST register user */
 router.post('/', async function (req, res, next) {
     try {
-        const {name_user, surname_user, email_user, pass_user } = req.body;
+        const { name_user, surname_user, email_user, pass_user, age_user, phone_user } = req.body;
+
 
         // Controlla se e' una nuova email
         const existingUser = await User.findOne({email_user: email_user});
@@ -25,6 +26,8 @@ router.post('/', async function (req, res, next) {
             surname_user,
             email_user,
             pass_user: hashedPassword,
+            age_user,
+            phone_user
         });
 
         // Salva l'User
