@@ -24,7 +24,6 @@ import BTN_SIGN_UP from '../Sign_Up/SignUpBtn.vue';
         this.pass =  this.$refs.passComponent.getPass();
 
         if (this.user && this.pass) {
-          
           try {
             fetch('http://localhost:3000/login', {
               method: 'POST',
@@ -41,14 +40,19 @@ import BTN_SIGN_UP from '../Sign_Up/SignUpBtn.vue';
                 if (!response.ok) {
                   // controllo il tipo di user e vado alla sua pagina home
                   // logica per vedere il tipo di utente
-                  /*if () {                                   //user home
-                    ROUTER.push('/UserHome');
-                  } else if () {                            // data analyst home
-                    ROUTER.push('/DataAnalystHome');
-                  } else if () {                            // moderator home
-                    ROUTER.push('/ModeratorHome');
-                  }*/
-                  this.$router.push('/UserHome');
+                  switch (response.body['type_user']) {
+                    case 1:
+                      this.$router.push('/UserHome');
+                      break;
+                    case 2:
+                      this.$router.push('/DataAnalystHome');
+                      break;
+                    case 3:
+                      this.$router.push('/ModeratorHome');
+                      break;
+                    default: alert('Utente non esistente!');
+                      break;
+                  }
                 }
                 return response.json();
               })
