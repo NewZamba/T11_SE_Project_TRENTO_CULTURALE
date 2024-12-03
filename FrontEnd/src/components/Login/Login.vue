@@ -22,12 +22,13 @@ import BTN_SIGN_UP from '../Sign_Up/SignUpBtn.vue';
       async loginUtente() {
         this.user = this.$refs.userComponent.getUser();
         this.pass =  this.$refs.passComponent.getPass();
+        console.log(this.user);
+        console.log(this.pass);
 
         if (this.user && this.pass) {
           try {
             fetch('http://localhost:3000/login', {
               method: 'POST',
-              mode: 'no-cors',
               headers: {
                 'Content-Type': 'application/json',
               },
@@ -37,25 +38,25 @@ import BTN_SIGN_UP from '../Sign_Up/SignUpBtn.vue';
               }),
             })
             .then(response => {
-                if (!response.ok) {
-                  // controllo il tipo di user e vado alla sua pagina home
-                  // logica per vedere il tipo di utente
-                  switch (response.body['type_user']) {
-                    case 1:
-                      this.$router.push('/UserHome');
-                      break;
-                    case 2:
-                      this.$router.push('/DataAnalystHome');
-                      break;
-                    case 3:
-                      this.$router.push('/ModeratorHome');
-                      break;
-                    default: alert('Utente non esistente!');
-                      break;
-                  }
-                }
+              if (!response.ok) {
+                throw new Error(response.statusText);
+              }
                 return response.json();
-              })
+            }).then(data => {
+              switch (data.user['type_user']) {
+                case 1:
+                  this.$router.push('/UserHome');
+                  break;
+                case 2:
+                  this.$router.push('/DataAnalystHome');
+                  break;
+                case 3:
+                  this.$router.push('/ModeratorHome');
+                  break;
+                default: alert('Utente non esistente!');
+                  break;
+              }
+            })
             .catch(error => {
               alert(error.message);
             });
