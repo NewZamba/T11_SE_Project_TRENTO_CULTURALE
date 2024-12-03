@@ -4,7 +4,10 @@ import UserHome from './components/User/Home.vue';
 import DataAnalystHome from './components/Data_Analyst/Home.vue';
 import ModeratorHome from './components/Moderator/Home.vue';
 import SignUp from './components/Sign_Up/SignUp.vue';
-import Login from './components/Login/btnLogin.vue';
+import Login from './components/Login/Login.vue';
+
+
+Vue.use(Router);
 
 const routes = [
     {
@@ -32,8 +35,6 @@ const routes = [
         redirect: '/',
     },
 ];
-
-Vue.use(Router);
 
 const router = new Router({
     routes,
