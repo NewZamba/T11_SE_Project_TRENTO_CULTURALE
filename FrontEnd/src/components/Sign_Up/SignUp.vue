@@ -48,7 +48,7 @@
 						<span class="fa fa-user"></span>
 					</span>
           </div>
-          <input type="text" class="form-control" placeholder="Firstname" required="required" v-model="firstname">
+          <input type="text" class="form-control" placeholder="First Name" required="required" v-model="firstname">
         </div>
       </div>
       <div class="form-group">
@@ -58,7 +58,7 @@
 						<span class="fa fa-user"></span>
 					</span>
           </div>
-          <input type="text" class="form-control" placeholder="Lastname" required="required" v-model="lastname">
+          <input type="text" class="form-control" placeholder="Last Name" required="required" v-model="lastname">
         </div>
       </div>
       <div class="form-group">
