@@ -10,25 +10,46 @@
         email: '',
         pass1: '',
         pass2: '',
-        age: ''
+        age: '',
+        phone: ''
       };
     },
     methods: {
       handleSubmit() {
+
         //gestione submit
         try {
-          fetch('http://localhost:3000/login', {
-            method: 'POST',
-            mode: 'no-cors',
+
+         var tipo;
+
+         if (this.email.includes('@admin.trento.it')) {
+           tipo = 1;
+         } else if (this.email.includes('@data.trento.it')) {
+           tipo = 2;
+         } else {
+           tipo = 3;
+         }
+
+          fetch('http://localhost:3000/addUser', {
+            method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              email: this.user,
-              password: this.pass,
+              name_user: this.firstname,
+              surname_user: this.lastname,
+              age_user: this.age,
+              email_user: this.email,
+              pass_user: this.pass1,
+              phone_user: this.phone,
+              type_user: tipo,
             }),
+          }).then(res => {
+            if (res.ok) {
+              alert('Utente registrato con successo!');
+              this.$router.push('/');
+            }
           })
-              .then(res => res.json())
         } catch (err) {
           alert(err);
         }
