@@ -16,6 +16,22 @@
     methods: {
       handleSubmit() {
         //gestione submit
+        try {
+          fetch('http://localhost:3000/login', {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              email: this.user,
+              password: this.pass,
+            }),
+          })
+              .then(res => res.json())
+        } catch (err) {
+          alert(err);
+        }
       }
     }
   };
@@ -37,93 +53,106 @@
   -->
 
   <div class="signup-form">
-    <form @submit="handleSubmit">
+    <b-form @submit.prevent="handleSubmit">
       <h2>Sign Up</h2>
       <p>Please fill in this form to create an account!</p>
-      <hr>
-      <div class="form-group">
-        <div class="input-group">
-          <div class="input-group-prepend">
-					<span class="input-group-text">
-						<span class="fa fa-user"></span>
-					</span>
-          </div>
-          <input type="text" class="form-control" placeholder="First Name" required="required" v-model="firstname">
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="input-group">
-          <div class="input-group-prepend">
-					<span class="input-group-text">
-						<span class="fa fa-user"></span>
-					</span>
-          </div>
-          <input type="text" class="form-control" placeholder="Last Name" required="required" v-model="lastname">
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="input-group">
-          <div class="input-group-prepend">
-					<span class="input-group-text">
-						<i class="fa fa-paper-plane"></i>
-					</span>
-          </div>
-          <input type="email" class="form-control" placeholder="Email Address" required="required" v-model="email">
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="input-group">
-          <div class="input-group-prepend">
-					<span class="input-group-text">
-						<i class="fa fa-lock"></i>
-					</span>
-          </div>
-          <input type="password" class="form-control" placeholder="Password" required="required" v-model="pass1">
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="input-group">
-          <div class="input-group-prepend">
-					<span class="input-group-text">
-						<i class="fa fa-lock"></i>
-						<i class="fa fa-check"></i>
-					</span>
-          </div>
-          <input type="password" class="form-control" placeholder="Confirm Password" required="required" v-model="pass2">
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="input-group">
-          <div class="input-group-prepend">
-					<span class="input-group-text">
-						<span class="fa fa-user"></span>
-					</span>
-          </div>
-          <input type="number" class="form-control" placeholder="Age" required="required" v-model="age">
-        </div>
-      </div>
-      <div class="form-group">
-        <button type="submit" class="btn btn-primary btn-lg">Sign Up</button>
-      </div>
-    </form>
-    <div class="text-center">Already have an account? <a href="#">Login here</a></div>
+      <hr />
+
+      <b-form-group>
+        <b-input-group>
+          <b-input-group-prepend>
+            <b-icon icon="person"></b-icon>
+          </b-input-group-prepend>
+          <b-form-input
+              type="text"
+              placeholder="First Name"
+              required
+              v-model="firstname"
+          ></b-form-input>
+        </b-input-group>
+      </b-form-group>
+
+      <b-form-group>
+        <b-input-group>
+          <b-input-group-prepend>
+            <b-icon icon="person"></b-icon>
+          </b-input-group-prepend>
+          <b-form-input
+              type="text"
+              placeholder="Last Name"
+              required
+              v-model="lastname"
+          ></b-form-input>
+        </b-input-group>
+      </b-form-group>
+
+      <b-form-group>
+        <b-input-group>
+          <b-input-group-prepend>
+            <b-icon icon="envelope"></b-icon>
+          </b-input-group-prepend>
+          <b-form-input
+              type="email"
+              placeholder="Email Address"
+              required
+              v-model="email"
+          ></b-form-input>
+        </b-input-group>
+      </b-form-group>
+
+      <b-form-group>
+        <b-input-group>
+          <b-input-group-prepend>
+            <b-icon icon="lock"></b-icon>
+          </b-input-group-prepend>
+          <b-form-input
+              type="password"
+              placeholder="Password"
+              required
+              v-model="pass1"
+          ></b-form-input>
+        </b-input-group>
+      </b-form-group>
+
+      <b-form-group>
+        <b-input-group>
+          <b-input-group-prepend>
+            <b-icon icon="lock"></b-icon>
+            <b-icon icon="check"></b-icon>
+          </b-input-group-prepend>
+          <b-form-input
+              type="password"
+              placeholder="Confirm Password"
+              required
+              v-model="pass2"
+          ></b-form-input>
+        </b-input-group>
+      </b-form-group>
+
+      <b-form-group>
+        <b-input-group>
+          <b-input-group-prepend>
+            <b-icon icon="person"></b-icon>
+          </b-input-group-prepend>
+          <b-form-input
+              type="number"
+              placeholder="Age"
+              required
+              v-model="age"
+          ></b-form-input>
+        </b-input-group>
+      </b-form-group>
+
+      <b-button type="submit" variant="primary" size="lg">Sign Up</b-button>
+    </b-form>
+    <div class="text-center">
+      Already have an account? <router-link to="/">Login here</router-link>
+    </div>
   </div>
 
 </template>
 
 <style scoped>
-
-  .form-control {
-    font-size: 15px;
-  }
-
-  .form-control, .form-control:focus, .input-group-text {
-    border-color: #e1e1e1;
-  }
-
-  .form-control, .btn {
-    border-radius: 3px;
-  }
 
   .signup-form {
     width: 400px;
