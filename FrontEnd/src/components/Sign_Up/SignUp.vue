@@ -1,6 +1,7 @@
 <script>
 
   export default {
+    name: 'SIGN_UP',
     components: {},
     data() {
       return {

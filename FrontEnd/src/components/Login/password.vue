@@ -1,5 +1,6 @@
 <script>
   export default {
+    name:'PASSWORD',
     data() {
       return {
         pass: '',

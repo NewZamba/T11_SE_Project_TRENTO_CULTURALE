@@ -2,6 +2,7 @@
 import ROUTER from '../../router.js';
 
   export default {
+    name: 'SIGN_UP_BTN',
     components: {
     },
     data() {

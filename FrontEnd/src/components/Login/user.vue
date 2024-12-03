@@ -1,5 +1,6 @@
 <script>  
   export default {
+    name: 'USER',
     data() {
       return {
         user_name: '',
