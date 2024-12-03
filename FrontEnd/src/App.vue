@@ -1,9 +1,5 @@
 <script>
-import BTN_LOGIN from './Login/btnLogin.vue';
-import TITLE from './Login/title.vue';
-import BTN_SIGN_UP from './Sign_Up/SignUpBtn.vue';
-
-  export default {
+export default {
     name: 'App',
     components: {},
     data() {
@@ -16,14 +12,14 @@ import BTN_SIGN_UP from './Sign_Up/SignUpBtn.vue';
 
 <template>
 
-  <div id="app">
+  <div>
     <router-view />
   </div>
 
   <!--<div class="login">
 
     <TITLE />
-    <BTN_LOGIN />
+    <Login />
     <BTN_SIGN_UP />
 
   </div>-->

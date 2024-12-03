@@ -5,6 +5,7 @@ import TITLE from './title.vue';
 import BTN_SIGN_UP from '../Sign_Up/SignUpBtn.vue';
 
   export default {
+    name: 'BTN_LOGIN',
     components: {
       USER,
       PASS,

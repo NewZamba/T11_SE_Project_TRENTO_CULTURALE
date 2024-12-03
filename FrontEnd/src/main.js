@@ -1,14 +1,20 @@
+import './style.css'
 import Vue from 'vue';
-import App from './components/App.vue';
-import '../index.css';
-import BootstrapVue from 'bootstrap-vue';
-import { IconsPlugin } from 'bootstrap-vue';
+import App from './App.vue';
 import router from './router.js';
+import {BootstrapVue,IconsPlugin} from 'bootstrap-vue';
+import 'bootstrap/dist/css/bootstrap.css'; // Importa i CSS di Bootstrap
+import 'bootstrap-vue/dist/bootstrap-vue.css'; // Importa i CSS di BootstrapVue
 
+// Usa BootstrapVue
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 
+Vue.config.productionTip = false;
+
+// Usa new Vue() per creare l'app in Vue 2
 new Vue({
-    router,  // Collega il router all'app
-    render: (h) => h(App),
+    router,
+    render: h => h(App),
 }).$mount('#app');
+
