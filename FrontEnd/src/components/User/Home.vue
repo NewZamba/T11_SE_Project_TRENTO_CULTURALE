@@ -46,11 +46,11 @@ import CARDS from './Cards.vue';
 <template>
 
   <div class="container">
-    <div class="main">
-      <CAROUSEL :events="events"/>
+    <div class="Carousel">
+      <CAROUSEL :events="events" class="Carousel" />
     </div>
-    <div class="footer">
-      <CARDS :events="events" class="footer"   />
+    <div class="CARDS">
+      <CARDS :events="events" class="CARDS"   />
     </div>
   </div>
 
@@ -66,19 +66,24 @@ import CARDS from './Cards.vue';
       overflow-y: scroll;
       overflow-x: hidden;
       display: grid;
-      grid-auto-columns: 1fr;
       grid-template-columns: 1fr 1fr;
       grid-template-rows: 1fr 1fr;
-      gap: 30px 30px;
       grid-template-areas:
-      "main main"
-      "footer footer";
-      .footer { grid-area: footer; display: flex; justify-content: center;
-      align-items: center; }
-      .main { grid-area: main;
+      "Carousel Carousel"
+      "CARDS CARDS";
+      gap: 30px 30px;
+
+
+    }
+    .Carousel {
+      grid-area: Carousel;
       align-items: center;
       justify-content: center;
       display: flex}
-    }
+    .CARDS {
+      grid-area: CARDS;
+      display: flex;
+      justify-content: center;
+      align-items: center; }
 
 </style>

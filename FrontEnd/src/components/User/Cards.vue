@@ -25,7 +25,7 @@
           :title="event.name_event"
           :img-src="event.img_event"
           img-alt="Event Image"
-          img-top
+          img-height="200px"
           tag="article"
           class="card-item d-flex flex-column justify-content-between"
       >
@@ -41,8 +41,8 @@
 <style scoped>
 
   .card-item {
-    max-width: 20rem;
-    height: 100%;
+    width: 325px;
+    height: 375px;
     flex: 1 1 calc(33.333% - 1rem);
     box-sizing: border-box;
     margin: 1rem;

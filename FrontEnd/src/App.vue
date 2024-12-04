@@ -19,11 +19,11 @@ export default {
 <template>
 
   <div id="app" class="container">
-    <Header class="header" />
+      <Header class="header" />
     <main class="mains">
       <router-view />
     </main>
-    <Footer class="footer"/>
+      <Footer class="footer"/>
   </div>
 
 </template>
@@ -35,7 +35,7 @@ export default {
     margin: 0 0 0 0;
     padding: 0 0 0 0;
     overflow-y: hidden;
-    display: flex;
+    display: grid;
   }
 
   .container {
@@ -44,32 +44,43 @@ export default {
     margin: 0 0 0 0;
     padding: 0 0 0 0;
     overflow: hidden;
-    display: flex;
-    align-items: center;
     justify-content: center;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 0.2fr 2.7fr 0.1fr;
+    grid-template-areas:
+     "header" "header"
+      "mains" "mains"
+      "footer" "footer";
 
   }
 
-  .header {
-    height: 5%;
-  }
+
 
   .mains {
+    grid-area: mains;
     height: 90%;
     overflow: auto;
     min-width: 100vw;
     max-width: 100vw;
   }
-
-  .footer {
+  .header {
+    grid-area: header;
     height: 5%;
+  }
+  .footer {
+    grid-area: footer;
+    height: 2%;
+    justify-content: center;
+    align-items: center;
+    display: flex;
   }
   #app{
     height: 1080px;
     width: 1920px;
     overflow: hidden;
     align-items: center;
-    display: flex;
+    display: block;
   }
 
 </style>
