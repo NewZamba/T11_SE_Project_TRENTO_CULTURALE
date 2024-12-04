@@ -12,9 +12,9 @@ export default {
 </script>
 
 <template>
-  <div class="header">
+  <h1>
       Trento Culturale
-  </div>
+  </h1>
 </template>
 
 <style scoped>
@@ -23,7 +23,7 @@ export default {
     text-align: center;
     color: #53a199;
     font-family: Helvetica, sans-serif;
-    font-size: small;
+    font-size: 20px;
   }
 
 </style>

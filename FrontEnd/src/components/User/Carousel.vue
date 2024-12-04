@@ -27,11 +27,13 @@
     <b-carousel
         id="carousel-1"
         v-model="slide"
+        fade
         :interval="4000"
+        img-width="1024"
+        img-height="480"
         controls
-        img-height="30vh"
-        img-width="100vw"
-        style="text-shadow: 1px 1px 2px #333;"
+        style="text-shadow: 1px 1px 2px #333"
+
     >
 
 
@@ -43,9 +45,9 @@
           :key="event._id"
           :caption="event.name_event"
           :img-src="event.img_event"
-          :img-width="1600"
-          :img-height="480"
+          :img-width="1024"
       >
+
       </b-carousel-slide>
     </b-carousel>
 
@@ -53,10 +55,16 @@
 
 <style scoped>
 #carousel-1 {
-  height: 100%;
+  height: 500px;
   width: 60%;
   align-items: center;
 }
+::v-deep(img.img-fluid) {
+  width: 100%; /* Opzionale */
+  height: 480px !important;
+  object-fit: fill;
+}
+
 
 
 
