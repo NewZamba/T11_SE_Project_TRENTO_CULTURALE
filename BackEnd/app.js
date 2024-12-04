@@ -22,29 +22,28 @@ var isLoggedTest = require('./routes/isLoggedTest');
 
 
 //connesione al database
+mongoose.connect(`mongodb+srv://fraCok:fraCok@cluster0.c9u75.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`);
 const url = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.c9u75.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 mongoose.connect(url);
 
 var app = express();
 
-// enable cors
-app.use(cors())
+// Crea una sessione (biscotti temporanei)
+app.use(session({
+    secret: crypto.randomBytes(32).toString('hex'),
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        maxAge: 60 * 60 * 1000, // 1 hour in milliseconds
+        secure: false //TODO: false per i test, True per quando il progetto e' finito
+    }
+}));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
-// Crea una sessione (biscotti temporanei)
-app.use(session({
-  secret: crypto.randomBytes(32).toString('hex'),
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    maxAge: 60 * 60 * 1000, // 1 hour in milliseconds
-    secure: false //TODO: false per i test, True per quando il progetto e' finito
-  }
-}));
-
+app.use(cors())
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
