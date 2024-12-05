@@ -11,6 +11,23 @@
         type: Array,
         required: true
       }
+    },
+    methods: {
+      showEvent(event) {
+
+        this.$router.push({
+          path: `/EventPage`,
+          query: {
+            _id: event._id,
+            name_event: event.name_event,
+            img_event: event.img_event,
+            description_event: event.description_event,
+            location_event: event.location_event,
+            date_event: event.date_event,
+            tags: event.tags
+          }
+        });
+      }
     }
   };
 
@@ -33,7 +50,7 @@
           {{ event.description }}
         </b-card-text>
 
-        <b-button href="#" variant="primary">View details</b-button>
+        <b-button href="#" variant="primary" @click="showEvent(event)">View details</b-button>
       </b-card>
     </b-card-group>
 </template>
@@ -49,6 +66,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
   }
 
   @media (max-width: 768px) {

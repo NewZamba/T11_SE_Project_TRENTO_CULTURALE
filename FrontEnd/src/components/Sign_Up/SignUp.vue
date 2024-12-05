@@ -16,19 +16,17 @@
     },
     methods: {
       handleSubmit() {
-
         //gestione submit
         try {
+          let tipo;
 
-         var tipo;
-
-         if (this.email.includes('@admin.trento.it')) {
-           tipo = 1;
-         } else if (this.email.includes('@data.trento.it')) {
-           tipo = 2;
-         } else {
-           tipo = 3;
-         }
+          if (this.email.includes('@admin.trento.it')) {
+            tipo = 1;
+          } else if (this.email.includes('@data.trento.it')) {
+            tipo = 2;
+          } else {
+            tipo = 3;
+          }
 
           fetch('http://localhost:3000/addUser', {
             method: 'PUT',
@@ -49,7 +47,7 @@
               alert('Utente registrato con successo!');
               this.$router.push('/');
             }
-          })
+          });
         } catch (err) {
           alert(err);
         }
