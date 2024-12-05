@@ -1,14 +1,19 @@
+/**
+ * @deprecated ora Auth.js sostituisce sia il login che la registrazione
+ */
+
+
 var express = require('express');
 var router = express.Router();
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
+const passport = require('passport');
 
 
 /* POST register user */
 router.post('/', async function (req, res, next) {
     try {
-        const { name_user, surname_user, email_user, pass_user, age_user, phone_user } = req.body;
-
+        const { name_user, surname_user, email_user, pass_user, age_user, phone_user, type_user } = req.body;
 
         // Controlla se e' una nuova email
         const existingUser = await User.findOne({email_user: email_user});
@@ -27,7 +32,8 @@ router.post('/', async function (req, res, next) {
             email_user,
             pass_user: hashedPassword,
             age_user,
-            phone_user
+            phone_user,
+            type_user
         });
 
         // Salva l'User
