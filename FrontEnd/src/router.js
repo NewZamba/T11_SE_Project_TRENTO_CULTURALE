@@ -5,6 +5,7 @@ import DataAnalystHome from './components/Data_Analyst/Home.vue';
 import ModeratorHome from './components/Moderator/Home.vue';
 import SignUp from './components/Sign_Up/SignUp.vue';
 import Login from './components/Login/Login.vue';
+import EventPage from './components/EventPage.vue';
 
 
 Vue.use(Router);
@@ -29,6 +30,10 @@ const routes = [
     {
         path: '/SignUp',
         component: SignUp
+    },
+    {
+        path: '/EventPage',
+        component: EventPage
     },
     {
         path: '*', // Rotte non definite
