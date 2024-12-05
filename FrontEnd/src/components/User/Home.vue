@@ -50,14 +50,13 @@ import CARDS from './Cards.vue';
       <CAROUSEL :events="events" class="Carousel" />
     </div>
     <div class="CARDS">
-      <CARDS :events="events" class="CARDS"   />
+      <CARDS :events="events" class="CARDS"  />
     </div>
   </div>
 
 </template>
 
 <style scoped>
-
 
     .container {
       height: 100vh;
@@ -72,18 +71,20 @@ import CARDS from './Cards.vue';
       "Carousel Carousel"
       "CARDS CARDS";
       gap: 30px 30px;
-
-
     }
+
     .Carousel {
       grid-area: Carousel;
       align-items: center;
       justify-content: center;
-      display: flex}
+      display: flex;
+    }
+
     .CARDS {
       grid-area: CARDS;
       display: flex;
       justify-content: center;
-      align-items: center; }
+      align-items: center;
+    }
 
 </style>
