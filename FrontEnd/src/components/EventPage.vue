@@ -34,13 +34,14 @@
 
 <template>
 
+  <!--
+     bottone indietro
+    -->
+  <header class="header">
+    <button class="back_btn" @click="backToHome"></button>
+  </header>
+
   <div class="event-page">
-    <!--
-      bottone indietro
-     -->
-    <header class="header">
-      <button class="back_btn" @click="backToHome"></button>
-    </header>
     <!--
       dettagli evento
     -->
