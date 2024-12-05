@@ -28,7 +28,7 @@
             tipo = 3;
           }
 
-          fetch('http://localhost:3000/addUser', {
+          fetch('http://localhost:3000/auth/signUp', {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',

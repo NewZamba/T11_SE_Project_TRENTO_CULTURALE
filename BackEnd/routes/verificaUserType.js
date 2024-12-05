@@ -1,37 +1,45 @@
-const express = require('express');
-const router = express.Router();
+var express = require('express');
+var router = express.Router();
 const User = require('../models/User');
 
 /*
-1 = user
+0 = user
+1 = mod
 2 = data analyst
-3 = mod
-*/
+ */
 
-router.get('/is_logged', (req, res) => {
-    return req.user ? res.send(req.user) : res.sendStatus(401)
+const isAuthenticated = (req, res, next) => {
+    if (req.isAuthenticated()) {
+        return next();
+    }
+    return res.status(401).json({ message: "Non loggato" });
+};
+
+const isMod = (req, res, next) => {
+    if (req.isAuthenticated() && req.user.type_user === 1) {
+        return next();
+    }
+    return res.status(402).json({ message: "privilegi da Moderatore richesti" });
+};
+
+const isDataAnalyst = (req, res, next) => {
+    if (req.isAuthenticated() && req.user.type_user === 2) {
+        return next();
+    }
+    return res.status(402).json({ message: "privilegi da Data Analyst richesti" });
+};
+
+router.get('/user-home', isAuthenticated, (req, res) => {
+    res.json({message: "Accesso consentito"});
 });
 
-router.get('/is_data_analyst', (req, res) => {
-    if (!req.user) {
-        return res.status(401).json({ message: 'User not authenticated' });
-    }
-    if (req.user.type_user === 2) {
-        return res.status(200).json(req.user);
-    } else {
-        return res.status(403).json({ message: 'User is not a data analyst' });
-    }
+router.get('/mod-home', isAuthenticated, isMod, (req, res) => {
+    res.json({message: "Accesso consentito"});
 });
 
-router.get('/is_mod', (req, res) => {
-    if (!req.user) {
-        return res.status(401).json({ message: 'User not authenticated' });
-    }
-    if (req.user.type_user === 3) {
-        return res.status(200).json(req.user);
-    } else {
-        return res.status(403).json({ message: 'User is not a data analyst' });
-    }
+router.get('/data-analyst-home', isAuthenticated, isDataAnalyst, (req, res) => {
+    res.json({message: "Accesso consentito"});
 });
+
 
 module.exports = router;

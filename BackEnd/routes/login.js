@@ -1,8 +1,14 @@
+/**
+ * @deprecated ora Auth.js sostituisce sia il login che la registrazione
+ */
+
+
 var express = require('express');
 var router = express.Router();
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
-const OAuth2Client = require('google-auth-library');
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 
 /* POST login user  */
@@ -23,10 +29,11 @@ router.post('/', async function (req, res, next) {
             return res.status(401).json({ message: "Password errata"});
         }
 
-        // Set user session
+        // dati temporanei della sessioni
         req.session.user = {
             id: user._id,
-            email: user.email_user
+            email: user.email_user,
+            type: user.type_user
         };
 
         // Se email e password sono corrette
@@ -40,7 +47,7 @@ router.post('/', async function (req, res, next) {
 });
 
 /* POST login user with google */
-router.post('/google-auth', async function (req, res, next) {
+router.post('/auth/google/callback', async function (req, res, next) {
     const { credential } = req.body;
 
     try {
