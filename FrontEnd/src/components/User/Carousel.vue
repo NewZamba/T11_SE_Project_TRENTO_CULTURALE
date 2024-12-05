@@ -18,7 +18,6 @@
     methods: {
       showEvent(event) {
 
-        console.log("ciao")
         this.$router.push({
           path: `/EventPage`,
           query: {
