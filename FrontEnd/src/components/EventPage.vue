@@ -1,8 +1,11 @@
 <script>
+import LOGIN from './Login/Login.vue';
 
   export default {
     name: 'EventPage',
-    components: {},
+    components: {
+      LOGIN
+    },
     data() {
       return {
         _id: null,
@@ -11,7 +14,8 @@
         description_event: '',
         location_event: '',
         date_event: null,
-        tags: 0
+        tags: 0,
+        user: {}
       };
     },
     mounted() {
@@ -26,6 +30,32 @@
     methods: {
       backToHome() {
         this.$router.push('/UserHome');
+      },
+      subscribe() {
+        this.user = LOGIN.getUser();
+
+        //iscrivo l'user all'evento
+        //ci sara tabella iscizioni legata a user
+
+        fetch('http://localhost:3000/subscribe', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name_user: this.user.name_user,
+            surname_user: this.user.surname_user,
+            age_user: this.user.age_user,
+            email_user: this.user.email_user,
+            phone_user: this.user.phone_user
+          }),
+        }).then(res => {
+            if (res.ok) {
+              alert(`Subscribed at ${this.name_event}!`);
+            } else {
+              alert(`Subscription failed!`);
+            }
+        });
       }
     }
   };
@@ -34,17 +64,14 @@
 
 <template>
 
-  <!--
-     bottone indietro
-    -->
-  <header class="header">
-    <button class="back_btn" @click="backToHome"></button>
-  </header>
-
   <div class="event-page">
-    <!--
-      dettagli evento
-    -->
+
+    <header class="headerEP">
+      <button class="back_btn" @click="backToHome">
+        X
+      </button>
+    </header>
+
     <div class="event">
       <div class="details_img">
         <div class="details">
@@ -54,7 +81,7 @@
           <div class="info">LOCATION: {{ location_event }}</div>
         </div>
         <div class="img">
-          <img />
+          ciao
         </div>
       </div>
       <div class="description">
@@ -63,6 +90,13 @@
       </div>
 
     </div>
+
+    <footer class="footerEP">
+      <button class="subscribe_btn" @click="subscribe">
+        Subscribe
+      </button>
+    </footer>
+
   </div>
 
 </template>
@@ -71,16 +105,31 @@
 
   .event-page {
     display: flex;
+    flex-direction: column;
     width: 40%;
     height: 80%;
     border-radius: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     margin: auto auto;
+    background-color: azure;
   }
 
-  .header {
-    justify-items: left;
+  .event {
+    background-color: #4cafa0;
+  }
+
+  .headerEP {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
     padding: 5px;
+  }
+
+  .footerEP {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 7px;
   }
 
   .back_btn {
@@ -90,8 +139,8 @@
     border-radius: 50%;
     background-color: #4cafa0;
     color: white;
-    font-size: 16px;
-    line-height: 100px;
+    font-size: x-large;
+    font-family: 'Helvetica', sans-serif;
     cursor: pointer;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     transition: transform 0.2s;
@@ -101,16 +150,39 @@
     transform: scale(1.1);
   }
 
-  .details_img img {
+  .subscribe_btn {
+    border: none;
+    width: 120px;
+    height: 60px;
+    border-radius: 30px;
+    background-color: #4cafa0;
+    color: white;
+    font-size: medium;
+    font-family: 'Helvetica', sans-serif;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s;
+  }
 
+  .subscribe_btn:hover {
+    transform: scale(1.1);
+  }
+
+
+  .details_img {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
   }
 
   .details {
-
+    justify-content: left;
+    align-items: center;
   }
 
   .img {
-
+    align-items: center;
+    justify-content: center;
   }
 
   .description {
