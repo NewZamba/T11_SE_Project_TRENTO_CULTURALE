@@ -16,6 +16,7 @@ import BTN_SIGN_UP from '../Sign_Up/SignUpBtn.vue';
       return {
         user: '',
         pass: '',
+        userLog: {}
       };
     },
     methods: {
@@ -56,6 +57,7 @@ import BTN_SIGN_UP from '../Sign_Up/SignUpBtn.vue';
                 default: alert('Utente non esistente!');
                   break;
               }
+              this.userLog = data.user;
             })
             .catch(error => {
               alert(error.message);
@@ -64,6 +66,9 @@ import BTN_SIGN_UP from '../Sign_Up/SignUpBtn.vue';
             alert(error);
           }    
         }
+      },
+      getUser() {
+        return this.userLog;
       }
     }
   };
