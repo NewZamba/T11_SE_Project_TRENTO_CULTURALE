@@ -1,10 +1,11 @@
 <script>
-import LOGIN from './Login/Login.vue';
+import BTN_LOGIN from './Login/Login.vue';
+import { EventBus } from './eventBus.js';
 
   export default {
     name: 'EventPage',
     components: {
-      LOGIN
+      BTN_LOGIN
     },
     data() {
       return {
@@ -32,30 +33,32 @@ import LOGIN from './Login/Login.vue';
         this.$router.push('/UserHome');
       },
       subscribe() {
-        this.user = LOGIN.getUser();
+        try {
 
-        //iscrivo l'user all'evento
-        //ci sara tabella iscizioni legata a user
+          this.user = {};
 
-        fetch('http://localhost:3000/subscribe', {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            name_user: this.user.name_user,
-            surname_user: this.user.surname_user,
-            age_user: this.user.age_user,
-            email_user: this.user.email_user,
-            phone_user: this.user.phone_user
-          }),
-        }).then(res => {
+          fetch('http://localhost:3000/addBooking', {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              id_user: this.user._id,
+              id_event: this._id,
+              date_Prenotation: new Date().toISOString()
+            }),
+          }).then(res => {
             if (res.ok) {
-              alert(`Subscribed at ${this.name_event}!`);
+              alert('Subscribed at ${this.name_event}!');
             } else {
-              alert(`Subscription failed!`);
+              alert('Subscription failed!');
             }
-        });
+          }).catch(err => {
+            alert(err);
+          });
+        } catch (err) {
+          alert(err);
+        }
       }
     }
   };
