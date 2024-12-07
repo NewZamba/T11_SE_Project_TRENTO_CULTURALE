@@ -82,17 +82,24 @@ passport.deserializeUser(async (id, done) => {
 /* POST login user  */
 router.post('/login',  (req, res, next) => {
     passport.authenticate('local', (err, user, info) => {
-        // errore imprevisto
-        if (err) {return res.status(500).json({ message: "Errore durante il login", error: err });}
 
-        // utente non trovato o password sbagliata
-        if (!user) {return res.status(404).json({message: info.message});}
+        // logga l'user
+        req.login(user, (err) => {
+            // errore imprevisto
+            if (err) {return res.status(500).json({ message: "Errore durante il login", error: err });}
 
-        return res.status(200).json({ message: "Login effettuato con successo", user: {
-                id: user._id,
-                email: user.email_user,
-                type: user.type_user
-        }});
+            // utente non trovato o password sbagliata
+            if (!user) {return res.status(404).json({message: info.message});}
+
+            return res.status(200).json({
+                message: "Login effettuato con successo",
+                user: {
+                    id: user._id,
+                    email: user.email_user,
+                    type: user.type_user
+                }
+            });
+        });
     })(req, res, next);
 });
 
@@ -159,14 +166,21 @@ router.get('/google/callback',
         failureRedirect: '/auth/login',
         failureMessage: true
     }),
-    function(req, res) {
-        res.status(200).json({
-            message: "Login con Google effettuato con successo",
-            user: {
-                id: req.user._id,
-                email: req.user.email_user,
-                type: req.user.type_user
+    function (req, res) {
+        // logga l'user
+        req.login(req.user, (err) => {
+            if (err) {
+                return res.status(500).json({ message: "Errore durante il login con Google", error: err });
             }
+            // Respond after login is complete
+            res.status(200).json({
+                message: "Login con Google effettuato con successo",
+                user: {
+                    id: req.user._id,
+                    email: req.user.email_user,
+                    type: req.user.type_user
+                }
+            });
         });
     }
 );
