@@ -5,7 +5,7 @@ const prenotation_schema = new Schema({
     id_user:{
         type: mongoose.Schema.Types.ObjectId,
         ref : 'User',
-        requred:true
+        required:true
     },
     id_event: {
         type: mongoose.Schema.Types.ObjectId,

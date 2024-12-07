@@ -15,6 +15,7 @@ var addEvent = require('./routes/addEvent');
 var addFavorite = require('./routes/addFavorite');
 var users = require('./routes/users');
 var events = require('./routes/events');
+var addBooking = require('./routes/addBooking');
 
 //connesione al database
 mongoose.connect(`mongodb+srv://fraCok:fraCok@cluster0.c9u75.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`);
@@ -41,6 +42,7 @@ app.use('/addEvent',addEvent);
 app.use('/addFavorite',addFavorite);
 app.use('/users',users);
 app.use('/events',events);
+app.use('/addBooking',addBooking);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
