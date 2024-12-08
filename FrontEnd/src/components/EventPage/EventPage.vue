@@ -1,11 +1,12 @@
 <script>
-import BTN_LOGIN from './Login/Login.vue';
-import { EventBus } from './eventBus.js';
+import DETAILS_IMG from './Details_Img.vue';
+import DESCRIPTION from './Description.vue';
 
   export default {
     name: 'EventPage',
     components: {
-      BTN_LOGIN
+      DETAILS_IMG,
+      DESCRIPTION
     },
     data() {
       return {
@@ -76,22 +77,8 @@ import { EventBus } from './eventBus.js';
     </header>
 
     <div class="event">
-      <div class="details_img">
-        <div class="details">
-          <div class="info">NAME: {{ name_event }}</div>
-          <div class="info">TAG: {{ tags }}</div>
-          <div class="info">DATE: {{ date_event }}</div>
-          <div class="info">LOCATION: {{ location_event }}</div>
-        </div>
-        <div class="img">
-          ciao
-        </div>
-      </div>
-      <div class="description">
-        DESCRIPTION:
-        <p>{{ description_event }}</p>
-      </div>
-
+      <DETAILS_IMG />
+      <DESCRIPTION />
     </div>
 
     <footer class="footerEP">
@@ -109,16 +96,26 @@ import { EventBus } from './eventBus.js';
   .event-page {
     display: flex;
     flex-direction: column;
-    width: 40%;
+    width: 45%;
     height: 80%;
     border-radius: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1),
+                0px -4px 6px rgba(0, 0, 0, 0.05),
+                4px 0px 6px rgba(0, 0, 0, 0.05),
+                -4px 0px 6px rgba(0, 0, 0, 0.05);
     margin: auto auto;
     background-color: azure;
   }
 
   .event {
-    background-color: #4cafa0;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    background-color: #84d0d0;
+    color: white;
+    font-family: 'Helvetica', sans-serif;
+    font-size: larger;
+
   }
 
   .headerEP {
@@ -169,33 +166,6 @@ import { EventBus } from './eventBus.js';
 
   .subscribe_btn:hover {
     transform: scale(1.1);
-  }
-
-
-  .details_img {
-    display: flex;
-    flex-direction: row;
-    flex: 1;
-  }
-
-  .details {
-    justify-content: left;
-    align-items: center;
-  }
-
-  .img {
-    align-items: center;
-    justify-content: center;
-  }
-
-  .description {
-
-  }
-
-  .info {
-    border-radius: 30px;
-    text-align: center;
-    padding: 5px;
   }
 
 </style>
