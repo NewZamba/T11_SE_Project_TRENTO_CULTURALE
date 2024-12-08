@@ -3,7 +3,6 @@ import PASS from './password.vue';
 import USER from './user.vue';
 import TITLE from './title.vue';
 import BTN_SIGN_UP from '../Sign_Up/SignUpBtn.vue';
-import { EventBus } from '../eventBus.js';
 
   export default {
     name: 'BTN_LOGIN',
@@ -19,11 +18,6 @@ import { EventBus } from '../eventBus.js';
         pass: '',
         userLog: {}
       };
-    },
-    mounted() {
-      EventBus.$on('subscribe', (callback) => {
-        callback(this.getUser());
-      });
     },
     methods: {
       async loginUtente() {
