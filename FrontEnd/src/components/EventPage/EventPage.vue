@@ -1,6 +1,7 @@
 <script>
 import DETAILS_IMG from './Details_Img.vue';
 import DESCRIPTION from './Description.vue';
+import cookie from 'js-cookie';
 
   export default {
     name: 'EventPage',
@@ -36,7 +37,7 @@ import DESCRIPTION from './Description.vue';
       subscribe() {
         try {
 
-          this.user = {};
+          this.user = cookie.get('User');
 
           fetch('http://localhost:3000/addBooking', {
             method: 'PUT',
@@ -44,15 +45,15 @@ import DESCRIPTION from './Description.vue';
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              id_user: this.user._id,
+              id_user: this.user,
               id_event: this._id,
               date_Prenotation: new Date().toISOString()
             }),
           }).then(res => {
             if (res.ok) {
-              alert('Subscribed at ${this.name_event}!');
+              alert('Subscribed at '+ this.name_event +'!');
             } else {
-              alert('Subscription failed!');
+              alert('You already booked!');
             }
           }).catch(err => {
             alert(err);

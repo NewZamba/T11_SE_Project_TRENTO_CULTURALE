@@ -3,6 +3,7 @@ import PASS from './password.vue';
 import USER from './user.vue';
 import TITLE from './title.vue';
 import BTN_SIGN_UP from '../Sign_Up/SignUpBtn.vue';
+import cookie from 'js-cookie';
 
   export default {
     name: 'BTN_LOGIN',
@@ -21,6 +22,7 @@ import BTN_SIGN_UP from '../Sign_Up/SignUpBtn.vue';
     },
     methods: {
       async loginUtente() {
+
         this.user = this.$refs.userComponent.getUser();
         this.pass =  this.$refs.passComponent.getPass();
         console.log(this.user);
@@ -44,6 +46,9 @@ import BTN_SIGN_UP from '../Sign_Up/SignUpBtn.vue';
               }
                 return response.json();
             }).then(data => {
+              //setto i coockie
+              cookie.set('User', data.user['_id'], {expires: 1});
+
               switch (data.user['type_user']) {
                 case 1:
                   this.$router.push('/UserHome');
@@ -66,6 +71,8 @@ import BTN_SIGN_UP from '../Sign_Up/SignUpBtn.vue';
             alert(error);
           }    
         }
+
+
       }
     }
   };
