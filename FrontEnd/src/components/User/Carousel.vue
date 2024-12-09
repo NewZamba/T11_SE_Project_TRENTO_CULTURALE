@@ -1,7 +1,14 @@
 <script>
 
+  import button from "bootstrap/js/src/button.js";
+
   export default {
     name: 'Carousel',
+    computed: {
+      button() {
+        return button
+      }
+    },
     components: {},
     data() {
       return {
@@ -54,10 +61,14 @@
       <b-carousel-slide
           v-for="event in events"
           :key="event._id"
-          :caption="event.name_event"
           :img-src="event.img_event"
           :img-width="1024"
       >
+        <div class="carousel-caption">
+          <b-button class="btn" @click="showEvent(event)">
+            {{ event.name_event }}
+          </b-button>
+        </div>
       </b-carousel-slide>
     </b-carousel>
 
@@ -79,6 +90,21 @@
 
   b-carousel-slide {
     cursor: pointer;
+  }
+
+  .btn {
+    font-size: xx-large;
+    font-weight: bold;
+    background: none;
+    border: none;
+    text-transform: uppercase;
+    -webkit-text-stroke: 1px black;
+    cursor: pointer;
+    outline: none;
+  }
+  .btn:hover {
+    color: white;
+    background: none;
   }
 
 </style>
