@@ -110,9 +110,9 @@ import cookie from 'js-cookie';
 
      <BTN_SIGN_UP />
 
-     <button @click="loginGoogle" class="google-button">
-       Login con Google
-     </button>
+     <form action="http://localhost:3000/auth/google" method="get">
+       <input type="submit" value="Press to log in"/>
+     </form>
 
    </div>
 
