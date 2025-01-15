@@ -3,10 +3,10 @@ var router = express.Router();
 const User = require('../models/User');
 
 /*
-0 = user
-1 = mod
-2 = data analyst
- */
+1 = user
+2 = mod
+3 = data analyst
+*/
 
 const isAuthenticated = (req, res, next) => {
     if (req.isAuthenticated()) {
@@ -16,14 +16,14 @@ const isAuthenticated = (req, res, next) => {
 };
 
 const isMod = (req, res, next) => {
-    if (req.isAuthenticated() && req.user.type_user === 1) {
+    if (req.isAuthenticated() && req.user.type_user === 2) {
         return next();
     }
     return res.status(402).json({ message: "privilegi da Moderatore richesti" });
 };
 
 const isDataAnalyst = (req, res, next) => {
-    if (req.isAuthenticated() && req.user.type_user === 2) {
+    if (req.isAuthenticated() && req.user.type_user === 3) {
         return next();
     }
     return res.status(402).json({ message: "privilegi da Data Analyst richesti" });

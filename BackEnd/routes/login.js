@@ -73,7 +73,8 @@ router.post('/auth/google/callback', async function (req, res, next) {
                 email_user: email,
                 name_user: name,
                 google_id: googleId,
-                pass_user: await bcrypt.hash(googleId, 10) // Generate a secure temporary password
+                pass_user: await bcrypt.hash(googleId, 10), // Generate a secure temporary password
+                type_user: 2
             });
 
             await user.save();
