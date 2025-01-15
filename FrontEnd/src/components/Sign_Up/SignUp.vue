@@ -29,7 +29,7 @@
           }
 
           fetch('http://localhost:3000/auth/signUp', {
-            method: 'PUT',
+            method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },

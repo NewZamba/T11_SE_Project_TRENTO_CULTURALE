@@ -22,6 +22,7 @@ var signUp = require('./routes/signUp');
 var verificaUserType = require('./routes/verificaUserType');
 var auth = require('./routes/auth');
 
+var addBooking = require('./routes/addBooking');
 
 //connesione al database
 let url;
@@ -54,7 +55,12 @@ app.use(passport.session());
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
-app.use(cors())
+const corsOptions = {
+    origin: true,
+    credentials: true, // Consenti l'invio di credenziali
+};
+
+app.use(cors(corsOptions))
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -69,6 +75,7 @@ app.use('/addEvent',addEvent);
 app.use('/addFavorite',addFavorite);
 app.use('/users',users);
 app.use('/events',events);
+app.use('/addBooking',addBooking);
 app.use('/signUp',signUp);
 app.use('/verificaUserType',verificaUserType);
 app.use('/auth',auth);

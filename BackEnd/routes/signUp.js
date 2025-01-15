@@ -11,18 +11,18 @@ const passport = require('passport');
 
 
 /* POST register user */
-router.post('/', async function (req, res, next) {
+router.post('/', async function (req, res) {
     try {
         const { name_user, surname_user, email_user, pass_user, age_user, phone_user, type_user } = req.body;
 
-        // Controlla se e' una nuova email
+        // Controlla se è una nuova email
         const existingUser = await User.findOne({email_user: email_user});
         if (existingUser) {
             return res.status(400).json({ message: "Utente gia' registrato" });
         }
 
         // Crypta la password
-        const saltRounds = 10; // piu' sono meglio e'
+        const saltRounds = 10; // più sono meglio e'
         const hashedPassword = await bcrypt.hash(pass_user, saltRounds);
 
         // Crea un nuovo user
