@@ -57,7 +57,7 @@ app.set('view engine', 'pug');
 
 const corsOptions = {
     origin: true,
-    credentials: true, // Consenti l'invio di credenziali
+    credentials: true, // Consenti l'invio di credenziali
 };
 
 app.use(cors(corsOptions))
