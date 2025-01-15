@@ -71,8 +71,23 @@ import cookie from 'js-cookie';
             alert(error);
           }    
         }
+      },
+      loginGoogle() {
 
-
+          fetch('http://localhost:3000/auth/google', {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          }).then (response => {
+            if (!response.ok) {
+              alert('Errore nel Login con Google!');
+              this.$router.push('/');
+            } else {
+              this.$router.push('/UserHome');
+              return response.json();
+            }
+          })
       }
     }
   };
@@ -94,6 +109,10 @@ import cookie from 'js-cookie';
       </div>
 
      <BTN_SIGN_UP />
+
+     <button @click="loginGoogle" class="google-button">
+       Login con Google
+     </button>
 
    </div>
 
@@ -178,4 +197,22 @@ import cookie from 'js-cookie';
     opacity: 0;
     transform: scale(0.1, 1);
   }
+
+  .google-button {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  .google-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+  }
+
 </style>
