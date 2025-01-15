@@ -9,6 +9,7 @@ const user_schema = new Schema({
     pass_user: {type: String, required: true},
     phone_user: {type: String},
     type_user: {type: Number, required: true},
+    google_id: {type: String, sparse: true}, // sparse: se il valore non viene assegnato l'utente non lo avra'
 });
 
 const User_model = mongoose.model('User', user_schema);
