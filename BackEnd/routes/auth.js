@@ -173,15 +173,16 @@ router.get('/google/callback',
                 return res.status(500).json({ message: "Errore durante il login con Google", error: err });
             }
             // Respond after login is complete
-            res.status(200).json({
+            /*res.status(200).json({
                 message: "Login con Google effettuato con successo",
                 user: {
                     id: req.user._id,
                     email: req.user.email_user,
                     type: req.user.type_user
                 }
-            });
+            });*/
         });
+        res.redirect('http://localhost:5173/UserHome');
     }
 );
 
