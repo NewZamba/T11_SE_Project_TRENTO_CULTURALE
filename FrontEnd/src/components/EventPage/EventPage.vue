@@ -2,6 +2,7 @@
 import DETAILS_IMG from './Details_Img.vue';
 import DESCRIPTION from './Description.vue';
 import cookie from 'js-cookie';
+import data from "bootstrap/js/src/dom/data.js";
 
   export default {
     name: 'EventPage',
@@ -18,6 +19,7 @@ import cookie from 'js-cookie';
         location_event: '',
         date_event: null,
         tags: 0,
+        guests: 0,
         user: {}
       };
     },
@@ -29,6 +31,7 @@ import cookie from 'js-cookie';
       this.location_event = this.$route.query.location_event;
       this.date_event = this.$route.query.date_event;
       this.tags = this.$route.query.tags;
+      this.guests = this.$route.query.guests_event;
     },
     methods: {
       backToHome() {
@@ -36,7 +39,6 @@ import cookie from 'js-cookie';
       },
       subscribe() {
         try {
-
           this.user = cookie.get('User');
 
           fetch('http://localhost:3000/addBooking', {
@@ -47,16 +49,17 @@ import cookie from 'js-cookie';
             body: JSON.stringify({
               id_user: this.user,
               id_event: this._id,
-              date_Prenotation: new Date().toISOString()
+              date_Prenotation: new Date().toISOString(),
+              guests_event: this.guests,
             }),
           }).then(res => {
             if (res.ok) {
-              alert('Subscribed at '+ this.name_event +'!');
+              alert('Subscribed at ' + this.name_event + '!');
+            } else if (res.status === 405) {
+              alert('Max partecipanti');
             } else {
-              alert('You already booked!');
+              alert(res.statusText);
             }
-          }).catch(err => {
-            alert(err);
           });
         } catch (err) {
           alert(err);

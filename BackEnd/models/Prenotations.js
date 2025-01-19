@@ -12,21 +12,9 @@ const prenotation_schema = new Schema({
         ref: 'Event',
         required: true
     },
-    name_event: {
-        type: String,
-        required: true
-    },
     date_Prenotation: {
         type: Date,
         required: true
-    },
-    date_event: {
-        type: Date,
-        required: true
-    },
-    form: {
-        type: Boolean,
-        default: false
     }
 });
 

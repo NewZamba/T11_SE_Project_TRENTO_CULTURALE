@@ -7,20 +7,29 @@ router.put('/', async (req, res) => {
     console.log('Request reached /addBooking endpoint');
 
     try {
-        const { id_user, id_event, date_Prenotation } = req.body;
+        const { id_user, id_event, date_Prenotation, guests_event} = req.body;
 
         if (!id_user || !id_event || !date_Prenotation) {
-            return res.status(400).json({ message: 'Tutti i campi sono richiesti.' });
+            return res.status(400).json({ message: 'Campi necessari!' });
         }
 
-        const existingPrenotation = await Prenotations.findOne({id_user:id_user,id_event:id_event});
+        // CONTROLLO SE IL NUMERO DI PRENOTAZIONI DI UN EVENTO E' > DEL NUMERO MAX DI POSTI PER QUELL' EVENTO
+        if(guests_event > 0) {
+            const prenotationsCount = await Prenotations.countDocuments({ id_event });
+
+            if (prenotationsCount >= guests_event) {
+                return res.status(405).json({ message: 'Posto non disponibile!' });
+            }
+        } // ALTRIMENTI CI SONO POSTI ILLIMITATI
+
+        const existingPrenotation = await Prenotations.findOne({id_user: id_user,id_event: id_event});
 
         if (existingPrenotation) {
             return res.status(409).json({ message: 'Prenotazione già esistente.' });
         }
 
         // Crea una nuova prenotazione
-        const newPrenotation = new Prenotations(req.body);
+        const newPrenotation = new Prenotations({ id_user, id_event, date_Prenotation });
 
         await newPrenotation.save();
 

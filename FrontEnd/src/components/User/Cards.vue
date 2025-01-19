@@ -24,7 +24,8 @@
             description_event: event.description_event,
             location_event: event.location_event,
             date_event: event.date_event,
-            tags: event.tags
+            tags: event.tags,
+            guests_event: event.guests_event,
           }
         });
       }
