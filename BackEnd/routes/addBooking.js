@@ -3,7 +3,7 @@ const router = express.Router();
 const Prenotations = require('../models/Prenotations');
 
 // Endpoint per aggiungere una prenotazione
-router.put('/', async (req, res) => {
+router.post('/', async (req, res) => {
     console.log('Request reached /addBooking endpoint');
 
     try {

@@ -25,7 +25,6 @@ import {RouterLink} from "vue-router";
     methods: {
       verifyUserType() {
         try {
-            console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
             fetch('http://localhost:3000/verificaUserType/user-home', {
               method: 'GET',
               headers: {
@@ -33,8 +32,6 @@ import {RouterLink} from "vue-router";
               },
               credentials: 'include',
             }).then(response => {
-              console.log(response);
-              console.log("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
               this.$router.push('/SignUp');
               // if (!response.ok) {
               //

@@ -42,7 +42,7 @@ import data from "bootstrap/js/src/dom/data.js";
           this.user = cookie.get('User');
 
           fetch('http://localhost:3000/addBooking', {
-            method: 'PUT',
+            method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
