@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const prenotation_schema = new Schema({
-    id_user:{
+    id_user: {
         type: mongoose.Schema.Types.ObjectId,
         ref : 'User',
         required:true
@@ -12,7 +12,10 @@ const prenotation_schema = new Schema({
         ref: 'Event',
         required: true
     },
-    date_Prenotation: {type: Date, required: true},
+    date_Prenotation: {
+        type: Date,
+        required: true
+    }
 });
 
 const prenotation_model = mongoose.model('Prenotation', prenotation_schema);
