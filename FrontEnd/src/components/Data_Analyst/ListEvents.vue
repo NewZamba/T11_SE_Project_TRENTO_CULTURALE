@@ -25,34 +25,40 @@
     methods: {
       showDetails(event) {
         this.t_event = event;
+        console.log(this.t_event);
       },
       showGraphic(event, x) {
         switch (x) {
-          // N_eventi_proposti/tempo
-          case 1: this.$router.push({
-                          path: '/GraphicEvent',
-                          query: {
-                            suggested_events: this.sugg_events
-                          }
-                        });
+            // N_eventi_proposti/tempo
+          case 1:
+            console.log(this.sugg_events);
+            this.$router.push({
+              path: '/GraphicEvent',
+              query: {
+                suggested_events: this.sugg_events
+              }
+            });
             break;
-          // Media_feedback_eventi/tempo
-          case 2: this.$router.push({
-                          path: '/GraphicEvent',
-                          query: {
-                            event: event
-                          }
-                        });
+            // Media_feedback_eventi/tempo
+          case 2:
+            console.log(this.event + 'dio latte');
+            this.$router.push({
+              path: '/GraphicEvent',
+              query: {
+                event: event
+              }
+            });
             break;
-          // Media_prenotazioni_eventi/tempo
-          /*case 3: this.$router.push({
-                          path: '/GraphicEvent',
-                          query: {
-                            prenotations: this.prenotations
-                          }
-                        });
-            break;*/
-          default: break;
+            // Media_prenotazioni_eventi/tempo
+            /*case 3: this.$router.push({
+                            path: '/GraphicEvent',
+                            query: {
+                              prenotations: this.prenotations
+                            }
+                          });
+              break;*/
+          default:
+            break;
         }
       }
     }
@@ -76,40 +82,40 @@
     </div>
 
     <div class="right-column">
-      <div v-if="this.t_event === null">
+      <div v-if="t_event === null">
         <p> Nessun evento selezionato </p>
       </div>
 
-      <div v-if="this.t_event !== null" class="graphics">
+      <div v-else class="graphics">
           <!--Info eventi-->
           <div class="info">
-            <h1> {{ this.t_event.name_event }} </h1>
-            <p> {{ this.t_event.location_event }} </p>
-            <p> {{ this.t_event.date_event }} </p>
-            <p> {{ this.t_event.tags }} </p>
-            <p> {{ this.t_event.description_event }} </p>
-            <img :src="t_event.img_event" v-if="t_event
-                    && t_event.img_event" alt="Immagine Evento" />
+            <h1> {{ t_event.name_event }} </h1>
+            <p> {{ t_event.location_event }} </p>
+            <p> {{ t_event.date_event }} </p>
+            <p> {{ t_event.tags }} </p>
+            <p> {{ t_event.description_event }} </p>
+            <img :src="t_event.img_event"
+                 v-if="t_event && t_event.img_event" alt="Immagine Evento" />
           </div>
 
         <div class="buttons">
           <!--Possibili grafici-->
           <b-button
-              @click="showGraphic(this.t_event, 1)"
+              @click="showGraphic(t_event, 1)"
               class="card-item">
-            N.eventi proposti/tempo
+            N eventi proposti/tempo
           </b-button>
 
           <b-button
-              @click="showGraphic(this.t_event, 2)"
+              @click="showGraphic(t_event, 2)"
               class="card-item">
-            Media feedback evento/tempo
+            Media prenotazioni eventi/tempo
           </b-button>
 
           <!--
           <b-button
               @click="showGraphic(this.t_event, 3)"
-              class="card-item">
+              class="card-item" >
             Media prenotazioni evento/tempo
           </b-button>
           -->

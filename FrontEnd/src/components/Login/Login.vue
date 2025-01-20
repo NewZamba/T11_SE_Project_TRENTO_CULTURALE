@@ -136,7 +136,7 @@ import BTN_SIGN_UP from '../Sign_Up/SignUpBtn.vue';
      <BTN_SIGN_UP />
 
      <form action="http://localhost:3000/auth/google" method="get">
-       <input type="submit" value="Press to log in"/>
+       <input type="submit" value="Press to log in"/>
      </form>
 
 <!--     <div class="box">-->

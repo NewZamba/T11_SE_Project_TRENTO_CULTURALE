@@ -30,7 +30,6 @@ export default {
 
 <style scoped>
 
-
   * {
     margin: 0 0 0 0;
     padding: 0 0 0 0;

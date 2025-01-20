@@ -1,7 +1,6 @@
 <script>
 import CAROUSEL from './Carousel.vue';
 import CARDS from './Cards.vue';
-// import cookie from 'js-cookie';
 import {RouterLink} from "vue-router";
 
   export default {
@@ -12,46 +11,64 @@ import {RouterLink} from "vue-router";
     },
     data() {
       return {
-        events: [],
-        // type_user: {}
+        events: []
       };
     },
     created() {
-      // this.type_user = cookie.get('User')
       this.verifyUserType();
     },
     mounted() {
-      // this.fetchEvents();
+      console.log('Component mounted.');
+      this.fetchEvents();
+      console.log(this.events);
     },
     methods: {
-      async verifyUserType() {
+      verifyUserType() {
         try {
-          const response = await fetch('http://localhost:3000/verificaUserType/test', {
-            method: 'GET',
-            credentials: 'include',
-          });
-
-          if (response.status === 401) {
-            throw new Error('utente non loggato');
-          } else if (!response.ok) {
-            const errorResponse = await response.json();
-            throw new Error(errorResponse.message || 'Server error');
-          }
-
-          if (!response.ok) {
-            const errorResponse = await response.json();
-            throw new Error(errorResponse.message || 'Server error');
-          }
-
-          const user_data = await response.json();
-          // Assuming 'user' is the key in the response object
-          alert(`User: ${user_data.email_user || 'Unknown user'}, Type: ${user_data.type_user || 'Unknown type'}`);
-        } catch (error) {
-          // Display the error message in case of issues
-          alert(`Error: ${error.message}`);
+            console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+            fetch('http://localhost:3000/verificaUserType/user-home', {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              credentials: 'include',
+            }).then(response => {
+              console.log(response);
+              console.log("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
+              this.$router.push('/SignUp');
+              // if (!response.ok) {
+              //
+              // }
+              return response.json();
+            }).then(data => {
+              if (data.type_user !== 0) {
+                throw new Error('User non autorizzato');
+              }
+            })
+        } catch (err){
+          alert(err.message);
         }
       },
-    },
+      fetchEvents() {
+        try {
+          fetch('http://localhost:3000/events', {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          }).then(response => {
+            if (!response.ok) {
+              throw new Error('Error fetching events');
+            }
+            return response.json();
+          }).then(data => {
+            this.events = data;
+          });
+        } catch (err) {
+          alert(err.message);
+        }
+      }
+    }
   };
 
 </script>

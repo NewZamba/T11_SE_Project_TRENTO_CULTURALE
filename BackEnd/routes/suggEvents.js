@@ -5,8 +5,7 @@ const suggEvents = require("../models/SuggEvents");
 /* GET users listing. */
 router.get('/', async function (req, res, next) {
 
-    const {event} = req.query;
-    const lstSuggEvents = await suggEvents.find({id_event: event._id});
+    const lstSuggEvents = await suggEvents.find();
 
     if (lstSuggEvents) {
         return res.status(200).json(lstSuggEvents);
