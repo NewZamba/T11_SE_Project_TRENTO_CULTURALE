@@ -1,12 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const Prenotation = require("../models/Prenotation");
+const Prenotation = require("../models/Prenotations");
 
 /* GET users listing. */
 router.get('/', async function (req, res, next) {
 
-    const {event} = req.query;
-    const lstPrenotations = await Prenotation.find({id_event: event._id});
+    const lstPrenotations = await Prenotation.find();
 
     if (lstPrenotations) {
         return res.status(200).json(lstPrenotations);
