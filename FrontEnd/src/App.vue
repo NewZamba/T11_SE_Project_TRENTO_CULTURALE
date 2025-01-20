@@ -55,8 +55,6 @@ export default {
 
   }
 
-
-
   .mains {
     grid-area: mains;
     height: 90%;

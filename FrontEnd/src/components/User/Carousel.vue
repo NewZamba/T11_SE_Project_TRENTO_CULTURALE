@@ -1,6 +1,5 @@
 <script>
-
-  import button from "bootstrap/js/src/button.js";
+import button from "bootstrap/js/src/button.js";
 
   export default {
     name: 'Carousel',

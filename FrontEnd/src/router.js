@@ -6,11 +6,7 @@ import ModeratorHome from './components/Moderator/Home.vue';
 import SignUp from './components/Sign_Up/SignUp.vue';
 import Login from './components/Login/Login.vue';
 import EventPage from './components/EventPage/EventPage.vue';
-import Comment from './components/Comment/CommentSection.vue';
-import SuggestionEvent from "./components/User/SuggestionEvent.vue";
-import SuggEvents from './components/User/SuggEvents.vue';
-import FormEvents from './components/User/FormEvents.vue';
-import BookingsPage from './components/User/BookingsPage.vue';
+import GraphicEvent from './components/Data_Analyst/GraphicEvent.vue';
 
 Vue.use(Router);
 
@@ -40,24 +36,8 @@ const routes = [
         component: EventPage
     },
     {
-        path: '/Comment',
-        component: Comment
-    },
-    {
-        path: '/SuggestionEvent',
-        component: SuggestionEvent
-    },
-    {
-        path: '/SuggEvents',
-        component: SuggEvents
-    },
-    {
-        path: '/FormEvents',
-        component: FormEvents
-    },
-    {
-        path: '/BookingsPage',
-        component: BookingsPage
+        path: '/GraphicEvent',
+        component: GraphicEvent
     },
     {
         path: '*', // Rotte non definite
