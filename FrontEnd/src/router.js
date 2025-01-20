@@ -6,7 +6,7 @@ import ModeratorHome from './components/Moderator/Home.vue';
 import SignUp from './components/Sign_Up/SignUp.vue';
 import Login from './components/Login/Login.vue';
 import EventPage from './components/EventPage/EventPage.vue';
-
+import GraphicEvent from './components/Data_Analyst/GraphicEvent.vue';
 
 Vue.use(Router);
 
@@ -34,6 +34,10 @@ const routes = [
     {
         path: '/EventPage',
         component: EventPage
+    },
+    {
+        path: '/GraphicEvent',
+        component: GraphicEvent
     },
     {
         path: '*', // Rotte non definite

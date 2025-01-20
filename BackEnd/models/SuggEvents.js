@@ -9,10 +9,7 @@ const suggEvent_schema = new Schema({
     },
     name_event: {type: String, required: true},
     date_event: {type: Date, required: true},
-    tag_event: {
-        type: String, 
-        required: true
-    },
+    tag_event: {type: String, required: true},
     description_event: {type: String, required: true},
     img_event: {type: String, required: false}
 });
