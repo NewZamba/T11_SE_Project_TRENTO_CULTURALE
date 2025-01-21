@@ -3,7 +3,6 @@ import PASS from './password.vue';
 import USER from './user.vue';
 import TITLE from './title.vue';
 import BTN_SIGN_UP from '../Sign_Up/SignUpBtn.vue';
-import cookie from 'js-cookie';
 
   export default {
     name: 'BTN_LOGIN',
@@ -17,79 +16,105 @@ import cookie from 'js-cookie';
       return {
         user: '',
         pass: '',
-        userLog: {}
       };
     },
     methods: {
       async loginUtente() {
-
         this.user = this.$refs.userComponent.getUser();
         this.pass =  this.$refs.passComponent.getPass();
-        console.log(this.user);
-        console.log(this.pass);
-
         if (this.user && this.pass) {
           try {
-            fetch('http://localhost:3000/auth/login', {
+            const response = await fetch('http://localhost:3000/auth/login', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
               },
+              credentials: 'include',
               body: JSON.stringify({
-                email: this.user,
-                password: this.pass,
+                email_user: this.user,
+                pass_user: this.pass,
               }),
-            })
-            .then(response => {
-              if (!response.ok) {
-                throw new Error(response.statusText);
-              }
-                return response.json();
-            }).then(data => {
-              //setto i coockie
-              cookie.set('User', data.user['_id'], {expires: 1});
-
-              switch (data.user['type_user']) {
-                case 1:
-                  this.$router.push('/UserHome');
-                  break;
-                case 2:
-                  this.$router.push('/DataAnalystHome');
-                  break;
-                case 3:
-                  this.$router.push('/ModeratorHome');
-                  break;
-                default: alert('Utente non esistente!');
-                  break;
-              }
-              this.userLog = data.user;
-            })
-            .catch(error => {
-              alert(error.message);
             });
+
+            if (!response.ok) {
+              throw new Error('email o password errata');
+            }
+
+            const data = await response.json();
+
+            switch (data.type_user) {
+              case 0:
+                await this.$router.push('/UserHome');
+                break;
+              case 1:
+                await this.$router.push('/DataAnalystHome');
+                break;
+              case 2:
+                await this.$router.push('/ModeratorHome');
+                break;
+              default:
+                throw new Error('type_user non esistente');
+            }
           } catch (error) {
-            alert(error);
-          }    
+            alert(error.message);
+          }
+        } else {
+          alert('email o password non inserita');
         }
       },
-      loginGoogle() {
-
-          fetch('http://localhost:3000/auth/google', {
+      async loginGoogle() {
+        try {
+          const response = await fetch('http://localhost:3000/auth/google', {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
-            }
-          }).then (response => {
-            if (!response.ok) {
-              alert('Errore nel Login con Google!');
-              this.$router.push('/');
-            } else {
-              this.$router.push('/UserHome');
-              return response.json();
-            }
-          })
+            },
+          });
+
+          if (!response.ok) {
+            throw new Error('Errore nel Login con Google!');
+          }
+
+          const data = await response.json();
+
+          switch (data.type_user) {
+            case 0:
+              await this.$router.push('/UserHome');
+              break;
+            case 1:
+              await this.$router.push('/DataAnalystHome');
+              break;
+            case 2:
+              await this.$router.push('/ModeratorHome');
+              break;
+            default:
+              throw new Error('type_user non esistente');
+          }
+        } catch (error) {
+          alert(error.message);
+        }
+
+
+
+
+
+
+          // fetch('http://localhost:3000/auth/google', {
+          //   method: 'GET',
+          //   headers: {
+          //     'Content-Type': 'application/json',
+          //   }
+          // }).then (response => {
+          //   if (!response.ok) {
+          //     alert('Errore nel Login con Google!');
+          //     this.$router.push('/');
+          //   } else {
+          //     this.$router.push('/UserHome');
+          //     return response.json();
+          //   }
+          // })
       }
-    }
+    },
   };
 </script>
 
@@ -113,6 +138,12 @@ import cookie from 'js-cookie';
      <form action="http://localhost:3000/auth/google" method="get">
        <input type="submit" value="Press to log in"/>
      </form>
+
+<!--     <div class="box">-->
+<!--       <div class="btn btn-one" role="button" @click="loginGoogle">-->
+<!--         <span>LOGIN WITH GOOGLE</span>-->
+<!--       </div>-->
+<!--     </div>-->
 
    </div>
 

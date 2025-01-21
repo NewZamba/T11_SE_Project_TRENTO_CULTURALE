@@ -13,22 +13,34 @@ export default {
     this.verifyUserType();
   },
   methods: {
-    verifyUserType() {
-      fetch('http://localhost:3000/verificaUserType/data-analyst-home', {
-        method: 'GET',
-        credentials: 'include'
-      }).then(response => {
+    async verifyUserType() {
+      try {
+        const response = await fetch('http://localhost:3000/verificaUserType/test', {
+          method: 'GET',
+          credentials: 'include',
+        });
+
+        if (response.status === 401) {
+          throw new Error('utente non loggato');
+        } else if (!response.ok) {
+          const errorResponse = await response.json();
+          throw new Error(errorResponse.message || 'Server error');
+        }
+
         if (!response.ok) {
-          throw new Error('User non loggato');
+          const errorResponse = await response.json();
+          throw new Error(errorResponse.message || 'Server error');
         }
-        return response.json()
-      }).then(data => {
-        if (data.type_user !== 2) {
-          throw new Error('User non autorizzato');
-        }
-      })
-    }
-  }
+
+        const user_data = await response.json();
+        // Assuming 'user' is the key in the response object
+        alert(`User: ${user_data.email_user || 'Unknown user'}, Type: ${user_data.type_user || 'Unknown type'}`);
+      } catch (error) {
+        // Display the error message in case of issues
+        alert(`Error: ${error.message}`);
+      }
+    },
+  },
 };
 
 </script>

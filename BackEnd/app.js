@@ -9,20 +9,17 @@ const crypto = require('crypto');
 const cors = require('cors');
 const passport = require("passport");
 
-//import file di api
-var indexRouter = require('./routes/index');
-var caricaDati = require('./routes/caricaDati');
-var login = require('./routes/login');
-var addUser = require('./routes/addUser');
+//import file per api endpoints
+var addBooking = require('./routes/addBooking');
 var addEvent = require('./routes/addEvent');
 var addFavorite = require('./routes/addFavorite');
-var users = require('./routes/users');
-var events = require('./routes/events');
-var signUp = require('./routes/signUp');
-var verificaUserType = require('./routes/verificaUserType');
+var addUser = require('./routes/addUser');
 var auth = require('./routes/auth');
-
-var addBooking = require('./routes/addBooking');
+var caricaDati = require('./routes/caricaDati'); //TODO: rimuovere quando il progetto e' finito
+var events = require('./routes/events');
+var indexRouter = require('./routes/index');
+var users = require('./routes/users');
+var verificaUserType = require('./routes/verificaUserType');
 
 //connesione al database
 let url;
@@ -56,9 +53,10 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
 const corsOptions = {
-    origin: '*',
+    origin: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
 };
 
 app.use(cors(corsOptions))
@@ -70,14 +68,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/caricaDati',caricaDati);
-app.use('/login',login);
+// app.use('/login',login);
 app.use('/addUser',addUser);
 app.use('/addEvent',addEvent);
 app.use('/addFavorite',addFavorite);
 app.use('/users',users);
 app.use('/events',events);
 app.use('/addBooking',addBooking);
-app.use('/signUp',signUp);
+// app.use('/signUp',signUp);
 app.use('/verificaUserType',verificaUserType);
 app.use('/auth',auth);
 
