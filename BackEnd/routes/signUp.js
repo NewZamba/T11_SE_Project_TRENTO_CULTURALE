@@ -1,6 +1,7 @@
-/**
+/*
+/!**
  * @deprecated ora Auth.js sostituisce sia il login che la registrazione
- */
+ *!/
 
 
 var express = require('express');
@@ -10,7 +11,7 @@ const bcrypt = require('bcrypt');
 const passport = require('passport');
 
 
-/* POST register user */
+/!* POST register user *!/
 router.post('/', async function (req, res) {
     try {
         const { name_user, surname_user, email_user, pass_user, age_user, phone_user, type_user } = req.body;
@@ -46,4 +47,4 @@ router.post('/', async function (req, res) {
     }
 });
 
-module.exports = router;
+module.exports = router;*/

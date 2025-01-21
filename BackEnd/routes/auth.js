@@ -1,33 +1,61 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/User');
+const { user_model: User } = require('../models/User');
 const bcrypt = require('bcrypt');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+
+// passport.use(new LocalStrategy(
+//     {
+//         usernameField: 'email_user',
+//         passwordField: 'pass_user'
+//     },
+//     async function verify(email, password, cb) {
+//         // cd (callback) ritorna a tuple (err, user, info)
+//         try {
+//             // Controlla se l'utente esiste
+//             const user = await User.findOne({ email_user: email });
+//             if (!user) {
+//                 return cb(null, false, { message: "Utente non trovato" });
+//             }
+//
+//             // Controlla se la password è corretta
+//             const isPasswordCorrect = await bcrypt.compare(password, user.pass_user);
+//             if (!isPasswordCorrect) {
+//                 return cb(null, false, { message: "Password errata" });
+//             }
+//
+//             // Login accettato
+//             return cb(null, user);
+//         } catch (err) {
+//             return cb(err, false, { message: "Errore durante il login" });
+//         }
+//     }));
+
 
 passport.use(new LocalStrategy(
     {
         usernameField: 'email_user',
         passwordField: 'pass_user'
     },
-    async function verify(email, password, cb) {
-        // cd (callback) ritorna a tuple (err, user, info)
-        try {
-            // Controlla se l'utente esiste
-            const user = await User.findOne({ email_user: email });
-            if (!user) {return cb(null, false, {message: "Utente non trovato"});}
+    async (email_user, pass_user, done) => {
+    // console.log(`Email: ${email_user}, Password: ${pass_user}`);
+    try {
+        // Controlla se l'utente esiste
+        const user = await User.findOne({ email_user: email_user });
+        if (!user) throw new Error("Utente non trovato");
 
-            // Controlla se la password è corretta
-            const isPasswordCorrect = await bcrypt.compare(password, user.pass_user);
-            if (!isPasswordCorrect) {return cb(null, false, {message: "Password errata"});}
+        // Controlla se la password è corretta
+        const isPasswordCorrect = await bcrypt.compare(pass_user, user.pass_user);
+        if (!isPasswordCorrect) throw new Error("Password errata");
 
-            // Login accettato
-            return cb(null, user);
-        } catch (err) {
-            return cb(err, false, {message: "Errore durante il login"});
-        }
-    }));
+        // done ritorna a tuple (err, user)
+        done(null, user);
+    } catch (err) {
+        done(err, null);
+    }
+}));
 
 passport.use(new GoogleStrategy(
     {
@@ -37,36 +65,38 @@ passport.use(new GoogleStrategy(
         callbackURL: process.env.GOOGLE_CALLBACK_URL || "http://localhost:3000/auth/google/callback",
         passReqToCallback: true
     },
-    async function verify(req, accessToken, refreshToken, profile, cb) {
+    async function verify(req, accessToken, refreshToken, profile, done) {
         try {
             // Controlla se l'utente esiste
-            let user = await User.findOne({ email_user: profile.emails[0].value });
+            const user = await User.findOne({ email_user: profile.emails[0].value });
 
             if (user) {
                 // Se esiste login
-                return cb(null, user);
+                done(null, user);
             } else {
                 // Altrimenti signup
                 const newUser = new User({
-                    name_user: profile.name.givenName,
-                    surname_user: profile.name.familyName,
+                    name_user: profile.name.givenName || null,
+                    surname_user: profile.name.familyName || null,
                     email_user: profile.emails[0].value,
                     pass_user: 'google_oauth', // Password? Dove stiamo andando, non c’è bisogno di Password!
-                    type_user: 1, //TODO: implementare un modo per decidere l'user type
+                    type_user: 0,
                     google_id: profile.id
                 });
 
+                // Salva l'User
                 await newUser.save();
-                return cb(null, newUser);
+
+                done(null, user);
             }
         } catch (err) {
-            return cb(err, null);
+            done(err, null);
         }
     }));
 
 // serializza i dati temporanei della sessione
 passport.serializeUser((user, done) => {
-    done(null, user.id);
+    done(null, user.id); //user.id e' l'id di mongoDB dell'user
 });
 
 // deserializza i dati temporanei della sessione
@@ -75,33 +105,91 @@ passport.deserializeUser(async (id, done) => {
         const user = await User.findById(id);
         done(null, user);
     } catch (err) {
-        done(err);
+        done(err, null);
     }
 });
 
 /* POST login user  */
-router.post('/login',  (req, res, next) => {
-    passport.authenticate('local', (err, user, info) => {
+// router.post('/login', (req, res, next) => {
+//     passport.authenticate('local', (err, user, info) => {
+//         if (err) {
+//             return res.status(500).json({
+//                 message: "Errore durante il login",
+//                 error: err.message
+//             });
+//         }
+//
+//         if (!user) {
+//             return res.status(401).json({
+//                 message: info.message || "Credenziali non valide"
+//             });
+//         }
+//
+//         req.login(user, (err) => {
+//             if (err) {
+//                 return res.status(500).json({
+//                     message: "Errore durante il login",
+//                     error: err.message
+//                 });
+//             }
+//
+//             return res.status(200).json({
+//                 message: "Login effettuato con successo",
+//                 user: {
+//                     id: user._id,
+//                     email: user.email_user,
+//                     type_user: user.type_user
+//                 }
+//             });
+//         });
+//     })(req, res, next);
+// });
 
-        // logga l'user
-        req.login(user, (err) => {
-            // errore imprevisto
-            if (err) {return res.status(500).json({ message: "Errore durante il login", error: err });}
 
-            // utente non trovato o password sbagliata
-            if (!user) {return res.status(404).json({message: info.message});}
+/* POST login user  */
+router.post(
+    '/login',
+    passport.authenticate('local'),
+    (req, res, next) => {
+        res.status(200).json({ type_user: req.user.type_user });
+    }
+);
 
-            return res.status(200).json({
-                message: "Login effettuato con successo",
-                user: {
-                    id: user._id,
-                    email: user.email_user,
-                    type: user.type_user
-                }
-            });
-        });
-    })(req, res, next);
-});
+
+
+//     passport.authenticate('local'), (err, user, info) => {
+//         if (err) {
+//             return res.status(500).json({
+//                 message: "Errore durante il login",
+//                 error: err.message
+//             });
+//         }
+//
+//         if (!user) {
+//             return res.status(401).json({
+//                 message: info.message || "Credenziali non valide"
+//             });
+//         }
+//
+//         req.login(user, (err) => {
+//             if (err) {
+//                 return res.status(500).json({
+//                     message: "Errore durante il login",
+//                     error: err.message
+//                 });
+//             }
+//
+//             return res.status(200).json({
+//                 message: "Login effettuato con successo",
+//                 user: {
+//                     id: user._id,
+//                     email: user.email_user,
+//                     type_user: user.type_user
+//                 }
+//             });
+//         });
+//     })(req, res, next);
+// });
 
 /* POST register user */
 router.post('/signup', async function (req, res, next) {
@@ -126,7 +214,7 @@ router.post('/signup', async function (req, res, next) {
             pass_user: hashedPassword,
             age_user,
             phone_user,
-            type_user
+            type_user: 0
         });
 
         // Salva l'User
@@ -135,7 +223,7 @@ router.post('/signup', async function (req, res, next) {
         return res.status(200).json({message: "Utente aggiunto con sucesso"});
     } catch(err) {
         console.error('Registration error:', err);
-        return res.status(401).json({ message: "Utente non aggiunto: ", error: err.message });
+        return res.status(402).json({ message: "Utente non aggiunto: ", error: err.message });
     }
 });
 
@@ -143,7 +231,7 @@ router.post('/signup', async function (req, res, next) {
 router.post('/logout', (req, res, next) => {
     // Controlla se l'User e' loggato
     if (!req.isAuthenticated()) {
-        return res.status(401).json({ message: "Nessun utente da sloggare" });
+        return res.status(403).json({ message: "Nessun utente da sloggare" });
     }
 
     // logout
@@ -170,17 +258,17 @@ router.get('/google/callback',
         // logga l'user
         req.login(req.user, (err) => {
             if (err) {
-                return res.status(500).json({ message: "Errore durante il login con Google", error: err });
+                return res.status(500).json({ message: "Errore durante il login", error: err });
             }
-            // Respond after login is complete
-            /*res.status(200).json({
-                message: "Login con Google effettuato con successo",
-                user: {
-                    id: req.user._id,
-                    email: req.user.email_user,
-                    type: req.user.type_user
-                }
-            });*/
+
+            // return res.status(200).json({
+            //     message: "Login effettuato con successo",
+            //     user: {
+            //         id: user._id,
+            //         email: user.email_user,
+            //         type_user: user.type_user
+            //     }
+            // });
         });
         res.redirect('http://localhost:5173/UserHome');
     }
