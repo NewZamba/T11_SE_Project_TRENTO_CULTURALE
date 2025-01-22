@@ -1,52 +1,22 @@
 <script>
+import LineChart1 from './LineChart1.vue'
 
   export default {
     name: 'GraphicEvent',
-    components: {},
+    components: {
+      LineChart1,
+    },
     data() {
       return {
-        suggestions: null,
+        suggested_events: null,
         event: null
       };
-    },
-    chartData: {
-      labels: [], // Etichette sull'asse X
-      datasets: [
-        {
-          label: '',
-          data: [], // Dati per il grafico
-          borderColor: 'rgb(75, 192, 192)', // Colore della linea
-          fill: true
-        }
-      ]
-    },
-    chartOptions: {
-      responsive: true,
-      plugins: {
-        legend: {
-          position: 'top'
-        },
-        title: {
-          display: true,
-          text: 'GRAFICO - N_eventi_proposti/tempo '
-        }
-      },
-      scales: {
-        x: {
-          beginAtZero: true
-        },
-        y: {
-          beginAtZero: true
-        }
-      }
     },
     mounted() {
       this.event = this.$route.query.event;
       this.suggested_events = this.$route.query.suggested_events;
     },
-    methods: {
-
-    }
+    methods: {}
   };
 
 </script>
@@ -60,9 +30,7 @@
     </div> -->
 
     <!-- GRAFICO  N_eventi_proposti/tempo -->
-    <div class="graphics">
-
-    </div>
+    <LineChart1 :sugg_events="suggested_events" />
 
   </div>
 

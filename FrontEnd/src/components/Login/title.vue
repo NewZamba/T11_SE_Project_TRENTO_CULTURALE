@@ -22,7 +22,7 @@
 button {
   height: 100px;
     width: 400px;
-    padding: 2%; 
+    padding: 2%;
     position: relative;
     margin: 10px;
     border: 3px solid white;
@@ -32,7 +32,7 @@ button {
     transition: all 1000ms;
     z-index: 1;
     overflow: hidden;
-    
+
     font-family: 'Helvetica';
     font-weight: bold;
     font-size: x-large;
