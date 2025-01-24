@@ -192,7 +192,7 @@ router.post(
 // });
 
 /* POST register user */
-router.post('/signup', async function (req, res, next) {
+router.post('/signUp', async function (req, res, next) {
     try {
         const { name_user, surname_user, email_user, pass_user, age_user, phone_user, type_user } = req.body;
 
@@ -214,7 +214,7 @@ router.post('/signup', async function (req, res, next) {
             pass_user: hashedPassword,
             age_user,
             phone_user,
-            type_user: 0
+            type_user: 1
         });
 
         // Salva l'User
