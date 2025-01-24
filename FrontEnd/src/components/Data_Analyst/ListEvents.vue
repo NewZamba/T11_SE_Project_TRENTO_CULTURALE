@@ -29,18 +29,8 @@
       },
       showGraphic(event, x) {
         switch (x) {
-            // N_eventi_proposti/tempo
+          // Media_feedback_eventi/tempo
           case 1:
-            console.log(this.sugg_events);
-            this.$router.push({
-              path: '/GraphicEvent',
-              query: {
-                suggested_events: this.sugg_events
-              }
-            });
-            break;
-            // Media_feedback_eventi/tempo
-          case 2:
             console.log(this.event + 'dio latte');
             this.$router.push({
               path: '/GraphicEvent',
@@ -49,14 +39,6 @@
               }
             });
             break;
-            // Media_prenotazioni_eventi/tempo
-            /*case 3: this.$router.push({
-                            path: '/GraphicEvent',
-                            query: {
-                              prenotations: this.prenotations
-                            }
-                          });
-              break;*/
           default:
             break;
         }
@@ -101,12 +83,6 @@
         <div class="buttons">
           <!--Possibili grafici-->
           <b-button
-              @click="showGraphic(t_event, 1)"
-              class="card-item">
-            N eventi proposti/tempo
-          </b-button>
-
-          <b-button
               @click="showGraphic(t_event, 2)"
               class="card-item">
             Media prenotazioni eventi/tempo
@@ -122,6 +98,7 @@
         </div>
 
       </div>
+
     </div>
 
   </div>

@@ -1,11 +1,8 @@
 <script>
-import LineChart1 from './LineChart1.vue'
 
   export default {
     name: 'GraphicEvent',
-    components: {
-      LineChart1,
-    },
+    components: {},
     data() {
       return {
         suggested_events: null,
@@ -28,9 +25,6 @@ import LineChart1 from './LineChart1.vue'
     <!-- GRAFICO Media_prenotazioni_eventi/tempo
     <div v-if="suggestions !== null" class="graphics">
     </div> -->
-
-    <!-- GRAFICO  N_eventi_proposti/tempo -->
-    <LineChart1 :sugg_events="suggested_events" />
 
   </div>
 

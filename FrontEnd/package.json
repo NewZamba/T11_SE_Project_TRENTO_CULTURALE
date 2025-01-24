@@ -11,8 +11,10 @@
   "dependencies": {
     "bootstrap": "^5.3.3",
     "bootstrap-vue": "^2.21.2",
+    "echarts": "^5.6.0",
     "js-cookie": "^3.0.5",
     "vue": "^2.7.16",
+    "vue-echarts": "^7.0.3",
     "vue-router": "^3.6.5"
   },
   "devDependencies": {
