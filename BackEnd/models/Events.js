@@ -10,7 +10,8 @@ const event_schema = new Schema({
         required: true
     },
     description_event: {type: String, required: true},
-    img_event: {type: String, required: false}
+    img_event: {type: String, required: false},
+    guests_event: {type: Number, required: true, default: 0}
 });
 
 const event_model = mongoose.model('Event', event_schema);
