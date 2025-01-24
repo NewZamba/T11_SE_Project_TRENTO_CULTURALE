@@ -9,17 +9,19 @@ const crypto = require('crypto');
 const cors = require('cors');
 const passport = require("passport");
 
-//import file per api endpoints
-var addBooking = require('./routes/addBooking');
-var addEvent = require('./routes/addEvent');
-var addFavorite = require('./routes/addFavorite');
-var addUser = require('./routes/addUser');
-var auth = require('./routes/auth');
-var caricaDati = require('./routes/caricaDati'); //TODO: rimuovere quando il progetto e' finito
-var events = require('./routes/events');
-var indexRouter = require('./routes/index');
-var users = require('./routes/users');
-var verificaUserType = require('./routes/verificaUserType');
+//import file di api
+const indexRouter = require('./routes/index');
+const caricaDati = require('./routes/caricaDati');
+const addUser = require('./routes/addUser');
+const addEvent = require('./routes/addEvent');
+const addFavorite = require('./routes/addFavorite');
+const users = require('./routes/users');
+const events = require('./routes/events');
+const verificaUserType = require('./routes/verificaUserType');
+const auth = require('./routes/auth');
+const addBooking = require('./routes/addBooking');
+const prenotations = require('./routes/prenotations');
+const suggEvents = require('./routes/suggEvents');
 
 //connesione al database
 let url;
@@ -32,7 +34,7 @@ if (process.env.DB_USERNAME && process.env.DB_PASSWORD) {
 mongoose.connect(url);
 
 
-var app = express();
+const app = express();
 
 // Crea una sessione (biscotti temporanei) parte 1
 app.use(session({
@@ -68,16 +70,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/caricaDati',caricaDati);
-// app.use('/login',login);
 app.use('/addUser',addUser);
 app.use('/addEvent',addEvent);
 app.use('/addFavorite',addFavorite);
 app.use('/users',users);
 app.use('/events',events);
 app.use('/addBooking',addBooking);
-// app.use('/signUp',signUp);
 app.use('/verificaUserType',verificaUserType);
 app.use('/auth',auth);
+app.use('/prenotations', prenotations);
+app.use('/suggEvents', suggEvents);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
