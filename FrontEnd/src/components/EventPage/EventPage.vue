@@ -40,7 +40,7 @@ import data from "bootstrap/js/src/dom/data.js";
       subscribe() {
         try {
           this.user = cookie.get('User');
-
+          console.log(this.user);
           fetch('http://localhost:3000/addBooking', {
             method: 'POST',
             headers: {

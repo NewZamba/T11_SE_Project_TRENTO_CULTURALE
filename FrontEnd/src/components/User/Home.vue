@@ -18,9 +18,7 @@ import {RouterLink} from "vue-router";
       this.verifyUserType();
     },
     mounted() {
-      console.log('Component mounted.');
       this.fetchEvents();
-      console.log(this.events);
     },
     methods: {
       async verifyUserType() {
