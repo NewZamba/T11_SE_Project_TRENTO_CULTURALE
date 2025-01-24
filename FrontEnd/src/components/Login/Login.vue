@@ -43,13 +43,13 @@ import BTN_SIGN_UP from '../Sign_Up/SignUpBtn.vue';
             const data = await response.json();
 
             switch (data.type_user) {
-              case 0:
+              case 1:
                 await this.$router.push('/UserHome');
                 break;
-              case 1:
+              case 2:
                 await this.$router.push('/DataAnalystHome');
                 break;
-              case 2:
+              case 3:
                 await this.$router.push('/ModeratorHome');
                 break;
               default:
@@ -78,13 +78,13 @@ import BTN_SIGN_UP from '../Sign_Up/SignUpBtn.vue';
           const data = await response.json();
 
           switch (data.type_user) {
-            case 0:
+            case 1:
               await this.$router.push('/UserHome');
               break;
-            case 1:
+            case 2:
               await this.$router.push('/DataAnalystHome');
               break;
-            case 2:
+            case 3:
               await this.$router.push('/ModeratorHome');
               break;
             default:
