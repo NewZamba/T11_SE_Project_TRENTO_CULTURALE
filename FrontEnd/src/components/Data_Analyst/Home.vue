@@ -1,25 +1,50 @@
 <script>
-import LISTEVENTS from './ListEvents.vue';
-import BarChartTemplate from './BarChartTemplate.vue';
+import LISTEVENTS from './ListEvents.vue'
+import { use } from 'echarts/core';
+import { LineChart } from 'echarts/charts';
+import { TitleComponent, TooltipComponent, LegendComponent, GridComponent } from 'echarts/components';
+import { CanvasRenderer } from 'echarts/renderers';
+
+use([LineChart, TitleComponent, TooltipComponent, LegendComponent, GridComponent, CanvasRenderer]);
 
   export default {
     components: {
-      BarChart: BarChartTemplate,
-      LISTEVENTS
+      LISTEVENTS,
     },
     data() {
       return {
-        titile1: 'Eventi nel Tempo',
-        title2: 'Numero Prenotazioni Eventi',
         events: [],
-        sugg_events: [],
         prenotations: [],
-        arrData: [],
-        num_prenotations: [],
-        eventsLoaded: false,
-        suggLoaded: false,
-        prenotationsLoaded: false,
-        numPrenotationsLoaded: false
+        sugg_events: [],
+
+        chartOptions: {
+          title: {
+            text: 'numEventiProposti x tempo' ,
+            left: 'center',
+          },
+          tooltip: {
+            trigger: 'axis',
+          },
+          legend: {
+            top: 'bottom',
+            formatter: '{name}'
+          },
+          xAxis: {
+            type: 'category',
+            data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+          },
+          yAxis: {
+            type: 'value',
+            min: 0,
+            interval: 5
+          },
+          series: [
+            {
+              type: 'bar',
+              data: [],
+            }
+          ],
+        }
       };
     },
     created() {
@@ -29,6 +54,7 @@ import BarChartTemplate from './BarChartTemplate.vue';
       this.fetchEvents();
       this.fetchPrenotations();
       this.fetchSuggEvents();
+      this.countEventPerMonth();
     },
     methods: {
       async verifyUserType() {
@@ -58,99 +84,77 @@ import BarChartTemplate from './BarChartTemplate.vue';
           alert(`Error: ${error.message}`);
         }
       },
-      async fetchEvents() {
+      fetchEvents() {
         try {
-          const response = await fetch('http://localhost:3000/events', {
+          fetch('http://localhost:3000/events', {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
             }
+          }).then(response => {
+            if (!response.ok) {
+              throw new Error('Error fetching events');
+            }
+            return response.json();
+          }).then(data => {
+            this.events = data;
           });
-
-          if (!response.ok) {
-            throw new Error('Error fetching events');
-          }
-
-          const data = await response.json();
-          this.events = data;
-          this.countEventPerMonth();
-          this.eventsLoaded = true;
-
-          this.num_prenotations = new Array(this.events.length).fill(0);
-
-          await Promise.all(this.events.map((event, i) => this.countPrenotations(event._id, i)));
-
-          this.numPrenotationsLoaded = true;
         } catch (err) {
-          alert(`Error: ${err.message}`);
+          alert(err.message);
         }
       },
       fetchPrenotations() {
-        fetch('http://localhost:3000/prenotations', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          }
-        }).then(response => {
-          if (!response.ok) {
-            throw new Error('Error fetching prenotations');
-          }
-          return response.json();
-        }).then(data => {
-          this.prenotations = data;
-          this.prenotationsLoaded = true;
-        }).catch(err => {
+        try {
+          fetch('http://localhost:3000/prenotations', {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          }).then(response => {
+            if (!response.ok) {
+              throw new Error('Error fetching prenotations');
+            }
+            return response.json();
+          }).then(data => {
+            this.prenotations = data;
+          });
+        } catch (err) {
           alert(err.message);
-        });
+        }
       },
       fetchSuggEvents() {
-        fetch('http://localhost:3000/suggEvents', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          }
-        }).then(response => {
-          if (!response.ok) {
-            throw new Error('Error fetching suggested events');
-          }
-          return response.json();
-        }).then(data => {
-          this.sugg_events = data;
-          this.suggLoaded = true;
-        }).catch(err => {
+        try {
+          fetch('http://localhost:3000/suggEvents', {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          }).then(response => {
+            if (!response.ok) {
+              throw new Error('Error fetching suggested events');
+            }
+            return response.json();
+          }).then(data => {
+            this.sugg_events = data;
+          });
+        } catch (err) {
           alert(err.message);
-        });
+        }
       },
       countEventPerMonth() {
-        const arr = Array(12).fill(0);
+        const eventCounts = Array(12).fill(0);
 
         if (this.events.length !== 0) {
           this.events.forEach(event => {
             if (event.date_event) {
-              const month = new Date(event.date_event).getMonth();
-              arr[month] += 1;
-            }
-          });
-          this.arrData = arr;
-        }
-      },
-      async countPrenotations(id, i) {
-        try {
-          const response = await fetch(`http://localhost:3000/addBooking?id=${id}`, {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
+              const month = event.date_event.getMonth();
+              eventCounts[month] += 1;
             }
           });
 
-          if (!response.ok) {
-            throw new Error(response.statusText);
-          }
+          console.log("eventCounts:", eventCounts);
 
-          const data = await response.json();
-          this.$set(this.num_prenotations, i, data);
-        } catch (error) {
-          console.log(error);
+          this.chartOptions.series[0].data = eventCounts;
         }
       }
     }
@@ -161,26 +165,17 @@ import BarChartTemplate from './BarChartTemplate.vue';
 <template>
 
   <div class="container">
-    <div class="chart-container" v-if="eventsLoaded">
-      <BarChart :data="arrData"
-                :labels="['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']"
-                :titles="titile1"/>
+
+    <!-- Grafico -->
+    <div class="chart-container">
+      <VChart :options="chartOptions" autoresize />
     </div>
 
-    <div class="chart-container" v-if="numPrenotationsLoaded && eventsLoaded">
-      <BarChart :data="num_prenotations"
-                :labels="events.map(event => event.name_event)"
-                :titles="title2"/>
-    </div>
-
-    <!-- Lista eventi -->
     <div class="events-list">
-      <LISTEVENTS
-          :events="events"
-          :prenotations="prenotations"
-          :sugg_events="sugg_events"
-          v-if="suggLoaded && eventsLoaded && prenotationsLoaded"/>
+      <LISTEVENTS v-if="events" :events="events" :prenotations="prenotations" :sugg_events="sugg_events"/>
+      <p v-else>Nessun evento trovato.</p>
     </div>
+
   </div>
 
 </template>
@@ -193,39 +188,27 @@ import BarChartTemplate from './BarChartTemplate.vue';
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    min-height: 100vh;
-    padding: 10px;
+    height: 100vh;
+    padding: 20px;
     box-sizing: border-box;
-    gap: 20px;
   }
 
   .chart-container {
-    width: 100%;
+    width: 80%;
     max-width: 1000px;
-    margin-bottom: 10px;
+    margin-bottom: 30px;
     border: 1px solid #ddd;
     border-radius: 8px;
+    padding: 20px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     text-align: center;
     height: 400px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
   }
 
   .events-list {
-    width: 100%;
+    width: 80%;
     max-width: 1000px;
     margin-top: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 10px;
-    box-sizing: border-box;
-    min-height: 300px;
-    max-height: 400px;
-    overflow-y: auto;
   }
 
   p {
@@ -235,5 +218,3 @@ import BarChartTemplate from './BarChartTemplate.vue';
   }
 
 </style>
-
-

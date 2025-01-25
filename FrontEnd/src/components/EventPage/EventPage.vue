@@ -64,6 +64,15 @@ import data from "bootstrap/js/src/dom/data.js";
         } catch (err) {
           alert(err);
         }
+      },
+      showComment() {
+        this.$router.push({
+          path: `/Comment`,
+          query: {
+            id_event : this._id,
+            id_user: this.user.id_user,
+          }
+        });
       }
     }
   };
@@ -88,6 +97,9 @@ import data from "bootstrap/js/src/dom/data.js";
     <footer class="footerEP">
       <button class="subscribe_btn" @click="subscribe">
         Subscribe
+      </button>
+      <button class="subscribe_btn" @click="showComment">
+        Comment
       </button>
     </footer>
 

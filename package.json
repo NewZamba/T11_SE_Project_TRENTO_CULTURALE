@@ -2,7 +2,7 @@
   "scripts": {
     "start": "concurrently \"npm run start-express\" \"npm run start-vite\"",
     "start-express": "cd ./BackEnd/bin && node -r dotenv/config ./www",
-    "start-vite": "cd ./FrontEnd && vite && node node_modules/vue-demi/scripts/postinstall.js"
+    "start-vite": "cd ./FrontEnd && vite"
   },
   "dependencies": {
     "chart.js": "^4.4.7",

@@ -1,0 +1,104 @@
+<script>
+
+export default {
+  name: 'CommentCard',
+  props: {
+    comment: Object,
+    zIndex: Number,
+  },
+  data() {
+    return {
+      newReplyText: "",
+      replyingTo: null,  // Track the comment we're replying to
+    };
+  },
+  methods: {
+    handleReply(parentId) {
+      console.log("Entro in handler");
+      // Set the comment we're replying to
+      this.replyingTo = parentId;
+      this.$emit('reply', { parentId });
+    },
+    addReply(parentId) {
+      console.log("Entro in addReply");
+      // Emit the reply data
+      if (this.newReplyText.trim()) {
+        //this.$emit('add-reply', { parentId, text: this.newReplyText});
+        this.addComment();
+        this.newReplyText = "";  // Clear the input after submitting
+        this.replyingTo = null;  // Reset replyingTo
+      }
+    },
+    async addComment() {
+        const newComment = {
+          id_event: this.comment.id_event,
+          id_user: this.comment.id_user,
+          id_Parent: this.comment._id,
+          text: this.newReplyText,
+          date: new Date().toISOString(),
+          user_name : this.comment.id_user+" pippone",
+          z_index:this.comment.z_index+1,
+        };
+
+        try {
+          const response = await fetch("http://localhost:3000/addComment", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(newComment),
+          });
+          if (!response.ok) throw new Error("Failed to add comment");
+          const savedComment = await response.json();
+          this.comment.replies.push(savedComment.comment);
+        } catch (error) {
+          console.error("Error adding comment:", error);
+        }
+    },
+  },
+};
+</script>
+
+<template>
+  <div :style="{ zIndex: zIndex }" class="comment-card p-3 mb-2 border">
+    <!-- Dati del commento -->
+    <div class="comment-header">
+      <strong>{{ comment.user_name }}</strong>
+      <span class="text-muted"> - {{ new Date(comment.date).toLocaleString() }}</span>
+    </div>
+    <p>{{ comment.text }}</p>
+
+    <!-- Tasto Reply -->
+    <b-button variant="link" @click="handleReply(comment._id)" class="p-0">
+      Reply
+    </b-button>
+
+    <!-- Se ci sono risposte, le mostriamo -->
+
+    <div v-if="comment.replies.length" class="mt-3">
+      <div v-for="reply in comment.replies" :key="reply._id" class="reply p-2 border-top">
+        <CommentCard :comment="reply" @reply="handleReply" :zIndex="reply.z_index" @add-reply="addReply" />
+      </div>
+    </div>
+
+    <!-- Input per la risposta -->
+    <div v-if="replyingTo === comment._id" class="mt-3">
+      <textarea
+          v-model="newReplyText"
+          class="form-control"
+          rows="3"
+          placeholder="Write a reply..."
+      ></textarea>
+      <b-button variant="primary" class="mt-2" @click="addReply(comment._id,zIndex)">Send</b-button>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+.comment-card {
+  position: relative;
+}
+.reply {
+  margin-left: 20px;
+}
+</style>

@@ -14,7 +14,6 @@
     },
     methods: {
       showEvent(event) {
-
         this.$router.push({
           path: `/EventPage`,
           query: {
