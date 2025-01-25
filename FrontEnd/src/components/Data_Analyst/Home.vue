@@ -1,6 +1,6 @@
 <script>
-import BarChart from './BarChart.vue';
 import LISTEVENTS from './ListEvents.vue';
+import BarChart from './BarChart.vue';
 
   export default {
     components: {
@@ -23,9 +23,11 @@ import LISTEVENTS from './ListEvents.vue';
       this.fetchPrenotations();
       this.fetchSuggEvents();
       this.countEventPerMonth();
+      console.log(this.arrData);
+      console.log(this.events);
     },
     methods: {
-      async verifyUserType() {
+      verifyUserType: async function () {
         try {
           const response = await fetch('http://localhost:3000/verificaUserType/test', {
             method: 'GET',
@@ -64,6 +66,7 @@ import LISTEVENTS from './ListEvents.vue';
               throw new Error('Error fetching events');
             }
           }).then(data => {
+            console.log(data);
             this.events = data;
           });
         } catch (err) {
@@ -109,16 +112,18 @@ import LISTEVENTS from './ListEvents.vue';
         }
       },
       countEventPerMonth() {
-        this.arrData = Array(12).fill(0);
+        var arr = Array(12).fill(0);
 
         if (this.events.length !== 0) {
           this.events.forEach((event) => {
             if (event.date_event) {
+              console.log(event.date_event);
               const month = new Date(event.date_event).getMonth();
-              this.arrData[month] += 1;
+              arr[month] ++;
             }
           });
         }
+        this.arrData = arr;
       },
     }
   };
@@ -128,25 +133,18 @@ import LISTEVENTS from './ListEvents.vue';
 
   <div class="container">
     <div class="chart-container">
-      <BarChart
-          :data="arrData"
-          :labels="[
-            'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-            'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
-          ]" />
+      <BarChart :data="arrData" />
     </div>
 
     <!-- Lista eventi -->
     <div class="events-list">
       <LISTEVENTS
-          v-if="events.length"
           :events="events"
           :prenotations="prenotations"
-          :sugg_events="sugg_events"
-      />
-      <p v-else>Nessun evento trovato.</p>
+          :sugg_events="sugg_events" />
     </div>
   </div>
+
 </template>
 
 <style scoped>
