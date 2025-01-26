@@ -12,7 +12,8 @@ import BarChart from './BarChart.vue';
         events: [],
         sugg_events: [],
         prenotations: [],
-        arrData: []
+        arrData: [],
+        eventsLoaded: false
       };
     },
     created() {
@@ -22,12 +23,9 @@ import BarChart from './BarChart.vue';
       this.fetchEvents();
       this.fetchPrenotations();
       this.fetchSuggEvents();
-      this.countEventPerMonth();
-      console.log(this.arrData);
-      console.log(this.events);
     },
     methods: {
-      verifyUserType: async function () {
+      async verifyUserType() {
         try {
           const response = await fetch('http://localhost:3000/verificaUserType/test', {
             method: 'GET',
@@ -55,84 +53,80 @@ import BarChart from './BarChart.vue';
         }
       },
       fetchEvents() {
-        try {
-          fetch('http://localhost:3000/events', {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-            }
-          }).then(response => {
+        fetch('http://localhost:3000/events', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        }).then(response => {
             if (!response.ok) {
               throw new Error('Error fetching events');
             }
-          }).then(data => {
-            console.log(data);
+            return response.json();
+        }).then(data => {
             this.events = data;
-          });
-        } catch (err) {
-          alert(err.message);
-        }
+            this.countEventPerMonth();
+            this.eventsLoaded = true;
+        }).catch(err => {
+            alert(`Error: ${err.message}`);
+        });
       },
       fetchPrenotations() {
-        try {
-          fetch('http://localhost:3000/prenotations', {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-            }
-          }).then(response => {
-            if (!response.ok) {
-              throw new Error('Error fetching prenotations');
-            }
-            return response.json();
-          }).then(data => {
-            this.prenotations = data;
-          });
-        } catch (err) {
+        fetch('http://localhost:3000/prenotations', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        }).then(response => {
+          if (!response.ok) {
+            throw new Error('Error fetching prenotations');
+          }
+          return response.json();
+        }).then(data => {
+          this.prenotations = data;
+        }).catch(err => {
           alert(err.message);
-        }
+        });
       },
       fetchSuggEvents() {
-        try {
-          fetch('http://localhost:3000/suggEvents', {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-            }
-          }).then(response => {
-            if (!response.ok) {
-              throw new Error('Error fetching suggested events');
-            }
-            return response.json();
-          }).then(data => {
-            this.sugg_events = data;
-          });
-        } catch (err) {
+        fetch('http://localhost:3000/suggEvents', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        }).then(response => {
+          if (!response.ok) {
+            throw new Error('Error fetching suggested events');
+          }
+          return response.json();
+        }).then(data => {
+          this.sugg_events = data;
+        }).catch(err => {
           alert(err.message);
-        }
+        });
       },
       countEventPerMonth() {
-        var arr = Array(12).fill(0);
+        const arr = Array(12).fill(0);
 
         if (this.events.length !== 0) {
-          this.events.forEach((event) => {
+          this.events.forEach(event => {
             if (event.date_event) {
-              console.log(event.date_event);
               const month = new Date(event.date_event).getMonth();
-              arr[month] ++;
+              arr[month] += 1;
             }
           });
+          this.arrData = arr;
         }
-        this.arrData = arr;
       },
     }
   };
+
 </script>
 
 <template>
 
   <div class="container">
-    <div class="chart-container">
+    <div class="chart-container" v-if="eventsLoaded">
       <BarChart :data="arrData" />
     </div>
 
@@ -148,40 +142,54 @@ import BarChart from './BarChart.vue';
 </template>
 
 <style scoped>
-.container {
-  font-family: Arial, sans-serif;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  height: 100vh;
-  padding: 20px;
-  box-sizing: border-box;
-}
 
-.chart-container {
-  width: 80%;
-  max-width: 1000px;
-  margin-bottom: 30px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  height: 400px;
-}
+  .container {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+    padding: 10px;
+    box-sizing: border-box;
+    gap: 20px;
+  }
 
-.events-list {
-  width: 80%;
-  max-width: 1000px;
-  margin-top: 20px;
-}
+  .chart-container {
+    width: 100%;
+    max-width: 1000px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+  }
 
-p {
-  text-align: center;
-  font-size: 16px;
-  color: #555;
-}
+  .events-list {
+    width: 100%;
+    max-width: 1000px;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    box-sizing: border-box;
+    min-height: 300px;
+    max-height: 400px;
+    overflow-y: auto;
+  }
+
+  p {
+    text-align: center;
+    font-size: 16px;
+    color: #555;
+  }
+
 </style>
 
 

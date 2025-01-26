@@ -25,7 +25,21 @@
     methods: {
       showDetails(event) {
         this.t_event = event;
-        console.log(this.t_event);
+      },
+      showGraphic(event, x) {
+        switch (x) {
+          // Media_feedback_eventi/tempo
+          case 1:
+            this.$router.push({
+              path: '/GraphicEvent',
+              query: {
+                event: event
+              }
+            });
+            break;
+          default:
+            break;
+        }
       }
     }
   };
@@ -65,6 +79,20 @@
           </div>
 
         <div class="buttons">
+          <!--Possibili grafici-->
+          <b-button
+              @click="showGraphic(t_event, 2)"
+              class="card-item">
+            Media prenotazioni eventi/tempo
+          </b-button>
+
+          <!--
+          <b-button
+              @click="showGraphic(this.t_event, 3)"
+              class="card-item" >
+            Media prenotazioni evento/tempo
+          </b-button>
+          -->
         </div>
 
       </div>
@@ -80,6 +108,7 @@
   .main-container {
     display: flex;
     gap: 20px;
+    height: 100%;
   }
 
   .left-column {
