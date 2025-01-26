@@ -1,52 +1,15 @@
 <script>
 import LISTEVENTS from './ListEvents.vue'
-import { use } from 'echarts/core';
-import { LineChart } from 'echarts/charts';
-import { TitleComponent, TooltipComponent, LegendComponent, GridComponent } from 'echarts/components';
-import { CanvasRenderer } from 'echarts/renderers';
-import {VChart} from 'vue-echarts';
-
-use([LineChart, TitleComponent, TooltipComponent, LegendComponent, GridComponent, CanvasRenderer]);
 
   export default {
     components: {
-      LISTEVENTS,
-      VChart
+      LISTEVENTS
     },
     data() {
       return {
         events: [],
         prenotations: [],
-        sugg_events: [],
-
-        chartOptions: {
-          title: {
-            text: 'numEventiProposti x tempo' ,
-            left: 'center',
-          },
-          tooltip: {
-            trigger: 'axis',
-          },
-          legend: {
-            top: 'bottom',
-            formatter: '{name}'
-          },
-          xAxis: {
-            type: 'category',
-            data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-          },
-          yAxis: {
-            type: 'value',
-            min: 0,
-            interval: 5
-          },
-          series: [
-            {
-              type: 'bar',
-              data: [],
-            }
-          ],
-        }
+        sugg_events: []
       };
     },
     created() {
@@ -56,8 +19,7 @@ use([LineChart, TitleComponent, TooltipComponent, LegendComponent, GridComponent
       this.fetchEvents();
       this.fetchPrenotations();
       this.fetchSuggEvents();
-      this.countEventPerMonth();
-    },
+      },
     methods: {
       verifyUserType() {
         fetch('http://localhost:3000/verificaUserType/data-analyst-home', {
@@ -130,22 +92,6 @@ use([LineChart, TitleComponent, TooltipComponent, LegendComponent, GridComponent
         } catch (err) {
           alert(err.message);
         }
-      },
-      countEventPerMonth() {
-        const eventCounts = Array(12).fill(0);
-
-        if (this.events.length !== 0) {
-          this.events.forEach(event => {
-            if (event.date_event) {
-              const month = event.date_event.getMonth();
-              eventCounts[month] += 1;
-            }
-          });
-
-          console.log("eventCounts:", eventCounts);
-
-          this.chartOptions.series[0].data = eventCounts;
-        }
       }
     }
   };
@@ -158,7 +104,6 @@ use([LineChart, TitleComponent, TooltipComponent, LegendComponent, GridComponent
 
     <!-- Grafico -->
     <div class="chart-container">
-      <VChart :options="chartOptions" autoresize />
     </div>
 
     <div class="events-list">

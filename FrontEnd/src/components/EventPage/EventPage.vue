@@ -1,7 +1,7 @@
 <script>
 import DETAILS_IMG from './Details_Img.vue';
 import DESCRIPTION from './Description.vue';
-import cookie from 'js-cookie';
+import Cookie from 'js-cookie';
 import data from "bootstrap/js/src/dom/data.js";
 
   export default {
@@ -20,7 +20,7 @@ import data from "bootstrap/js/src/dom/data.js";
         date_event: null,
         tags: 0,
         guests: 0,
-        user: {}
+        id_user: null
       };
     },
     mounted() {
@@ -39,17 +39,17 @@ import data from "bootstrap/js/src/dom/data.js";
       },
       subscribe() {
         try {
-          this.user = cookie.get('User');
-          console.log(this.user);
+          this.id_user = Cookie.get('id_user');
+
           fetch('http://localhost:3000/addBooking', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              id_user: this.user,
+              id_user: this.id_user,
               id_event: this._id,
-              date_Prenotation: new Date().toISOString(),
+              date_Prenotation: new Date(this.date_event).toISOString(),
               guests_event: this.guests,
             }),
           }).then(res => {

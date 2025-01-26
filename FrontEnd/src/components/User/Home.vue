@@ -1,6 +1,7 @@
 <script>
 import CAROUSEL from './Carousel.vue';
 import CARDS from './Cards.vue';
+import Cookie from 'js-cookie';
 import {RouterLink} from "vue-router";
 
   export default {
@@ -41,6 +42,8 @@ import {RouterLink} from "vue-router";
           }
 
           const user_data = await response.json();
+          Cookie.set('id_user', user_data._id);
+
           // Assuming 'user' is the key in the response object
           alert(`User: ${user_data.email_user || 'Unknown user'}, Type: ${user_data.type_user || 'Unknown type'}`);
         } catch (error) {
