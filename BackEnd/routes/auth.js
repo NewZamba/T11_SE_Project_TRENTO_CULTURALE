@@ -151,7 +151,7 @@ router.post(
     '/login',
     passport.authenticate('local'),
     (req, res, next) => {
-        res.status(200).json({ type_user: req.user.type_user });
+        res.status(200).json({ type_user: req.user.type_user, id_user: req.user.id });
     }
 );
 
