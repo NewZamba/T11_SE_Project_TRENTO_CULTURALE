@@ -10,7 +10,7 @@
       events: {
         type: Array,
         required: true
-      }
+      },
     },
     methods: {
       showEvent(event) {

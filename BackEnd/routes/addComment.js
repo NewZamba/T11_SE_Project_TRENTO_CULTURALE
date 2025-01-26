@@ -1,12 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const Comment = require('../models/Comment'); // Importa il modello Comment
+const {user_model} = require('../models/User');
 
 // Middleware di validazione
 const validateCommentInput = (req, res, next) => {
-    const { id_event, id_user, text, date, user_name, z_index } = req.body;
+    const { id_event, id_user, text, date, z_index } = req.body;
 
-    if (!id_event || !id_user || !text || !date || !user_name || z_index === undefined) {
+    if (!id_event || !id_user || !text || !date || z_index === undefined) {
         return res.status(400).json({ message: 'Tutti i campi richiesti devono essere compilati!' });
     }
 
@@ -16,10 +17,12 @@ const validateCommentInput = (req, res, next) => {
 // Endpoint per aggiungere un commento
 router.post('/', validateCommentInput, async (req, res) => {
     try {
-        const { id_event, id_user, id_Parent, text, date, user_name, z_index } = req.body;
-
-        console.log(req.body);
-
+        const { id_event, id_user, id_Parent, text, date, z_index } = req.body;
+        const tmpUser = await user_model.findById(id_user);
+        console.log(tmpUser);
+        if(!tmpUser) {
+            return res.status(400).json({ message: "Utente inesistente" });
+        }
         // Creazione di un nuovo commento
         const newComment = new Comment({
             id_event,
@@ -27,10 +30,9 @@ router.post('/', validateCommentInput, async (req, res) => {
             id_Parent: id_Parent || null, // Imposta null se id_Parent non è fornito
             text,
             date,
-            user_name,
+            user_name: tmpUser.name_user + " " + tmpUser.surname_user,
             z_index,
         });
-
         // Salvataggio nel database
         const savedComment = await newComment.save();
 

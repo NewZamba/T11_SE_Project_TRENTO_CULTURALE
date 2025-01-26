@@ -1,5 +1,6 @@
 <script>
 import CommentCard from "./CommentCard.vue";
+import Cookies from "js-cookie";
 
 export default {
   components: { CommentCard },
@@ -32,11 +33,10 @@ export default {
       if (this.newCommentText.trim()) {
         const newComment = {
           id_event: this.id_event,
-          id_user: "6792655f15ee2db12a34f696", //da modificare
+          id_user: this.id_user,
           id_Parent: null,
           text: this.newCommentText,
           date: new Date().toISOString(),
-          user_name : this.id_user + " mpm ep ",
           z_index:0,
         };
         try {
@@ -60,7 +60,7 @@ export default {
   },
   mounted() {
     this.id_event = this.$route.query.id_event;
-    this.id_user = this.$route.query.id_user;
+    this.id_user = Cookies.get('id_User');
     this.fetchComments();
   },
 };
@@ -71,12 +71,6 @@ export default {
     <div class="mb-4">
       <h2 class="text-primary font-weight-bold">Comments</h2>
     </div>
-
-    <!-- Sezione commenti -->
-    <div v-for="comment in comments" :key="comment._id" class="mb-3">
-      <CommentCard :comment="comment" :zIndex="comment.z_index"/>
-    </div>
-
     <!-- Sezione per aggiungere un nuovo commento -->
     <div class="mt-4">
       <textarea
@@ -87,6 +81,12 @@ export default {
       ></textarea>
       <b-button variant="primary" class="mt-2" @click="addComment">Send</b-button>
     </div>
+
+    <!-- Sezione commenti -->
+    <div v-for="comment in comments" :key="comment._id" class="mb-3">
+      <CommentCard :comment="comment" :zIndex="comment.z_index" />
+    </div>
+
   </div>
 </template>
 

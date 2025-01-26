@@ -70,7 +70,6 @@ import data from "bootstrap/js/src/dom/data.js";
           path: `/Comment`,
           query: {
             id_event : this._id,
-            id_user: this.user.id_user,
           }
         });
       }

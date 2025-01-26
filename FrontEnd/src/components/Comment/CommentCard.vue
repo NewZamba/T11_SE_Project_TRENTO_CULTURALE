@@ -1,5 +1,7 @@
 <script>
 
+import Cookies from "js-cookie";
+
 export default {
   name: 'CommentCard',
   props: {
@@ -9,21 +11,19 @@ export default {
   data() {
     return {
       newReplyText: "",
-      replyingTo: null,  // Track the comment we're replying to
+      replyingTo: null, // Track the comment we're replying to
+      id_user: null,
     };
   },
   methods: {
     handleReply(parentId) {
       console.log("Entro in handler");
-      // Set the comment we're replying to
       this.replyingTo = parentId;
       this.$emit('reply', { parentId });
     },
-    addReply(parentId) {
+    addReply() {
       console.log("Entro in addReply");
-      // Emit the reply data
       if (this.newReplyText.trim()) {
-        //this.$emit('add-reply', { parentId, text: this.newReplyText});
         this.addComment();
         this.newReplyText = "";  // Clear the input after submitting
         this.replyingTo = null;  // Reset replyingTo
@@ -36,7 +36,6 @@ export default {
           id_Parent: this.comment._id,
           text: this.newReplyText,
           date: new Date().toISOString(),
-          user_name : this.comment.id_user+" pippone",
           z_index:this.comment.z_index+1,
         };
 
@@ -49,13 +48,18 @@ export default {
             body: JSON.stringify(newComment),
           });
           if (!response.ok) throw new Error("Failed to add comment");
-          const savedComment = await response.json();
-          this.comment.replies.push(savedComment.comment);
+          const responseComment = await response.json();
+          const savedComment = await responseComment.comment;
+          savedComment.replies=[];
+          this.comment.replies.push(savedComment);
         } catch (error) {
           console.error("Error adding comment:", error);
         }
     },
   },
+  mounted() {
+    this.id_user = Cookies.get("id_User");
+  }
 };
 </script>
 
@@ -69,17 +73,21 @@ export default {
     <p>{{ comment.text }}</p>
 
     <!-- Tasto Reply -->
-    <b-button variant="link" @click="handleReply(comment._id)" class="p-0">
-      Reply
-    </b-button>
+    <b-button-group>
+      <b-button variant="primary" @click="handleReply(comment._id)" class="p-0">
+        Reply
+      </b-button>
+      <!-- Tasto ELimina -->
+      <b-button
+          v-if="comment.id_user === this.id_user"
+          variant="danger"
+          size="sm"
+          @click="deleteComment(comment._id)"
+      >
+        Delete
+      </b-button>
+    </b-button-group>
 
-    <!-- Se ci sono risposte, le mostriamo -->
-
-    <div v-if="comment.replies.length" class="mt-3">
-      <div v-for="reply in comment.replies" :key="reply._id" class="reply p-2 border-top">
-        <CommentCard :comment="reply" @reply="handleReply" :zIndex="reply.z_index" @add-reply="addReply" />
-      </div>
-    </div>
 
     <!-- Input per la risposta -->
     <div v-if="replyingTo === comment._id" class="mt-3">
@@ -91,6 +99,14 @@ export default {
       ></textarea>
       <b-button variant="primary" class="mt-2" @click="addReply(comment._id,zIndex)">Send</b-button>
     </div>
+
+    <!-- Se ci sono risposte, le mostriamo -->
+    <div v-if="comment.replies.length" class="mt-3">
+      <div v-for="reply in comment.replies" :key="reply._id" class="reply p-2 border-top">
+        <CommentCard :comment="reply" @reply="handleReply" :zIndex="reply.z_index" :id_user="id_user" @add-reply="addReply" />
+      </div>
+    </div>
+
   </div>
 </template>
 

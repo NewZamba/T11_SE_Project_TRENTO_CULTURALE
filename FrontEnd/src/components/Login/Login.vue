@@ -3,6 +3,7 @@ import PASS from './password.vue';
 import USER from './user.vue';
 import TITLE from './title.vue';
 import BTN_SIGN_UP from '../Sign_Up/SignUpBtn.vue';
+import Cookies from 'js-cookie';
 
   export default {
     name: 'BTN_LOGIN',
@@ -41,7 +42,6 @@ import BTN_SIGN_UP from '../Sign_Up/SignUpBtn.vue';
             }
 
             const data = await response.json();
-
             switch (data.type_user) {
               case 1:
                 await this.$router.push('/UserHome');
@@ -75,7 +75,7 @@ import BTN_SIGN_UP from '../Sign_Up/SignUpBtn.vue';
             throw new Error('Errore nel Login con Google!');
           }
 
-          const data = await response.json();
+          const data = await response.json()
 
           switch (data.type_user) {
             case 1:
