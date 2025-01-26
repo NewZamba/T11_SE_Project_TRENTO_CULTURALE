@@ -4,7 +4,7 @@ import { Chart, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale }
 Chart.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
 
   export default {
-    name: 'BarChart',
+    name: 'BarChartEventiProposti',
     components: {
       Bar: Bar
     },

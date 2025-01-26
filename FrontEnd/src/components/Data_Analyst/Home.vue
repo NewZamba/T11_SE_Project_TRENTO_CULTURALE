@@ -1,10 +1,10 @@
 <script>
 import LISTEVENTS from './ListEvents.vue';
-import BarChart from './BarChart.vue';
+import BarChartEventiProposti from './BarChartEventiProposti.vue';
 
   export default {
     components: {
-      BarChart,
+      BarChart: BarChartEventiProposti,
       LISTEVENTS
     },
     data() {
@@ -13,7 +13,9 @@ import BarChart from './BarChart.vue';
         sugg_events: [],
         prenotations: [],
         arrData: [],
-        eventsLoaded: false
+        eventsLoaded: false,
+        suggLoaded: false,
+        prenotationsLoaded: false
       };
     },
     created() {
@@ -84,6 +86,7 @@ import BarChart from './BarChart.vue';
           return response.json();
         }).then(data => {
           this.prenotations = data;
+          this.prenotationsLoaded = true;
         }).catch(err => {
           alert(err.message);
         });
@@ -101,6 +104,7 @@ import BarChart from './BarChart.vue';
           return response.json();
         }).then(data => {
           this.sugg_events = data;
+          this.suggLoaded = true;
         }).catch(err => {
           alert(err.message);
         });
@@ -117,7 +121,7 @@ import BarChart from './BarChart.vue';
           });
           this.arrData = arr;
         }
-      },
+      }
     }
   };
 
@@ -135,7 +139,8 @@ import BarChart from './BarChart.vue';
       <LISTEVENTS
           :events="events"
           :prenotations="prenotations"
-          :sugg_events="sugg_events" />
+          :sugg_events="sugg_events"
+          v-if="suggLoaded && eventsLoaded && prenotationsLoaded"/>
     </div>
   </div>
 

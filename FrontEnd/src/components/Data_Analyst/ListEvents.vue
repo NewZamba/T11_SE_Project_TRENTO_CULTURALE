@@ -1,11 +1,14 @@
 <script>
 
+  import BarChart2 from "@/components/Data_Analyst/BarChart2.vue";
+
   export default {
     name: 'ListEvents',
-    components: {},
+    components: {BarChart2},
     data() {
       return {
-        t_event: null
+        t_event: null,
+        graphicOn: false
       };
     },
     props: {
@@ -25,21 +28,6 @@
     methods: {
       showDetails(event) {
         this.t_event = event;
-      },
-      showGraphic(event, x) {
-        switch (x) {
-          // Media_feedback_eventi/tempo
-          case 1:
-            this.$router.push({
-              path: '/GraphicEvent',
-              query: {
-                event: event
-              }
-            });
-            break;
-          default:
-            break;
-        }
       }
     }
   };
@@ -78,23 +66,12 @@
                  v-if="t_event && t_event.img_event" alt="Immagine Evento" />
           </div>
 
-        <div class="buttons">
-          <!--Possibili grafici-->
-          <b-button
-              @click="showGraphic(t_event, 2)"
-              class="card-item">
-            Media prenotazioni eventi/tempo
-          </b-button>
-
-          <!--
-          <b-button
-              @click="showGraphic(this.t_event, 3)"
-              class="card-item" >
-            Media prenotazioni evento/tempo
-          </b-button>
-          -->
+        <div class="event-graphic"> <!--Possibili grafici per quell'evento-->
+          <div class="g1">
+            <h1>G1</h1>
+            <BarChart2 :data="" />
+          </div>
         </div>
-
       </div>
 
     </div>
@@ -145,7 +122,7 @@
     border-radius: 5px;
   }
 
-  .buttons {
+  .event-graphic {
     display: flex;
     flex-direction: column;
     gap: 15px;
