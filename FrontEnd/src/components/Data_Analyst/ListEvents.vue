@@ -1,13 +1,13 @@
 <script>
-
-  import BarChart2 from "@/components/Data_Analyst/BarChart2.vue";
+//import BarChart2 from "@/components/Data_Analyst/BarChart2.vue";
 
   export default {
     name: 'ListEvents',
-    components: {BarChart2},
+    components: {},
     data() {
       return {
         t_event: null,
+        num_prenotations: 0,
         graphicOn: false
       };
     },
@@ -28,6 +28,26 @@
     methods: {
       showDetails(event) {
         this.t_event = event;
+        const id = event._id;
+        this.countPrenotations(id);
+      },
+      countPrenotations(id) {
+        fetch(`http://localhost:3000/addBooking?id=${id}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }).then(res => {
+          if(res.status !== 200) {
+            alert(res.statusText);
+          }
+
+          return res.json();
+        }).then(data => {
+          this.num_prenotations = data;
+        }).catch(error => {
+          console.log(error);
+        })
       }
     }
   };
@@ -62,6 +82,7 @@
             <p> {{ t_event.date_event }} </p>
             <p> {{ t_event.tags }} </p>
             <p> {{ t_event.description_event }} </p>
+            <p>Prenotazioni: {{ num_prenotations }} </p>
             <img :src="t_event.img_event"
                  v-if="t_event && t_event.img_event" alt="Immagine Evento" />
           </div>
@@ -69,7 +90,7 @@
         <div class="event-graphic"> <!--Possibili grafici per quell'evento-->
           <div class="g1">
             <h1>G1</h1>
-            <BarChart2 :data="" />
+            <!--<BarChart2 :data="" />-->
           </div>
         </div>
       </div>
