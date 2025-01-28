@@ -1,5 +1,5 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -8,7 +8,7 @@ router.get('/', function(req, res, next) {
   console.log(req.session.id);
   //req.session.visited = true
   res.cookie("hello", "world");
-  res.status(201).send({msg: "porco di"});
+  res.status(201).send({msg: ""});
 });
 
 module.exports = router;

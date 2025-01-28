@@ -4,7 +4,7 @@ import { Chart, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale }
 Chart.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
 
   export default {
-    name: 'BarChartEventiProposti',
+    name: 'BarChartTemplate',
     components: {
       Bar: Bar
     },
@@ -12,12 +12,20 @@ Chart.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
       data: {
         type: Array,
         required: true
+      },
+      labels: {
+        type: Array,
+        required: true
+      },
+      titles: {
+        type: String,
+        required: true
       }
     },
     data() {
       return {
         chartData: {
-          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+          labels: this.labels,
           datasets: [{
             data: this.data,
             backgroundColor: 'rgba(75, 192, 192, 0.2)',
@@ -32,7 +40,7 @@ Chart.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
             y: {
               beginAtZero: true,
               ticks: {
-                stepSize: 5
+                stepSize: 1
               }
             },
             x: {
@@ -42,6 +50,13 @@ Chart.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
             }
           },
           plugins: {
+            title: {
+              display: true,
+              text: this.titles,
+              font: {
+                size: 18,
+              }
+            },
             tooltip: {
               enabled: true
             }

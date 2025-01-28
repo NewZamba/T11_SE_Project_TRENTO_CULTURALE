@@ -1,21 +1,25 @@
 <script>
 import LISTEVENTS from './ListEvents.vue';
-import BarChartEventiProposti from './BarChartEventiProposti.vue';
+import BarChartTemplate from './BarChartTemplate.vue';
 
   export default {
     components: {
-      BarChart: BarChartEventiProposti,
+      BarChart: BarChartTemplate,
       LISTEVENTS
     },
     data() {
       return {
+        titile1: 'Eventi nel Tempo',
+        title2: 'Numero Prenotazioni Eventi',
         events: [],
         sugg_events: [],
         prenotations: [],
         arrData: [],
+        num_prenotations: [],
         eventsLoaded: false,
         suggLoaded: false,
-        prenotationsLoaded: false
+        prenotationsLoaded: false,
+        numPrenotationsLoaded: false
       };
     },
     created() {
@@ -54,24 +58,32 @@ import BarChartEventiProposti from './BarChartEventiProposti.vue';
           alert(`Error: ${error.message}`);
         }
       },
-      fetchEvents() {
-        fetch('http://localhost:3000/events', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          }
-        }).then(response => {
-            if (!response.ok) {
-              throw new Error('Error fetching events');
+      async fetchEvents() {
+        try {
+          const response = await fetch('http://localhost:3000/events', {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
             }
-            return response.json();
-        }).then(data => {
-            this.events = data;
-            this.countEventPerMonth();
-            this.eventsLoaded = true;
-        }).catch(err => {
-            alert(`Error: ${err.message}`);
-        });
+          });
+
+          if (!response.ok) {
+            throw new Error('Error fetching events');
+          }
+
+          const data = await response.json();
+          this.events = data;
+          this.countEventPerMonth();
+          this.eventsLoaded = true;
+
+          this.num_prenotations = new Array(this.events.length).fill(0);
+
+          await Promise.all(this.events.map((event, i) => this.countPrenotations(event._id, i)));
+
+          this.numPrenotationsLoaded = true;
+        } catch (err) {
+          alert(`Error: ${err.message}`);
+        }
       },
       fetchPrenotations() {
         fetch('http://localhost:3000/prenotations', {
@@ -121,6 +133,25 @@ import BarChartEventiProposti from './BarChartEventiProposti.vue';
           });
           this.arrData = arr;
         }
+      },
+      async countPrenotations(id, i) {
+        try {
+          const response = await fetch(`http://localhost:3000/addBooking?id=${id}`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          });
+
+          if (!response.ok) {
+            throw new Error(response.statusText);
+          }
+
+          const data = await response.json();
+          this.$set(this.num_prenotations, i, data);
+        } catch (error) {
+          console.log(error);
+        }
       }
     }
   };
@@ -131,7 +162,15 @@ import BarChartEventiProposti from './BarChartEventiProposti.vue';
 
   <div class="container">
     <div class="chart-container" v-if="eventsLoaded">
-      <BarChart :data="arrData" />
+      <BarChart :data="arrData"
+                :labels="['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']"
+                :titles="titile1"/>
+    </div>
+
+    <div class="chart-container" v-if="numPrenotationsLoaded && eventsLoaded">
+      <BarChart :data="num_prenotations"
+                :labels="events.map(event => event.name_event)"
+                :titles="title2"/>
     </div>
 
     <!-- Lista eventi -->
