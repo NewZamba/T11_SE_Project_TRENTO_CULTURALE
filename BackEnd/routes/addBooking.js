@@ -10,13 +10,11 @@ router.get('/', async (req, res) => {
             return res.status(400).json({ message: 'Parametro id mancante' });
         }
 
-        console.log(id);
         if (!ObjectId.isValid(id)) {
             return res.status(400).json({ message: 'ID non valido' });
         }
 
         const c = await Prenotations.countDocuments({ id_event: new ObjectId(id) });
-        console.log('Conteggio prenotazioni trovato:', c);
 
         return res.status(200).json(c);
     } catch (error) {
