@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Comment = require('../models/Comment'); // Importa il modello Comment
-const {user_model} = require('../models/User');
+const user_model = require('../models/User');
 
 // Middleware di validazione
 const validateCommentInput = (req, res, next) => {
@@ -18,6 +18,7 @@ const validateCommentInput = (req, res, next) => {
 router.post('/', validateCommentInput, async (req, res) => {
     try {
         const { id_event, id_user, id_Parent, text, date, z_index } = req.body;
+        console.log(id_user)
         const tmpUser = await user_model.findById(id_user);
         console.log(tmpUser);
         if(!tmpUser) {
