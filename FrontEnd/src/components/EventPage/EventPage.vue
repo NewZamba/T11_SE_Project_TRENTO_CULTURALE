@@ -1,17 +1,19 @@
 <script>
 import DETAILS_IMG from './Details_Img.vue';
 import DESCRIPTION from './Description.vue';
-import Cookie from 'js-cookie';
-import data from "bootstrap/js/src/dom/data.js";
+import EVALUATION from '../Evaluation/Evaluation.vue';
+import cookie from 'js-cookie';
 
   export default {
     name: 'EventPage',
     components: {
       DETAILS_IMG,
-      DESCRIPTION
+      DESCRIPTION,
+      EVALUATION
     },
     data() {
       return {
+        id_event : null,
         _id: null,
         name_event: '',
         img_event: '',
@@ -20,11 +22,12 @@ import data from "bootstrap/js/src/dom/data.js";
         date_event: null,
         tags: 0,
         guests: 0,
-        id_user: null
+        user: {}
       };
     },
     mounted() {
       this._id = this.$route.query._id;
+      this.id_event = this._id;
       this.name_event = this.$route.query.name_event;
       this.img_event = this.$route.query.img_event;
       this.description_event = this.$route.query.description_event;
@@ -39,17 +42,17 @@ import data from "bootstrap/js/src/dom/data.js";
       },
       subscribe() {
         try {
-          this.id_user = Cookie.get('id_user');
-
+          this.user = cookie.get('User');
+          console.log(this.user);
           fetch('http://localhost:3000/addBooking', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              id_user: this.id_user,
+              id_user: this.user,
               id_event: this._id,
-              date_Prenotation: new Date(this.date_event).toISOString(),
+              date_Prenotation: new Date().toISOString(),
               guests_event: this.guests,
             }),
           }).then(res => {
@@ -91,6 +94,7 @@ import data from "bootstrap/js/src/dom/data.js";
     <div class="event">
       <DETAILS_IMG />
       <DESCRIPTION />
+      <EVALUATION v-if="id_event" :id_event="id_event" />
     </div>
 
     <footer class="footerEP">
