@@ -1,6 +1,26 @@
 const express = require('express');
 const router = express.Router();
 const Prenotations = require('../models/Prenotations');
+const {ObjectId} = require("mongodb");
+
+router.get('/', async (req, res) => {
+    try {
+        const { id } = req.query;
+        if (!id) {
+            return res.status(400).json({ message: 'Parametro id mancante' });
+        }
+
+        if (!ObjectId.isValid(id)) {
+            return res.status(400).json({ message: 'ID non valido' });
+        }
+
+        const c = await Prenotations.countDocuments({ id_event: new ObjectId(id) });
+
+        return res.status(200).json(c);
+    } catch (error) {
+        return res.status(500).json({ message: 'Errore del server', error });
+    }
+});
 
 // Endpoint per aggiungere una prenotazione
 router.post('/', async (req, res) => {
