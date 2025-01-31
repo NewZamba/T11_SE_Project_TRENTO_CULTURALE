@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { user_model: User } = require('../models/User');
+const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
@@ -194,7 +194,7 @@ router.post(
 /* POST register user */
 router.post('/signup', async function (req, res, next) {
     try {
-        const { name_user, surname_user, email_user, pass_user, age_user, phone_user, type_user } = req.body;
+        const { name_user, surname_user, email_user, pass_user, age_user, phone_user, type_user, ban_until_date } = req.body;
 
         // Controlla se e' una nuova email
         const existingUser = await User.findOne({email_user: email_user});
@@ -214,7 +214,8 @@ router.post('/signup', async function (req, res, next) {
             pass_user: hashedPassword,
             age_user,
             phone_user,
-            type_user: 0
+            type_user,
+            ban_until_date
         });
 
         // Salva l'User
