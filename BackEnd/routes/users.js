@@ -1,9 +1,9 @@
-const express = require('express');
-const router = express.Router();
-const User = require("../models/User");
+var express = require('express');
+var router = express.Router();
+var User = require("../models/User");
 
 /* GET users listing. */
-router.get('/get', async function (req, res, next) {
+router.get('/', async function (req, res, next) {
 
   const lstUser = await User.find();
   if (lstUser) {
@@ -13,24 +13,9 @@ router.get('/get', async function (req, res, next) {
   }
 });
 
-/* GET users listing, only public data */
-router.get('/public_for_mod', async function (req, res, next) {
-  try {
-    const lstUser = await User.find().select('name_user surname_user age_user email_user ban_until_date _id');
-    if (lstUser.length > 0) {
-      return res.status(200).json(lstUser);
-    } else {
-      return res.status(404).json({ message: 'No user found' });
-    }
-  } catch (err) {
-    return res.status(500).json({ message: 'Error', error: err.message });
-  }
-});
-
 router.patch('/suspend', async function (req, res, next) {
   try {
     const { ban_until_date, user_id } = req.body;
-    console.log(ban_until_date, user_id)
 
     const user = await User.findByIdAndUpdate(
         user_id,
@@ -51,7 +36,6 @@ router.patch('/suspend', async function (req, res, next) {
 router.patch('/unsuspend', async function (req, res, next) {
   try {
     const { user_id } = req.body;
-    console.log(user_id)
 
     const user = await User.findByIdAndUpdate(
         user_id,
@@ -65,21 +49,9 @@ router.patch('/unsuspend', async function (req, res, next) {
 
     return res.status(200).json({ message: 'Utente riattivato', user: user });
   } catch (err) {
-    return res.status(500).json({ message: err.message });
+    return res.status(500).json({ message: 'Errore', error: err.message });
   }
 });
 
-/* GET users listing. */
-router.put('/add', function(req, res, next)
-{
-  try {
-    const user = new User(req.body);
-    user.save();
-  }catch(err)
-  {
-    return res.status(401).json({message: err.message});
-  }
-  return res.status(200).json({message: "Utente aggiunto con sucesso"});
-})
 
 module.exports = router;
