@@ -29,8 +29,6 @@ router.post('/', async (req, res) => {
     try {
         const { id_user, id_event, date_Prenotation, guests_event } = req.body;
 
-        console.log('ciao da addBooking');
-
         if (!id_user || !id_event || !date_Prenotation) {
             return res.status(400).json({ message: 'Campi necessari!' });
         }

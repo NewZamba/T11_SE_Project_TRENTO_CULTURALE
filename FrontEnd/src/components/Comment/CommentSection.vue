@@ -60,7 +60,7 @@ export default {
   },
   mounted() {
     this.id_event = this.$route.query.id_event;
-    this.id_user = Cookies.get('id_User');
+    this.id_user = Cookies.get('id_user');
     this.fetchComments();
   },
 };

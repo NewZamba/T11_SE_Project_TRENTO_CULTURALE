@@ -2,7 +2,7 @@
 import DETAILS_IMG from './Details_Img.vue';
 import DESCRIPTION from './Description.vue';
 import EVALUATION from '../Evaluation/Evaluation.vue';
-import cookie from 'js-cookie';
+import Cookies from 'js-cookie';
 
   export default {
     name: 'EventPage',
@@ -42,7 +42,7 @@ import cookie from 'js-cookie';
       },
       subscribe() {
         try {
-          this.user = cookie.get('User');
+          this.user = Cookies.get('id_user');
           console.log(this.user);
           fetch('http://localhost:3000/addBooking', {
             method: 'POST',

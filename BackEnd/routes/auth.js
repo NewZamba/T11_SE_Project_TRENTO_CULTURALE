@@ -6,33 +6,6 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
-// passport.use(new LocalStrategy(
-//     {
-//         usernameField: 'email_user',
-//         passwordField: 'pass_user'
-//     },
-//     async function verify(email, password, cb) {
-//         // cd (callback) ritorna a tuple (err, user, info)
-//         try {
-//             // Controlla se l'utente esiste
-//             const user = await User.findOne({ email_user: email });
-//             if (!user) {
-//                 return cb(null, false, { message: "Utente non trovato" });
-//             }
-//
-//             // Controlla se la password è corretta
-//             const isPasswordCorrect = await bcrypt.compare(password, user.pass_user);
-//             if (!isPasswordCorrect) {
-//                 return cb(null, false, { message: "Password errata" });
-//             }
-//
-//             // Login accettato
-//             return cb(null, user);
-//         } catch (err) {
-//             return cb(err, false, { message: "Errore durante il login" });
-//         }
-//     }));
-
 
 passport.use(new LocalStrategy(
     {
@@ -109,42 +82,6 @@ passport.deserializeUser(async (id, done) => {
     }
 });
 
-/* POST login user  */
-// router.post('/login', (req, res, next) => {
-//     passport.authenticate('local', (err, user, info) => {
-//         if (err) {
-//             return res.status(500).json({
-//                 message: "Errore durante il login",
-//                 error: err.message
-//             });
-//         }
-//
-//         if (!user) {
-//             return res.status(401).json({
-//                 message: info.message || "Credenziali non valide"
-//             });
-//         }
-//
-//         req.login(user, (err) => {
-//             if (err) {
-//                 return res.status(500).json({
-//                     message: "Errore durante il login",
-//                     error: err.message
-//                 });
-//             }
-//
-//             return res.status(200).json({
-//                 message: "Login effettuato con successo",
-//                 user: {
-//                     id: user._id,
-//                     email: user.email_user,
-//                     type_user: user.type_user
-//                 }
-//             });
-//         });
-//     })(req, res, next);
-// });
-
 
 /* POST login user  */
 router.post(
@@ -155,41 +92,6 @@ router.post(
     }
 );
 
-
-
-//     passport.authenticate('local'), (err, user, info) => {
-//         if (err) {
-//             return res.status(500).json({
-//                 message: "Errore durante il login",
-//                 error: err.message
-//             });
-//         }
-//
-//         if (!user) {
-//             return res.status(401).json({
-//                 message: info.message || "Credenziali non valide"
-//             });
-//         }
-//
-//         req.login(user, (err) => {
-//             if (err) {
-//                 return res.status(500).json({
-//                     message: "Errore durante il login",
-//                     error: err.message
-//                 });
-//             }
-//
-//             return res.status(200).json({
-//                 message: "Login effettuato con successo",
-//                 user: {
-//                     id: user._id,
-//                     email: user.email_user,
-//                     type_user: user.type_user
-//                 }
-//             });
-//         });
-//     })(req, res, next);
-// });
 
 /* POST register user */
 router.post('/signup', async function (req, res, next) {

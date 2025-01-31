@@ -77,7 +77,7 @@ export default {
   },
   mounted() {
     console.log("ID evento ricevuto:", this.id_event);
-    this.id_user = Cookies.get("id_User");
+    this.id_user = Cookies.get("id_user");
     this.getEvaluation();
   }
 };
