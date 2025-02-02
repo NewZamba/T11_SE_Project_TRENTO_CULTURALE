@@ -1,75 +1,96 @@
 <script>
 import CAROUSEL from './Carousel.vue';
 import CARDS from './Cards.vue';
-import Cookies from "js-cookie";
+import Cookie from 'js-cookie';
+import {RouterLink} from "vue-router";
 
-  export default {
-    name: 'UserHome',
-    components: {
-      CAROUSEL,
-      CARDS
+export default {
+  name: 'UserHome',
+  components: {
+    CAROUSEL,
+    CARDS
+  },
+  data() {
+    return {
+      events: [],
+      sortN: true,
+      sortD: false,
+      arrSortN: [],
+      arrSortD: []
+    };
+  },
+  created() {
+    this.verifyUserType();
+  },
+  mounted() {
+    this.fetchEvents();
+  },
+  computed: {
+    sortedEvents() {
+      return this.sortN ? this.arrSortN : this.arrSortD;
     },
-    data() {
-      return {
-        events: []
-      };
-    },
-    created() {
-      this.verifyUserType();
-    },
-    mounted() {
-      this.fetchEvents();
-    },
-    methods: {
-      async verifyUserType() {
-        try {
-          const response = await fetch('http://localhost:3000/verificaUserType/test', {
-            method: 'GET',
-            credentials: 'include',
-          });
+  },
+  methods: {
+    async verifyUserType() {
+      try {
+        const response = await fetch('http://localhost:3000/verificaUserType/test', {
+          method: 'GET',
+          credentials: 'include',
+        });
 
-          if (response.status === 401) {
-            throw new Error('utente non loggato');
-          } else if (!response.ok) {
-            const errorResponse = await response.json();
-            throw new Error(errorResponse.message || 'Server error');
-          }
-
-          if (!response.ok) {
-            const errorResponse = await response.json();
-            throw new Error(errorResponse.message || 'Server error');
-          }
-
-          const user_data = await response.json();
-          // Assuming 'user' is the key in the response object
-          Cookies.set('id_User', user_data._id);
-          alert(`User: ${user_data.email_user || 'Unknown user'}, Type: ${user_data.type_user || 'Unknown type'}`);
-        } catch (error) {
-          // Display the error message in case of issues
-          alert(`Error: ${error.message}`);
+        if (response.status === 401) {
+          throw new Error('utente non loggato');
+        } else if (!response.ok) {
+          const errorResponse = await response.json();
+          throw new Error(errorResponse.message || 'Server error');
         }
-      },
-      fetchEvents() {
-        try {
-          fetch('http://localhost:3000/events', {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-            }
-          }).then(response => {
-            if (!response.ok) {
-              throw new Error('Error fetching events');
-            }
-            return response.json();
-          }).then(data => {
-            this.events = data;
-          });
-        } catch (err) {
-          alert(err.message);
+
+        if (!response.ok) {
+          const errorResponse = await response.json();
+          throw new Error(errorResponse.message || 'Server error');
         }
+
+        const user_data = await response.json();
+        Cookie.set('id_user', user_data._id);
+        alert(`User: ${user_data.email_user || 'Unknown user'}, Type: ${user_data.type_user || 'Unknown type'}`);
+      } catch (error) {
+        // Display the error message in case of issues
+        alert(`Error: ${error.message}`);
       }
+    },
+    fetchEvents() {
+      try {
+        fetch('http://localhost:3000/events', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        }).then(response => {
+          if (!response.ok) {
+            throw new Error('Error fetching events');
+          }
+          return response.json();
+        }).then(data => {
+          this.events = data;
+          Promise.all([this.sortByName(), this.sortByDate()]);
+        });
+      } catch (err) {
+        alert(err.message);
+      }
+    },
+    async sortByName() {
+      this.arrSortN = this.events.sort((a, b) => {return a.name_event.localeCompare(b.name_event)});
+      this.sortN = true;
+      this.sortD = false;
+
+    },
+    async sortByDate() {
+      this.arrSortD = this.events.sort((a, b) => {return a.date_event.localeCompare(b.date_event)});
+      this.sortD = true;
+      this.sortN = false;
     }
-  };
+  }
+};
 
 </script>
 
@@ -79,8 +100,14 @@ import Cookies from "js-cookie";
     <div class="Carousel">
       <CAROUSEL :events="events" class="Carousel" />
     </div>
-    <div class="CARDS">
-      <CARDS :events="events" class="CARDS"  />
+    <div class="Sort">
+      <b-dropdown class="" text="Sort by">
+        <b-dropdown-item @click="sortByName">Name</b-dropdown-item>
+        <b-dropdown-item @click="sortByDate">Date</b-dropdown-item>
+      </b-dropdown>
+    </div>
+    <div class="Cards">
+      <CARDS :events="sortedEvents" class="Card" />
     </div>
   </div>
 
@@ -88,33 +115,41 @@ import Cookies from "js-cookie";
 
 <style scoped>
 
-    .container {
-      height: 100vh;
-      width: 100vw;
-      align-items: center;
-      overflow-y: scroll;
-      overflow-x: hidden;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: 1fr 1fr;
-      grid-template-areas:
-      "Carousel Carousel"
-      "CARDS CARDS";
-      gap: 30px 30px;
-    }
+  .container {
+    height: 100vh;
+    width: 100vw;
+    align-items: center;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto 1fr;
+    grid-template-areas:
+            "Carousel Carousel"
+            "Sort Sort"
+            "Cards Cards";
+    gap: 30px 30px;
+  }
 
-    .Carousel {
-      grid-area: Carousel;
-      align-items: center;
-      justify-content: center;
-      display: flex;
-    }
+  .Carousel {
+    grid-area: Carousel;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+  }
 
-    .CARDS {
-      grid-area: CARDS;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+  .Sort {
+    grid-area: Sort;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .Cards {
+    grid-area: Cards;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
 </style>
