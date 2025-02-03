@@ -10,19 +10,15 @@ export default {
       description_event: '',
       location_event: '',
       date_event: '',
-      tags: '',
+      tag_event: '', // Changed from tags to tag_event
       user: {}
     };
   },
   methods: {
     async createEvent() {
-      // console.log(user._id)
-      // console.log(user.email_user)
       try {
-        // this.user = cookie.get('User');
-
         const response = await fetch('http://localhost:3000/addEvent', {
-          method: 'PUT',
+          method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
@@ -32,8 +28,7 @@ export default {
             description_event: this.description_event,
             location_event: this.location_event,
             date_event: this.date_event,
-            tags: this.tags,
-            // created_by: this.user
+            tag_event: parseInt(this.tag_event), // Convert string to number
           }),
         });
 
@@ -42,8 +37,11 @@ export default {
           throw new Error(errorResponse.message || 'Errore nel Backend');
         }
 
+        // Show success message
+        alert('Event created successfully!');
+
       } catch (error) {
-        alert(error);
+        alert(error.message);
       }
     }
   }
@@ -58,7 +56,7 @@ export default {
       <textarea v-model="description_event" placeholder="Event Description"></textarea>
       <input v-model="location_event" placeholder="Location" />
       <input type="date" v-model="date_event" />
-      <input v-model="tags" placeholder="Tags" />
+      <input v-model="tag_event" type="number" placeholder="Tag Number" />
     </div>
 
     <footer class="footerEP">

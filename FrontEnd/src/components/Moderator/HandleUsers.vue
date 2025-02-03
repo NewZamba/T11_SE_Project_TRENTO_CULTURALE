@@ -20,7 +20,7 @@ export default {
   methods: {
     async fetchUsers() {
       try {
-        const response = await fetch('http://localhost:3000/users');
+        const response = await fetch('http://localhost:3000/users/public-for-mod');
         const allUsers = await response.json();
 
         this.suspendedUsers = allUsers.filter(user =>
@@ -60,14 +60,14 @@ export default {
         alert(error);
       }
     },
-    async unsuspendUser(user) {
+    async unsuspendUser(user_id) {
       try {
         const response = await fetch('http://localhost:3000/users/unsuspend', {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ user_id: user._id }),
+          body: JSON.stringify({ user_id: user_id }),
         });
 
         if (!response.ok) {

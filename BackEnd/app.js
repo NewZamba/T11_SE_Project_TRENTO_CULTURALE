@@ -12,13 +12,11 @@ const passport = require("passport");
 //import file di api
 const indexRouter = require('./routes/index');
 const caricaDati = require('./routes/caricaDati');
-const login = require('./routes/login');
 const addUser = require('./routes/addUser');
 const addEvent = require('./routes/addEvent');
 const addFavorite = require('./routes/addFavorite');
 const users = require('./routes/users');
 const events = require('./routes/events');
-const signUp = require('./routes/signUp');
 const verificaUserType = require('./routes/verificaUserType');
 const auth = require('./routes/auth');
 const addBooking = require('./routes/addBooking');
@@ -62,8 +60,9 @@ app.set('view engine', 'pug');
 
 const corsOptions = {
     origin: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
 };
 
 app.use(cors(corsOptions))
@@ -75,14 +74,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/caricaDati',caricaDati);
-app.use('/login',login);
 app.use('/addUser',addUser);
 app.use('/addEvent',addEvent);
 app.use('/addFavorite',addFavorite);
 app.use('/users',users);
 app.use('/events',events);
 app.use('/addBooking',addBooking);
-app.use('/signUp',signUp);
 app.use('/verificaUserType',verificaUserType);
 app.use('/auth',auth);
 app.use('/prenotations', prenotations);
