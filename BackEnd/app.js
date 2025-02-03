@@ -26,6 +26,7 @@ const addComments = require('./routes/addComment');
 const getComments = require('./routes/getComment');
 const addEvaluation = require('./routes/addEvaluation');
 const getEvaluations = require('./routes/getEvaluations');
+const addSuggEvent = require('./routes/addSuggEvent');
 
 //connesione al database
 let url;
@@ -88,6 +89,8 @@ app.use("/addComment", addComments);
 app.use('/getComment',getComments);
 app.use('/addEvaluation', addEvaluation);
 app.use('/getEvaluation', getEvaluations);
+app.use('/addSuggEvent', addSuggEvent)
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
