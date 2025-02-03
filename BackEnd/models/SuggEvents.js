@@ -11,7 +11,8 @@ const suggEvent_schema = new Schema({
     date_event: {type: Date, required: true},
     tag_event: {type: String, required: true},
     description_event: {type: String, required: true},
-    img_event: {type: String, required: false}
+    img_event: {type: String, required: false},
+    guests_event: {type: Number, required: true},
 });
 
 const suggEvent_model = mongoose.model('Suggested_Event', suggEvent_schema);
