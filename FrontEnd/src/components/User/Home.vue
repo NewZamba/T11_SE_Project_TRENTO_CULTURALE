@@ -88,6 +88,9 @@ export default {
       this.arrSortD = this.events.sort((a, b) => {return a.date_event.localeCompare(b.date_event)});
       this.sortD = true;
       this.sortN = false;
+    },
+    suggEvent() {
+      this.$router.push({path: '/SuggestionEvent'});
     }
   }
 };
@@ -105,6 +108,9 @@ export default {
         <b-dropdown-item @click="sortByName">Name</b-dropdown-item>
         <b-dropdown-item @click="sortByDate">Date</b-dropdown-item>
       </b-dropdown>
+      <button class="sugg_btn" @click="suggEvent">
+        Suggest Event
+      </button>
     </div>
     <div class="Cards">
       <CARDS :events="sortedEvents" class="Card" />
@@ -143,6 +149,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+    gap: 10px
   }
 
   .Cards {
@@ -150,6 +157,24 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+
+  .sugg_btn {
+    border: none;
+    width: 120px;
+    height: 60px;
+    border-radius: 30px;
+    background-color: #4cafa0;
+    color: white;
+    font-size: medium;
+    font-family: 'Helvetica', sans-serif;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s;
+  }
+
+  .sugg_btn:hover {
+    transform: scale(1.1);
   }
 
 </style>
