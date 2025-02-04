@@ -21,9 +21,11 @@ export default {
 
   .footer {
     text-align: center;
-    color: #53a199;
-    font-family: Helvetica, sans-serif;
+    align-content: center;
+    color: rgba(104, 85, 224, 1);
+    font-family: 'Roboto Light';
     font-size: small;
+    font-weight: bold;
   }
 
 </style>

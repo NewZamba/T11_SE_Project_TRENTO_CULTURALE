@@ -19,11 +19,11 @@ export default {
 <template>
 
   <div id="app" class="container">
-      <Header class="header" />
+    <Header class="header" />
     <main class="mains">
       <router-view />
     </main>
-      <Footer class="footer"/>
+    <Footer class="footer"/>
   </div>
 
 </template>

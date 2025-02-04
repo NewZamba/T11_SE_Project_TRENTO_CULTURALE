@@ -12,18 +12,22 @@ export default {
 </script>
 
 <template>
-  <h1>
-      Trento Culturale
-  </h1>
+
+  <div class="header">
+    Trento Culturale
+  </div>
+
 </template>
 
 <style scoped>
 
   .header {
     text-align: center;
-    color: #53a199;
-    font-family: Helvetica, sans-serif;
+    align-content: center;
+    color: rgba(104, 85, 224, 1);
+    font-family: 'Roboto Light';
     font-size: 20px;
+    font-weight: bold;
   }
 
 </style>
