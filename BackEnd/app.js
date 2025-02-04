@@ -11,7 +11,6 @@ const passport = require("passport");
 
 //import file di api
 const indexRouter = require('./routes/index');
-const caricaDati = require('./routes/caricaDati');
 const addUser = require('./routes/addUser');
 const addEvent = require('./routes/addEvent');
 const addFavorite = require('./routes/addFavorite');
@@ -27,6 +26,9 @@ const getComments = require('./routes/getComment');
 const addEvaluation = require('./routes/addEvaluation');
 const getEvaluations = require('./routes/getEvaluations');
 const addSuggEvent = require('./routes/addSuggEvent');
+const convertEvent = require('./routes/convertEvent');
+const addTag = require('./routes/addTag');
+const tags = require('./routes/tags');
 
 //connesione al database
 let url;
@@ -74,7 +76,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/caricaDati',caricaDati);
 app.use('/addUser',addUser);
 app.use('/addEvent',addEvent);
 app.use('/addFavorite',addFavorite);
@@ -89,7 +90,10 @@ app.use("/addComment", addComments);
 app.use('/getComment',getComments);
 app.use('/addEvaluation', addEvaluation);
 app.use('/getEvaluation', getEvaluations);
-app.use('/addSuggEvent', addSuggEvent)
+app.use('/addSuggEvent', addSuggEvent);
+app.use('/convertEvent', convertEvent);
+app.use('/addTag', addTag);
+app.use('/tags', tags);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
