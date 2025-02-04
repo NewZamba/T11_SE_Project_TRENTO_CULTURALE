@@ -20,9 +20,11 @@ export default {
 
   <div id="app" class="container">
     <Header class="header" />
+
     <main class="mains">
       <router-view />
     </main>
+
     <Footer class="footer"/>
   </div>
 
@@ -31,8 +33,8 @@ export default {
 <style scoped>
 
   * {
-    margin: 0 0 0 0;
-    padding: 0 0 0 0;
+    margin: 0;
+    padding: 0;
     overflow-y: hidden;
     display: grid;
   }
@@ -51,7 +53,6 @@ export default {
      "header" "header"
       "mains" "mains"
       "footer" "footer";
-
   }
 
   .mains {
@@ -61,10 +62,12 @@ export default {
     min-width: 100vw;
     max-width: 100vw;
   }
+
   .header {
     grid-area: header;
     height: 5%;
   }
+
   .footer {
     grid-area: footer;
     height: 2%;
@@ -72,6 +75,7 @@ export default {
     align-items: center;
     display: flex;
   }
+
   #app{
     height: 1080px;
     width: 1920px;

@@ -53,17 +53,13 @@ import button from "bootstrap/js/src/button.js";
         img-width="1024"
         img-height="480"
         controls
-        style="text-shadow: 1px 1px 2px #333"
-    >
-      <!--
-      Per le immagini le mettiamo in base64 nel database e poi ssi richiama la funz inversa per riportarle im img
-      -->
+        style="text-shadow: 1px 1px 2px #333">
+
       <b-carousel-slide
           v-for="event in events"
           :key="event._id"
           :img-src="event.img_event"
-          :img-width="1024"
-      >
+          :img-width="1024" >
         <div class="carousel-caption">
           <b-button class="btn" @click="showEvent(event)">
             {{ event.name_event }}
@@ -77,15 +73,17 @@ import button from "bootstrap/js/src/button.js";
 <style scoped>
 
   #carousel-1 {
-    height: 500px;
-    width: 60%;
+    height: 650px;
+    width: 100%;
     align-items: center;
+    margin-top: 0;
+    padding-top: 0;
   }
 
   ::v-deep(img.img-fluid) {
     width: 100%;
     height: 480px !important;
-    object-fit: fill;
+    object-fit: cover;
   }
 
   b-carousel-slide {
@@ -101,10 +99,13 @@ import button from "bootstrap/js/src/button.js";
     -webkit-text-stroke: 1px black;
     cursor: pointer;
     outline: none;
+    transition: transform 0.2s;
   }
+
   .btn:hover {
     color: white;
     background: none;
+    transform: scale(1.1);
   }
 
 </style>

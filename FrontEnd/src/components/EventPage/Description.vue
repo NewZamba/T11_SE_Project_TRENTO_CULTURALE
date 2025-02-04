@@ -20,12 +20,14 @@
 
   <div class="description">
     <h1>Description</h1>
+    <hr />
     <p>{{ description_event }}</p>
   </div>
 
 </template>
 
 <style scoped>
+
   .description {
     display: flex;
     flex-direction: column;
@@ -36,7 +38,13 @@
   }
 
   h1 {
-    font-family: 'Helvetica', sans-serif;
+    font-family: 'Roboto Light', sans-serif;
     font-size: x-large;
   }
+
+  p {
+    font-family: 'Roboto Light', sans-serif;
+    font-size: large;
+  }
+
 </style>

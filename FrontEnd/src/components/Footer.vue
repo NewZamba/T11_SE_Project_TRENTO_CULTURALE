@@ -12,9 +12,11 @@ export default {
 </script>
 
 <template>
+
   <div class="footer">
     @Università di Trento - Gruppo: T11 - F.Buscardo, F.Cocquio, G.Marasca
   </div>
+
 </template>
 
 <style scoped>
