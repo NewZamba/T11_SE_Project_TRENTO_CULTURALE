@@ -1,14 +1,13 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 const Event = require('../models/Events');
-const User = require("../models/User");
 
 /* POST event */
 router.post('/', async function(req, res, next) {
     try {
-        const {name_event, location_event, date_event, tag_event, description_event, img_event} = req.body;
+        const {name_event, location_event, date_event, tags_event, description_event, img_event, guests_event} = req.body;
 
-        if (!name_event || !location_event || !date_event || !tag_event || !description_event) {
+        if (!name_event || !location_event || !date_event || !tags_event || !description_event || !img_event || !guests_event) {
             return res.status(400).json({ message: "Dati mancanti" });
         }
 
@@ -16,9 +15,10 @@ router.post('/', async function(req, res, next) {
             name_event,
             location_event,
             date_event,
-            tag_event: parseInt(tag_event),
+            tags_event,
             description_event,
             img_event,
+            guests_event,
         });
 
         await event.save();

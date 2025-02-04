@@ -3,7 +3,7 @@ const router = express.Router();
 const Event = require('../models/Events');
 const suggEvents = require("../models/SuggEvents");
 
-router.post('/sug_to_off', async function (req, res, next) {
+router.post('/sug-to-off', async function (req, res, next) {
     try {
         const { suggEventId, location_event } = req.body;
 
