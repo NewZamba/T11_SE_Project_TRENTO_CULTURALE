@@ -29,6 +29,7 @@ const addSuggEvent = require('./routes/addSuggEvent');
 const convertEvent = require('./routes/convertEvent');
 const addTag = require('./routes/addTag');
 const tags = require('./routes/tags');
+const deleteComment = require('./routes/deleteComment');
 
 //connesione al database
 let url;
@@ -94,6 +95,7 @@ app.use('/addSuggEvent', addSuggEvent);
 app.use('/convertEvent', convertEvent);
 app.use('/addTag', addTag);
 app.use('/tags', tags);
+app.use('/deleteComment', deleteComment);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

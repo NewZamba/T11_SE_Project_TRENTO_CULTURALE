@@ -54,9 +54,8 @@
   .form_field:focus {
     padding-bottom: 6px;
     font-weight: bold;
-    border-width: 3px;
-    border-image: linear-gradient(to right, #0fbbae, rgba(104, 85, 224, 1));
-    border-image-slice: 1;
+    font-size: medium;
+    color: white;
   }
 
   .form_field{

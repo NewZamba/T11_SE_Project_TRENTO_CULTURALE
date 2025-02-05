@@ -17,22 +17,37 @@ export default {
   },
   methods: {
     handleReply(parentId) {
-      console.log("Entro in handler");
       this.replyingTo = parentId;
       this.$emit('reply', { parentId });
     },
     addReply() {
-      console.log("Entro in addReply");
       if (this.newReplyText.trim()) {
         this.addComment();
         this.newReplyText = "";  // Clear the input after submitting
         this.replyingTo = null;  // Reset replyingTo
       }
     },
+    deleteReply(commentId) {
+      async function deleteComment(commentId) {
+        if (confirm("Sei sicuro di voler eliminare questo commento e tutte le risposte correlate?")) {
+          try {
+            const response = await fetch(`http://localhost:3000/deleteComment/${commentId}`, {
+              method: "DELETE",
+            });
+            if (!response.ok) throw new Error("Failed to delete comment");
+            this.$emit('comment-deleted', commentId);
+          } catch (error) {
+            console.error("Error deleting comment:", error);
+          }
+        }
+      }
+
+      deleteComment(commentId);
+    },
     async addComment() {
         const newComment = {
           id_event: this.comment.id_event,
-          id_user: this.comment.id_user,
+          id_user: this.id_user,
           id_Parent: this.comment._id,
           text: this.newReplyText,
           date: new Date().toISOString(),
@@ -58,7 +73,7 @@ export default {
     },
   },
   mounted() {
-    this.id_user = Cookies.get("id_User");
+    this.id_user = Cookies.get("id_user");
   }
 };
 </script>
@@ -82,7 +97,7 @@ export default {
           v-if="comment.id_user === this.id_user"
           variant="danger"
           size="sm"
-          @click="deleteComment(comment._id)"
+          @click="deleteReply(comment._id)"
       >
         Delete
       </b-button>

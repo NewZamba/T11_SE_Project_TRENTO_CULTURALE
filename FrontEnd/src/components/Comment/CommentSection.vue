@@ -50,7 +50,9 @@ export default {
 
           if (!response.ok) throw new Error("Failed to add comment");
           const savedComment = await response.json();
-          this.comments.push(savedComment.comment); // Aggiungi il nuovo commento alla lista
+          const comment = savedComment.comment;
+          comment.replies = [];
+          this.comments.push(comment);  // Aggiungi il nuovo commento alla lista
           this.newCommentText = ""; // Resetta il campo di input
         } catch (error) {
           console.error("Error adding comment:", error);
@@ -62,6 +64,7 @@ export default {
     this.id_event = this.$route.query.id_event;
     this.id_user = Cookies.get('id_user');
     this.fetchComments();
+    console.log(this.comments);
   },
 };
 </script>
