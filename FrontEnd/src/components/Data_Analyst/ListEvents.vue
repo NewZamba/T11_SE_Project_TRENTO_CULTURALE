@@ -67,8 +67,6 @@
           <hr />
           <p class="p1">Description:</p>
           <p class="p2">{{ t_event.location_event }} </p>
-          <hr />
-          <img :src="t_event.img_event" v-if="t_event && t_event.img_event" alt="Immagine Evento" />
         </div>
       </div>
     </div>
@@ -98,7 +96,7 @@
     flex: 3;
     flex-direction: column;
     gap: 20px;
-    font-family: "Roboto Light";
+    font-family: "Roboto Light", sans-serif;
   }
 
   .graphics {
@@ -146,11 +144,11 @@
     font-size: 25px;
   }
 
-  .info img {
+  /*.info img {
     max-width: 100%;
     height: auto;
     border-radius: 5px;
-  }
+  }*/
 
   button {
     cursor: pointer;
