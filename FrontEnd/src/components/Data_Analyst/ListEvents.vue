@@ -53,15 +53,20 @@
 
       <div v-else class="graphics">
         <div class="info">
-          <h1>Name: {{ t_event.name_event }} </h1>
+          <p class="p1">Name:</p>
+          <p class="p2">{{ t_event.name_event }} </p>
           <hr />
-          <p>Location: {{ t_event.location_event }} </p>
+          <p class="p1">Location: </p>
+          <p class="p2">{{ t_event.location_event }} </p>
           <hr />
-          <p>Date: {{ t_event.date_event }} </p>
+          <p class="p1">Date:</p>
+          <p class="p2">{{ t_event.location_event }} </p>
           <hr />
-          <p>Tag: {{ t_event.tags }} </p>
+          <p class="p1">Tag:</p>
+          <p class="p2">{{ t_event.location_event }} </p>
           <hr />
-          <p>Description: {{ t_event.description_event }} </p>
+          <p class="p1">Description:</p>
+          <p class="p2">{{ t_event.location_event }} </p>
           <hr />
           <img :src="t_event.img_event" v-if="t_event && t_event.img_event" alt="Immagine Evento" />
         </div>
@@ -132,7 +137,12 @@
     font-size: 35px;
   }
 
-  p {
+  .p1 {
+    font-size: 25px;
+    font-style: italic;
+  }
+
+  .p2 {
     font-size: 25px;
   }
 
