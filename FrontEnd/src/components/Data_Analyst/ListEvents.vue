@@ -34,84 +34,106 @@
 
 <template>
 
-  <div class="main-container">
-
+  <div class="container">
     <div class="left-column">
-      <b-button
+      <button
           v-for="event in events"
           :key="event._id"
           :title="event.name_event"
           @click="showDetails(event)"
-          class="card-item d-flex flex-column justify-content-between">
+          class="btn_event">
         <span> {{ event.name_event }} </span>
-      </b-button>
+      </button>
     </div>
 
     <div class="right-column">
-      <div v-if="t_event === null">
+      <div class="nothing" v-if="t_event === null">
         <p> Nessun evento selezionato </p>
       </div>
 
       <div v-else class="graphics">
-          <!--Info eventi-->
-          <div class="info">
-            <h1> {{ t_event.name_event }} </h1>
-            <p> {{ t_event.location_event }} </p>
-            <p> {{ t_event.date_event }} </p>
-            <p> {{ t_event.tags }} </p>
-            <p> {{ t_event.description_event }} </p>
-            <img :src="t_event.img_event"
-                 v-if="t_event && t_event.img_event" alt="Immagine Evento" />
-          </div>
-
-        <div class="event-graphic"> <!--Possibili grafici per quell'evento-->
-          <div class="g1">
-            <h1>G1</h1>
-            <!--<BarChart2 :data="" />-->
-          </div>
+        <div class="info">
+          <h1>Name: {{ t_event.name_event }} </h1>
+          <hr />
+          <p>Location: {{ t_event.location_event }} </p>
+          <hr />
+          <p>Date: {{ t_event.date_event }} </p>
+          <hr />
+          <p>Tag: {{ t_event.tags }} </p>
+          <hr />
+          <p>Description: {{ t_event.description_event }} </p>
+          <hr />
+          <img :src="t_event.img_event" v-if="t_event && t_event.img_event" alt="Immagine Evento" />
         </div>
       </div>
-
     </div>
-
   </div>
 
 </template>
 
 <style scoped>
 
-  .main-container {
+  .container {
     display: flex;
     gap: 20px;
     height: 100%;
+    padding: 5px;
   }
 
   .left-column {
-    flex: 1;
     display: flex;
+    flex: 1;
     flex-direction: column;
     gap: 10px;
     align-items: flex-start;
   }
 
   .right-column {
-    flex: 3;
     display: flex;
+    flex: 3;
     flex-direction: column;
     gap: 20px;
+    font-family: "Roboto Light";
   }
 
   .graphics {
     display: flex;
     gap: 20px;
+    padding: 20px;
+    background-color: rgba(104, 85, 224, 1);
+  }
+
+  .nothing {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
   }
 
   .info {
-    flex: 1;
     display: flex;
+    flex: 1;
     flex-direction: column;
     justify-content: center;
     gap: 10px;
+    color: rgba(255, 255, 255, 1);
+  }
+
+  hr {
+    border: none;
+    height: 1.5px;
+    width: 100%;
+    align-self: center;
+    background-color: rgb(255, 245, 238);
+  }
+
+  h1 {
+    font-size: 35px;
+  }
+
+  p {
+    font-size: 25px;
   }
 
   .info img {
@@ -120,16 +142,28 @@
     border-radius: 5px;
   }
 
-  .event-graphic {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    align-items: flex-start;
+  button {
+    cursor: pointer;
+    border: 0;
+    border-radius: 4px;
+    font-weight: 600;
+    margin: 0 10px;
+    width: 200px;
+    padding: 10px 0;
+    box-shadow: 0 0 20px rgba(115, 99, 238, 0.2);
+    transition: 0.4s;
   }
 
-  .card-item {
-    width: 200px;
-    padding: 10px;
+  button:hover {
+    color: rgba(255, 255, 255, 1);
+    box-shadow: 0 0 40px rgba(104, 85, 224, 0.6);
+    background-color: rgba(104, 85, 224, 1);
+  }
+
+  .btn_event {
+    color: rgb(104, 85, 224);
+    background-color: rgba(255, 255, 255, 1);
+    border: 1px solid rgba(104, 85, 224, 1);
   }
 
 </style>

@@ -79,10 +79,10 @@ Chart.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
 <style scoped>
 
   .chart {
-    display: flex;
-    justify-content: center;
-    align-items: center;
     box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 100%;
     height: 100%;
     border: 1px solid #ddd;
