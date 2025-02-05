@@ -8,6 +8,7 @@ import Login from './components/Login/Login.vue';
 import EventPage from './components/EventPage/EventPage.vue';
 import Comment from './components/Comment/CommentSection.vue';
 import SuggestionEvent from "./components/User/SuggestionEvent.vue";
+import SuggEvents from './components/User/SuggEvents.vue'
 
 Vue.use(Router);
 
@@ -43,6 +44,10 @@ const routes = [
     {
         path: '/SuggestionEvent',
         component: SuggestionEvent
+    },
+    {
+        path: '/SuggEvents',
+        component: SuggEvents
     },
     {
         path: '*', // Rotte non definite

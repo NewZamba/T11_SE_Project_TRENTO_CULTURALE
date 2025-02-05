@@ -69,8 +69,6 @@
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
   }
 
-
-
   button {
     cursor: pointer;
     border: 0;

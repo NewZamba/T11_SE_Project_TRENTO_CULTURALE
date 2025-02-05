@@ -13,6 +13,7 @@ export default {
   data() {
     return {
       events: [],
+      suggEvents: [],
       sortN: true,
       sortD: false,
       arrSortN: [],
@@ -24,6 +25,7 @@ export default {
   },
   mounted() {
     this.fetchEvents();
+    this.fetchSuggEvents();
   },
   computed: {
     sortedEvents() {
@@ -77,6 +79,25 @@ export default {
         alert(err.message);
       }
     },
+    fetchSuggEvents() {
+      try {
+        fetch('http://localhost:3000/suggEvents', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        }).then(response => {
+          if (!response.ok) {
+            throw new Error('Error fetching events');
+          }
+          return response.json();
+        }).then(data => {
+          this.suggEvents = data;
+        });
+      } catch (err) {
+        alert(err.message);
+      }
+    },
     async sortByName() {
       this.arrSortN = this.events.sort((a, b) => {return a.name_event.localeCompare(b.name_event)});
       this.sortN = true;
@@ -90,6 +111,14 @@ export default {
     },
     suggEvent() {
       this.$router.push({path: '/SuggestionEvent'});
+    },
+    viewSuggEvents() {
+      this.$router.push({
+        path: '/SuggEvents',
+        query: {
+          events: this.suggEvents
+        }
+      });
     }
   }
 };
@@ -119,6 +148,10 @@ export default {
 
           <button class="sugg_btn" @click="suggEvent">
             Suggest Event
+          </button>
+
+          <button class="sugg_btn" @click="viewSuggEvents">
+            View Suggest Events
           </button>
         </div>
       </footer>
@@ -258,7 +291,7 @@ export default {
   }
 
   .sugg_btn {
-    width: 120px;
+    width: 160px;
     height: 60px;
     border-radius: 20px;
     border: 1px solid rgba(104, 85, 224, 1);
