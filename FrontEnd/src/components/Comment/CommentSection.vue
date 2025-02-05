@@ -24,7 +24,17 @@ export default {
         });
         if (!response.ok) throw new Error("Failed to fetch comments");
         const data = await response.json();
+        const sortComments = (comments) => {
+          return comments
+              .sort((a, b) => new Date(b.date) - new Date(a.date)) // Ordine decrescente
+              .map(comment => ({
+                ...comment,
+                replies: comment.replies ? sortComments(comment.replies) : []
+              }));
+        };
+
         this.comments = data.comments;
+        this.comments = sortComments(data.comments);
       } catch (error) {
         console.error("Error fetching comments:", error);
       }
@@ -49,10 +59,7 @@ export default {
           });
 
           if (!response.ok) throw new Error("Failed to add comment");
-          const savedComment = await response.json();
-          const comment = savedComment.comment;
-          comment.replies = [];
-          this.comments.push(comment);  // Aggiungi il nuovo commento alla lista
+          await this.fetchComments();
           this.newCommentText = ""; // Resetta il campo di input
         } catch (error) {
           console.error("Error adding comment:", error);
@@ -87,7 +94,11 @@ export default {
 
     <!-- Sezione commenti -->
     <div v-for="comment in comments" :key="comment._id" class="mb-3">
-      <CommentCard :comment="comment" :zIndex="comment.z_index" />
+      <CommentCard
+          :comment="comment"
+          :zIndex="comment.z_index"
+          @refresh-comments="fetchComments"
+      />
     </div>
 
   </div>

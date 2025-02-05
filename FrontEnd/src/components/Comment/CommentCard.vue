@@ -28,48 +28,45 @@ export default {
       }
     },
     deleteReply(commentId) {
-      async function deleteComment(commentId) {
+      async function deleteComment(commentId,coso) {
         if (confirm("Sei sicuro di voler eliminare questo commento e tutte le risposte correlate?")) {
           try {
             const response = await fetch(`http://localhost:3000/deleteComment/${commentId}`, {
               method: "DELETE",
             });
             if (!response.ok) throw new Error("Failed to delete comment");
-            this.$emit('comment-deleted', commentId);
+            coso.$emit("refresh-comments");
           } catch (error) {
             console.error("Error deleting comment:", error);
           }
         }
       }
+      deleteComment(commentId,this);
 
-      deleteComment(commentId);
     },
     async addComment() {
-        const newComment = {
-          id_event: this.comment.id_event,
-          id_user: this.id_user,
-          id_Parent: this.comment._id,
-          text: this.newReplyText,
-          date: new Date().toISOString(),
-          z_index:this.comment.z_index+1,
-        };
+      const newComment = {
+        id_event: this.comment.id_event,
+        id_user: this.id_user,
+        id_Parent: this.comment._id,
+        text: this.newReplyText,
+        date: new Date().toISOString(),
+        z_index:this.comment.z_index+1,
+      };
 
-        try {
-          const response = await fetch("http://localhost:3000/addComment", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(newComment),
-          });
-          if (!response.ok) throw new Error("Failed to add comment");
-          const responseComment = await response.json();
-          const savedComment = await responseComment.comment;
-          savedComment.replies=[];
-          this.comment.replies.push(savedComment);
-        } catch (error) {
-          console.error("Error adding comment:", error);
-        }
+      try {
+        const response = await fetch("http://localhost:3000/addComment", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newComment),
+        });
+        if (!response.ok) throw new Error("Failed to add comment");
+      } catch (error) {
+        console.error("Error adding comment:", error);
+      }
+      this.$emit("refresh-comments")
     },
   },
   mounted() {
@@ -118,7 +115,14 @@ export default {
     <!-- Se ci sono risposte, le mostriamo -->
     <div v-if="comment.replies.length" class="mt-3">
       <div v-for="reply in comment.replies" :key="reply._id" class="reply p-2 border-top">
-        <CommentCard :comment="reply" @reply="handleReply" :zIndex="reply.z_index" :id_user="id_user" @add-reply="addReply" />
+        <CommentCard
+            :comment="reply"
+            @reply="handleReply"
+            :zIndex="reply.z_index"
+            :id_user="id_user"
+            @add-reply="addReply"
+            @refresh-comments="$emit('refresh-comments')"
+        />
       </div>
     </div>
 
