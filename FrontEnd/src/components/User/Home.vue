@@ -52,7 +52,6 @@ export default {
 
         const user_data = await response.json();
         Cookie.set('id_user', user_data._id);
-        alert(`User: ${user_data.email_user || 'Unknown user'}, Type: ${user_data.type_user || 'Unknown type'}`);
       } catch (error) {
         // Display the error message in case of issues
         alert(`Error: ${error.message}`);

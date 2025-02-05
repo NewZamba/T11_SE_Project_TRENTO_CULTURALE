@@ -38,7 +38,6 @@ export default {
         }
 
         const user_data = await response.json();
-        alert(`User: ${user_data.email_user || 'Unknown user'}, Type: ${user_data.type_user || 'Unknown type'}`);
       } catch (error) {
         alert(`Error: ${error.message}`);
       }

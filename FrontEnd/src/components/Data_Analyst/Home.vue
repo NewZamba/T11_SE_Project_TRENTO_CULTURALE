@@ -52,8 +52,6 @@ import {values} from "lodash";
           }
 
           const user_data = await response.json();
-          // Assuming 'user' is the key in the response object
-          alert(`User: ${user_data.email_user || 'Unknown user'}, Type: ${user_data.type_user || 'Unknown type'}`);
         } catch (error) {
           // Display the error message in case of issues
           alert(`Error: ${error.message}`);
