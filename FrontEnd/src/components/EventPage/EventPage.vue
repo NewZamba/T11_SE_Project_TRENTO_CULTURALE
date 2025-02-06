@@ -2,10 +2,12 @@
 import DESCRIPTION from './Description.vue';
 import EVALUATION from '../Evaluation/Evaluation.vue';
 import Cookies from 'js-cookie';
+import CommentSection from "../Comment/CommentSection.vue";
 
   export default {
     name: 'EventPage',
     components: {
+      CommentSection,
       DESCRIPTION,
       EVALUATION
     },
@@ -82,7 +84,6 @@ import Cookies from 'js-cookie';
 <template>
 
   <div class="background">
-
     <div class="container">
       <div class="imgEvent">
         <img :src="img_event" alt="Event Image" />
@@ -123,6 +124,7 @@ import Cookies from 'js-cookie';
           </div>
         </div>
       </div>
+      <CommentSection :id_event="id_event"/>
     </div>
   </div>
 

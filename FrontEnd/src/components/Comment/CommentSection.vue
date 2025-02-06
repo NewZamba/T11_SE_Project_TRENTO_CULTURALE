@@ -31,11 +31,13 @@ import Cookies from "js-cookie";
 
 export default {
   components: {CommentCard},
+  props: {
+    id_event: {type:String},
+  },
   data() {
     return {
       comments: [],
       newCommentText: "",
-      id_event: null,
       id_user: null,
     };
   },
@@ -111,7 +113,6 @@ export default {
     },
   },
   mounted() {
-    this.id_event = this.$route.query.id_event;
     this.id_user = Cookies.get("id_user");
     this.fetchComments();
   },
