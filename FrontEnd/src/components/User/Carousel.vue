@@ -54,7 +54,6 @@ import button from "bootstrap/js/src/button.js";
         img-height="480"
         controls
         style="text-shadow: 1px 1px 2px #333">
-
       <b-carousel-slide
           v-for="event in events"
           :key="event._id"
@@ -73,17 +72,19 @@ import button from "bootstrap/js/src/button.js";
 <style scoped>
 
   #carousel-1 {
-    height: 650px;
+    height: 40%;
     width: 100%;
     align-items: center;
-    margin-top: 0;
+    margin: 0;
     padding-top: 0;
   }
 
   ::v-deep(img.img-fluid) {
     width: 100%;
-    height: 480px !important;
+    height: 360px !important;
     object-fit: cover;
+    border-top-right-radius: 30px;
+    border-top-left-radius: 30px;
   }
 
   b-carousel-slide {

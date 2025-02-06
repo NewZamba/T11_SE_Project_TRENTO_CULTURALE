@@ -136,10 +136,10 @@ export default {
       </div>
 
       <div class="Cards">
-        <CARDS :events="sortedEvents" class="Card" />
+        <CARDS :events="sortedEvents" />
       </div>
 
-      <footer class="Footer">
+      <footer>
         <div class="Sort">
           <b-dropdown class="" text="Sort by">
             <b-dropdown-item @click="sortByName">Name</b-dropdown-item>
@@ -181,22 +181,6 @@ export default {
     max-height: 100%;
   }
 
-  /*.container {
-    height: 100vh;
-    width: 100vw;
-    align-items: center;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto auto 1fr;
-    grid-template-areas:
-            "Carousel Carousel"
-            "Sort Sort"
-            "Cards Cards";
-    gap: 30px 30px;
-  }*/
-
   .container {
     display: flex;
     flex-direction: column;
@@ -212,67 +196,41 @@ export default {
     margin-top: 0;
     padding: 0;
     background: rgb(255, 245, 238);
+    gap: 20px;
   }
-  /*.Carousel {
-    grid-area: Carousel;
-    align-items: center;
-    justify-content: center;
-    display: flex;
-  }*/
 
   .Carousel {
     display: flex;
-    flex: 2;
     width: 100%;
+    height: 40%;
     align-items: center;
     justify-content: center;
     margin: 0;
     padding: 0;
   }
 
-  .Footer {
+  .Cards {
     display: flex;
-    flex-direction: row;
-    flex: 0.5;
+    height: 50%;
+    width: 100%;
+    margin-top: 10px;
+    scroll-behavior: smooth;
+  }
+
+  footer {
+    height: 10%;
     width: 100%;
     align-items: center;
     justify-content: center;
     padding: 5px;
   }
 
-  /*.Sort {
-    grid-area: Sort;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px
-  }*/
-
   .Sort {
     display: flex;
-    flex: 1;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-  }
-
-  /*.Cards {
-    grid-area: Cards;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-  }*/
-
-  .Cards {
-    display: flex;
-    flex: 3;
-    flex-direction: row;
-    flex-wrap: wrap;
-    overflow-x: auto;
-    gap: 20px;
     width: 100%;
-    justify-content: center;
+    height: 100%;
+    align-items: center;
+    justify-content: space-evenly;
   }
 
   button {

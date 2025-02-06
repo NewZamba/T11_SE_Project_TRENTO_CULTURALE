@@ -35,7 +35,7 @@
 
 <template>
 
-  <b-card-group deck>
+  <div class="cards">
     <b-card
         v-for="event in events"
         :key="event._id"
@@ -44,29 +44,34 @@
         img-alt="Event Image"
         img-height="200px"
         tag="article"
-        class="card-item d-flex flex-column justify-content-between" >
-      <b-card-text>
-        {{ event.description }}
-      </b-card-text>
-
-      <button class="viewEventBtn" @click="showEvent(event)">View Event</button>
+        class="card-item" >
+      <button class="viewEventBtn" @click="showEvent(event)">
+        View Event
+      not
+      </button>
     </b-card>
-  </b-card-group>
+  </div>
 
 </template>
 
 <style scoped>
 
-  .card-item {
-    width: 325px;
-    height: 375px;
-    flex: 1 1 calc(33.333% - 1rem);
-    box-sizing: border-box;
-    margin: 1rem;
+  .cards {
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    flex-direction: row;
+    overflow-x: scroll;
+    margin: 0;
+    padding: 5px;
+    gap: 10px;
+  }
+
+  .card-item {
+    min-width: 250px;
+    max-width: 250px;
+    height: 100%;
+    margin: 0;
+    font-family: "Roboto Light";
+    font-weight: bold;
   }
 
   button {
@@ -74,6 +79,7 @@
     border: 0;
     border-radius: 4px;
     font-weight: 600;
+    font-size: medium;
     margin: 0 10px;
     width: 50%;
     padding: 10px;

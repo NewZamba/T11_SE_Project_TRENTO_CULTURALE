@@ -26,6 +26,11 @@
       },
       backToHome() {
         this.$router.push('/UserHome');
+      },
+      voteEvent() {
+        if (this.openEvents.length > 0) {
+
+        }
       }
     },
   };
@@ -44,14 +49,14 @@
         </button>
       </header>
 
-      <nav>
+      <nav class="navbar">
         <div v-for="event in events" :key="event._id" class="event-container">
           <div class="ec2">
             <label @click="toggleMenu(event._id)">
               <span>{{ event.name_event }}</span>
             </label>
 
-            <button @click="" class="voteBtn">
+            <button @click="voteEvent" class="voteBtn">
               Vote
             </button>
           </div>
@@ -131,6 +136,10 @@
     height: 100%;
     margin: 0;
     padding: 0;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1),
+    0px -4px 6px rgba(0, 0, 0, 0.1),
+    4px 0px 6px rgba(0, 0, 0, 0.1),
+    -4px 0px 6px rgba(0, 0, 0, 0.1);
   }
 
   .event-container {
@@ -140,6 +149,14 @@
     justify-content: space-between;
   }
 
+  .navbar {
+    height: 90%;
+    overflow-y: auto;
+    border: none;
+    padding: 2px;
+    scroll-behavior: smooth;
+  }
+
   .ec2 {
     display: flex;
     height: 100%;
@@ -147,6 +164,7 @@
     margin: 0;
     align-items: center;
     justify-content: space-between;
+    border: 2px solid rgba(255, 245, 238);
   }
 
   .event-container .voteBtn{
@@ -231,7 +249,7 @@
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1),
     0px -4px 6px rgba(0, 0, 0, 0.1),
     4px 0px 6px rgba(0, 0, 0, 0.1),
-    -4px 0px 6px rgba(0, 0, 0, 0.1);;
+    -4px 0px 6px rgba(0, 0, 0, 0.1);
     transform: scale(1.1);
   }
 
