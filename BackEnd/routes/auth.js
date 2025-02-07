@@ -23,6 +23,11 @@ passport.use(new LocalStrategy(
         const isPasswordCorrect = await bcrypt.compare(pass_user, user.pass_user);
         if (!isPasswordCorrect) throw new Error("Password errata");
 
+        // Controlla se l'utente e' stato bannato
+        if (user.ban_until_date && new Date() < new Date(user.ban_until_date)) {
+            throw new Error(`Utente sospeso fino al ${new Date(user.ban_until_date).toLocaleDateString()}`);
+        }
+
         // done ritorna a tuple (err, user)
         done(null, user);
     } catch (err) {
@@ -44,7 +49,11 @@ passport.use(new GoogleStrategy(
             const user = await User.findOne({ email_user: profile.emails[0].value });
 
             if (user) {
-                // Se esiste login
+                // Se esiste login (prima controlla se l'utente e' stato bannato)
+                if (user.ban_until_date && new Date() < new Date(user.ban_until_date)) {
+                    throw new Error(`Utente sospeso fino al ${new Date(user.ban_until_date).toLocaleDateString()}`);
+                }
+
                 done(null, user);
             } else {
                 // Altrimenti signup
@@ -86,12 +95,20 @@ passport.deserializeUser(async (id, done) => {
 /* POST login user  */
 router.post(
     '/login',
-    passport.authenticate('local'),
-    (req, res, next) => {
+    passport.authenticate('local', {
+        failWithError: true,
+        session: true
+    }),
+    (req, res) => {
         res.status(200).json({ type_user: req.user.type_user });
+    },
+    (err, req, res, next) => {
+        // Error handler
+        return res.status(401).json({
+            message: err.message || 'Errore di autenticazione'
+        });
     }
 );
-
 
 /* POST register user */
 router.post('/signup', async function (req, res, next) {
