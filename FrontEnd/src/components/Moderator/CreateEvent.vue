@@ -78,15 +78,6 @@ export default {
       } catch (error) {
         alert(error.message);
       }
-    },
-    resetForm() {
-      this.name_event = '';
-      this.img_event = '';
-      this.description_event = '';
-      this.location_event = '';
-      this.date_event = '';
-      this.selectedTags = [];
-      this.tagInput = '';
     }
   }
 };
@@ -101,8 +92,6 @@ export default {
       <input v-model="location_event" placeholder="Inserisci il luogo dell'evento" />
       <input type="date" v-model="date_event" />
       <input type="Number" v-model="guests_event" placeholder="Inserisci partecipanti evento (0 se infiniti)">
-
-      <!-- Tags Section -->
       <div class="tags-section">
         <div class="selected-tags">
           <span v-for="tag in selectedTags" :key="tag._id" class="tag"
@@ -128,7 +117,6 @@ export default {
         </div>
       </div>
     </div>
-
     <footer class="footerEP">
       <button class="subscribe_btn" @click="createEvent">Create Event</button>
     </footer>
@@ -139,34 +127,46 @@ export default {
 .event-page {
   display: flex;
   flex-direction: column;
-  width: 45%;
+  width: 70%;
   height: 80%;
-  border-radius: 20px;
+  border-radius: 30px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1),
-  0px -4px 6px rgba(0, 0, 0, 0.05),
-  4px 0px 6px rgba(0, 0, 0, 0.05),
-  -4px 0px 6px rgba(0, 0, 0, 0.05);
+  0px -4px 6px rgba(0, 0, 0, 0.1),
+  4px 0px 6px rgba(0, 0, 0, 0.1),
+  -4px 0px 6px rgba(0, 0, 0, 0.1);
   margin: auto auto;
-  background-color: azure;
+  background-color: rgb(255, 245, 238);
   padding: 20px;
 }
 
 .event {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  background-color: #84d0d0;
-  color: white;
-  font-family: 'Helvetica', sans-serif;
-  font-size: larger;
+  gap: 15px;
+  background: rgba(104, 85, 224, 1);
+  color: rgba(255, 245, 238);
+  font-family: "Roboto Light", sans-serif;
   padding: 20px;
   border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1),
+  0px -4px 6px rgba(0, 0, 0, 0.1),
+  4px 0px 6px rgba(0, 0, 0, 0.1),
+  -4px 0px 6px rgba(0, 0, 0, 0.1);
 }
 
 input, textarea {
-  padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
+  padding: 12px;
+  border-radius: 4px;
+  border: 1px solid rgba(104, 85, 224, 0.3);
+  background-color: rgba(255, 245, 238);
+  font-family: "Roboto Light", sans-serif;
+  font-size: 1em;
+}
+
+input:focus, textarea:focus {
+  outline: none;
+  border-color: rgba(104, 85, 224, 1);
+  box-shadow: 0 0 5px rgba(104, 85, 224, 0.5);
 }
 
 .tags-section {
@@ -176,27 +176,32 @@ input, textarea {
 .selected-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 5px;
-  margin-bottom: 10px;
+  gap: 8px;
+  margin-bottom: 15px;
 }
 
 .tag {
-  padding: 5px 10px;
+  padding: 6px 12px;
   border-radius: 15px;
   display: flex;
   align-items: center;
   gap: 5px;
-  color: white;
-  font-size: 14px;
+  color: rgba(255, 245, 238);
+  font-size: 0.9em;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .remove-tag {
   background: none;
   border: none;
-  color: white;
+  color: rgba(255, 245, 238);
   cursor: pointer;
   font-size: 16px;
   padding: 0 5px;
+}
+
+.remove-tag:hover {
+  transform: scale(1.2);
 }
 
 .tag-input-container {
@@ -208,37 +213,54 @@ input, textarea {
   top: 100%;
   left: 0;
   right: 0;
-  background: white;
-  border: 1px solid #ccc;
+  background: rgba(255, 245, 238);
+  border: 1px solid rgba(104, 85, 224, 0.3);
   border-radius: 4px;
   max-height: 200px;
   overflow-y: auto;
   z-index: 1000;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .autocomplete-item {
-  padding: 8px 12px;
+  padding: 10px 15px;
   cursor: pointer;
-  color: #333;
-  background-color: white;
+  color: #2d2f31;
+  background-color: rgba(255, 245, 238);
+  font-family: "Roboto Light", sans-serif;
 }
 
 .autocomplete-item:hover {
-  background-color: #f5f5f5;
+  background-color: rgba(104, 85, 224, 0.1);
 }
 
 .subscribe_btn {
-  padding: 10px 20px;
-  border-radius: 5px;
-  border: none;
-  background-color: #84d0d0;
-  color: white;
   cursor: pointer;
-  font-size: 16px;
+  border: 0;
+  border-radius: 4px;
+  font-weight: 600;
+  width: 200px;
+  padding: 10px 20px;
+  color: rgba(104, 85, 224, 1);
+  background-color: rgba(255, 245, 238);
+  border: 1px solid rgba(104, 85, 224, 1);
+  box-shadow: 0 0 20px rgba(104, 85, 224, 0.2);
+  transition: 0.4s;
+  align-self: center;
   margin-top: 20px;
 }
 
 .subscribe_btn:hover {
-  background-color: #6ab3b3;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1),
+  0px -4px 6px rgba(0, 0, 0, 0.1),
+  4px 0px 6px rgba(0, 0, 0, 0.1),
+  -4px 0px 6px rgba(0, 0, 0, 0.1);
+  transform: scale(1.1);
+}
+
+.footerEP {
+  display: flex;
+  justify-content: center;
+  padding: 20px 0;
 }
 </style>

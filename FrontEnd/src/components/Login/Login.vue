@@ -37,11 +37,12 @@ import Cookies from 'js-cookie';
               }),
             });
 
+            const data = await response.json();
+
             if (!response.ok) {
-              throw new Error('email o password errata');
+              throw new Error(data.message || 'Server error');
             }
 
-            const data = await response.json();
             switch (data.type_user) {
               case 1:
                 await this.$router.push('/UserHome');

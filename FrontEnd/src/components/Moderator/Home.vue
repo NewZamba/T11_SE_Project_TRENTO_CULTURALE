@@ -72,39 +72,63 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  background: rgb(255, 245, 238);
+  min-height: 100vh;
+  position: relative;
 }
 
 .navbar {
   width: 100%;
   display: flex;
   justify-content: center;
-  padding: 10px;
-  margin-bottom: 20px;
-  background-color: #f4f4f4;
+  padding: 5px;
+  margin-bottom: 5px;
+  background-color: transparent;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
 .nav-buttons.centered {
   display: flex;
   gap: 20px;
+  padding: 20px 0;
+  background-color: rgb(255, 245, 238);
+  width: 100%;
+  justify-content: center;
 }
 
 .nav-button {
   padding: 10px 15px;
-  background-color: #e0e0e0;
-  border: none;
+  background-color: transparent;
+  border: 1px solid rgba(104, 85, 224, 1);
   cursor: pointer;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  transition: 0.4s;
 }
 
 .nav-button.active {
-  background-color: #4cafa0;
-  color: white;
+  background-color: rgba(104, 85, 224, 1);
+  color: rgb(255, 245, 238);
+}
+
+.nav-button:hover {
+  transform: scale(1.1);
 }
 
 .active-view-panel {
   width: 100%;
   max-width: 1200px;
-  border: 1px solid #e0e0e0;
+  border: 1px solid rgba(104, 85, 224, 0.3);
+  border-radius: 30px;
   padding: 20px;
-  margin-top: 10px;
+  margin-top: 20px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1),
+  0px -4px 6px rgba(0, 0, 0, 0.1),
+  4px 0px 6px rgba(0, 0, 0, 0.1),
+  -4px 0px 6px rgba(0, 0, 0, 0.1);
+  flex: 1;
+  overflow: auto;
 }
 </style>

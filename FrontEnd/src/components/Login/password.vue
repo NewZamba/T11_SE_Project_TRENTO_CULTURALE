@@ -55,8 +55,8 @@
     padding-bottom: 6px;
     font-weight: bold;
     border-width: 3px;
+    color: black;
     border-image: linear-gradient(to right, #0fbbae, rgba(104, 85, 224, 1));
-    border-image-slice: 1;
   }
 
   .form_field{
