@@ -65,7 +65,10 @@ export default {
 
   .header {
     grid-area: header;
-    height: 5%;
+    height: 7%;
+    align-items: center;
+    justify-content: center;
+    padding-top: 7px;
   }
 
   .footer {

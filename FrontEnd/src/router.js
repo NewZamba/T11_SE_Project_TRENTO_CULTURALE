@@ -9,6 +9,7 @@ import EventPage from './components/EventPage/EventPage.vue';
 import Comment from './components/Comment/CommentSection.vue';
 import SuggestionEvent from "./components/User/SuggestionEvent.vue";
 import SuggEvents from './components/User/SuggEvents.vue'
+import CreateGraphic from "./components/Data_Analyst/createGraphic.vue";
 
 Vue.use(Router);
 
@@ -48,6 +49,10 @@ const routes = [
     {
         path: '/SuggEvents',
         component: SuggEvents
+    },
+    {
+        path: '/createGraphic',
+        component: CreateGraphic
     },
     {
         path: '*', // Rotte non definite

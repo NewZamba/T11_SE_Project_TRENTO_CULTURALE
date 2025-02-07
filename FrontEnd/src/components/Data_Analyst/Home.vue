@@ -23,6 +23,10 @@ import {values} from "lodash";
         numPrenotationsLoaded: false
       };
     },
+    props: {
+      x: this.$router.query.x,
+      y: this.$router.query.y
+    },
     created() {
       this.verifyUserType();
     },
@@ -165,6 +169,9 @@ import {values} from "lodash";
         link.href = downloadUrl;
         link.download = "data.json";
         link.click();
+      },
+      goCreategraphic() {
+        this.$router.push('/CreateGraphic');
       }
     }
   };
@@ -199,6 +206,10 @@ import {values} from "lodash";
             data.json
           </button>
         </div>
+
+        <button class="createGraphic" @click="goCreategraphic">
+          Create Graphic
+        </button>
       </div>
 
       <div class="events-list">
@@ -255,6 +266,7 @@ import {values} from "lodash";
     0px -4px 6px rgba(0, 0, 0, 0.1),
     4px 0px 6px rgba(0, 0, 0, 0.1),
     -4px 0px 6px rgba(0, 0, 0, 0.1);
+    gap: 5px;
   }
 
   .chart-container {
@@ -303,17 +315,33 @@ import {values} from "lodash";
     transition: 0.4s;
   }
 
-  button:hover {
+  .export {
+    color: rgb(104, 85, 224);
+    background-color: rgba(255, 255, 255, 1);
+    border: 1px solid rgba(104, 85, 224, 1);
+    justify-self: center;
+  }
+
+  .export:hover {
     color: white;
     box-shadow: 0 0 40px rgba(104, 85, 224, 0.6);
     background-color: rgba(104, 85, 224, 1);
   }
 
-  .export {
-    color: rgb(104, 85, 224);
-    background-color: rgba(255, 255, 255, 1);
-    border: 1px solid rgba(104, 85, 224, 1);
+  .createGraphic {
+    color: rgba(255, 255, 255, 1);
+    background-color: rgb(104, 85, 224);
+    border: 1px solid rgba(255, 255, 255, 1);
+    justify-self: center;
   }
+
+  .createGraphic:hover {
+    color: white;
+    box-shadow: 0 0 40px rgba(104, 85, 224, 0.6);
+    background-color: rgba(104, 85, 224, 1);
+    transform: scale(1.1);
+  }
+
 
 </style>
 
