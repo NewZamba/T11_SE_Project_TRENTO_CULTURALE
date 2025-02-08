@@ -3,6 +3,7 @@ import CAROUSEL from './Carousel.vue';
 import CARDS from './Cards.vue';
 import Cookie from 'js-cookie';
 import {RouterLink} from "vue-router";
+import * as events from "node:events";
 
 export default {
   name: 'UserHome',
@@ -17,20 +18,20 @@ export default {
       sortN: true,
       sortD: false,
       arrSortN: [],
-      arrSortD: []
+      arrSortD: [],
+      userPrenotations: [],
+      id_user: null
     };
   },
   created() {
     this.verifyUserType();
-  },
-  mounted() {
     this.fetchEvents();
     this.fetchSuggEvents();
   },
   computed: {
     sortedEvents() {
       return this.sortN ? this.arrSortN : this.arrSortD;
-    },
+    }
   },
   methods: {
     async verifyUserType() {
@@ -54,6 +55,7 @@ export default {
 
         const user_data = await response.json();
         Cookie.set('id_user', user_data._id);
+        this.id_user = Cookie.get('id_user');
       } catch (error) {
         // Display the error message in case of issues
         alert(`Error: ${error.message}`);
@@ -79,7 +81,7 @@ export default {
         alert(err.message);
       }
     },
-    fetchSuggEvents() {
+    async fetchSuggEvents() {
       try {
         fetch('http://localhost:3000/suggEvents', {
           method: 'GET',
@@ -102,14 +104,13 @@ export default {
       this.arrSortN = this.events.sort((a, b) => {return a.name_event.localeCompare(b.name_event)});
       this.sortN = true;
       this.sortD = false;
-
     },
     async sortByDate() {
       this.arrSortD = this.events.sort((a, b) => {return a.date_event.localeCompare(b.date_event)});
       this.sortD = true;
       this.sortN = false;
     },
-    suggEvent() {
+    async suggEvent() {
       this.$router.push({path: '/SuggestionEvent'});
     },
     viewSuggEvents() {
@@ -117,6 +118,41 @@ export default {
         path: '/SuggEvents',
         query: {
           events: this.suggEvents
+        }
+      });
+    },
+    async fetchUserPrenotations() {
+      try {
+        const response = await fetch(`http://localhost:3000/prenotations2?id=${Cookie.get('id_user')}`);
+        if (!response.ok) {
+          const errorMessage = await response.text();
+          alert(`Errore dal server: ${errorMessage}`);
+          return [];
+        }
+
+        const data = await response.json();
+        this.userPrenotations = data;
+      } catch (err) {
+        alert(`Errore: ${err.message}`);
+        return [];
+      }
+    },
+    async viewForm() {
+
+      await Promise.all([
+        this.fetchUserPrenotations()
+      ]);
+
+      const today = new Date();
+
+      const f1 = this.userPrenotations.filter(p => {
+        return new Date(p.date_event) < today
+      });
+
+      this.$router.push({
+        path: '/FormEvents',
+        query: {
+          events: f1
         }
       });
     }
@@ -152,6 +188,10 @@ export default {
 
           <button class="sugg_btn" @click="viewSuggEvents">
             View Suggest Events
+          </button>
+
+          <button class="sugg_btn" @click="viewForm">
+            Form
           </button>
         </div>
       </footer>

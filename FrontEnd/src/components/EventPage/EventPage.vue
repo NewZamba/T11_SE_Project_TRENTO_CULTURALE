@@ -43,7 +43,7 @@ import CommentSection from "../Comment/CommentSection.vue";
       subscribe() {
         try {
           this.user = Cookies.get('id_user');
-          console.log(this.user);
+
           fetch('http://localhost:3000/addBooking', {
             method: 'POST',
             headers: {
@@ -52,8 +52,11 @@ import CommentSection from "../Comment/CommentSection.vue";
             body: JSON.stringify({
               id_user: this.user,
               id_event: this._id,
+              name_event: this.name_event,
               date_Prenotation: new Date().toISOString(),
-              guests_event: this.guests,
+              date_event: this.date_event,
+              form: false,
+              guests_event: this.guests
             }),
           }).then(res => {
             if (res.ok) {
