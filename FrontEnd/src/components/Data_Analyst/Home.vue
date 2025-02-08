@@ -122,17 +122,23 @@ import _ from 'lodash';
         });
       },
       countEventPerMonth() {
+        const months = [
+          "January", "February", "March", "April", "May", "June",
+          "July", "August", "September", "October", "November", "December"
+        ];
         const arr = Array(12).fill(0);
-        const stackArr = _.map(_.range(12), () => []);
+        const stackArr = _.map(_.range(12), (i) => ({
+          month: months[i],
+          events: []
+        }));
 
         if (this.events.length !== 0) {
-          this.events.forEach(event => {
-            if (event.date_event) {
-              const month = new Date(event.date_event).getMonth();
-              arr[month] += 1;
+          this.events.forEach((event) => {
+            const month = new Date(event.date_event).getMonth();
 
-              stackArr[month].push(event.name_event);
-            }
+            arr[month] += 1;
+
+            stackArr[month].events.push(event.name_event);
           });
 
           this.arrData = arr;
@@ -161,7 +167,7 @@ import _ from 'lodash';
       downloadJSON(data, labels, x) {
         switch (x) {
           case 1:
-            const jsonData1 = JSON.stringify(this.expDataG1, null, 2);
+            const jsonData1 = JSON.stringify(this.expDataG1, null, 1);
             const blob1 = new Blob([jsonData1], { type: "application/json" });
             const downloadUrl1 = URL.createObjectURL(blob1);
             const link1 = document.createElement("a");
@@ -173,8 +179,8 @@ import _ from 'lodash';
             break;
           case 2:
             const json = labels.map((label, index) => ({
-              event: ,
-
+              labels_asse_x: label,
+              values_x_y: data[index]
             }));
 
             const jsonData2 = JSON.stringify(json, null, 2);
