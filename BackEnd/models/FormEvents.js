@@ -13,8 +13,7 @@ const event_schema = new Schema({
         required: true
     },
     name_event: {type: String, required: true},
-    feedback: {type: String, required: true},
-    rating: {type: Number, required: true},
+    feedback: {type: String, required: true}
 });
 
 const event_model = mongoose.model('FormEvents', event_schema);
