@@ -221,7 +221,7 @@ import Cookies from 'js-cookie';
     padding: 0;
     display: flex;
     flex-direction: row;
-    height: 70%;
+    height: 70vh;
     width: 70%;
     justify-content: center;
     align-items: center;
