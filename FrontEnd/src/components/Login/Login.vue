@@ -203,6 +203,7 @@ import Cookies from 'js-cookie';
     justify-content: center;
     align-items: center;
     position: relative;
+    min-height: 100%;
   }
 
   .background img {

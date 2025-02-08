@@ -3,21 +3,15 @@ import Footer from "./components/Footer.vue";
 import Header from "./components/Header.vue";
 
 export default {
-    name: 'app',
-    components: {
-      Footer,
-      Header
-    },
-    data() {
-      return {};
-      },
-    methods: {}
-  };
-
+  name: 'app',
+  components: {
+    Footer,
+    Header
+  }
+};
 </script>
 
 <template>
-
   <div id="app" class="container">
     <Header class="header" />
 
@@ -25,66 +19,60 @@ export default {
       <router-view />
     </main>
 
-    <Footer class="footer"/>
+    <Footer class="footer" />
   </div>
-
 </template>
 
 <style scoped>
+/* Reset di base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-  * {
-    margin: 0;
-    padding: 0;
-    overflow-y: hidden;
-    display: grid;
-  }
+/* Assicuriamoci che html e body occupino il 100% della viewport */
+html, body {
+  width: 100%;
+  height: 100%;
+}
 
-  .container {
-    min-width: 100vw;
-    height: 100vh;
-    margin: 0 0 0 0;
-    padding: 0 0 0 0;
-    overflow: hidden;
-    justify-content: center;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 0.2fr 2.7fr 0.1fr;
-    grid-template-areas:
-     "header" "header"
-      "mains" "mains"
-      "footer" "footer";
-  }
+/* Il container principale usa una grid a 3 righe:
+   - header (auto)
+   - main (1fr, si espande e può scrollare)
+   - footer (auto)
+   Insieme a min-width e min-height, il container occupa almeno l'intera viewport */
+.container {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-width: 100vw;
+  min-height: 100vh;
+  width: 100%;
+  height: 100%;
+}
 
-  .mains {
-    grid-area: mains;
-    height: 90%;
-    overflow: auto;
-    min-width: 100vw;
-    max-width: 100vw;
-  }
+/* Header: occupa tutta la larghezza */
+.header {
+  width: 100%;
+}
 
-  .header {
-    grid-area: header;
-    height: 7%;
-    align-items: center;
-    justify-content: center;
-    padding-top: 7px;
-  }
+/* Main: occupa tutto lo spazio disponibile e abilita lo scrolling interno se necessario */
+.mains {
+  width: 100%;
+  overflow: auto;
+}
 
-  .footer {
-    grid-area: footer;
-    height: 2%;
-    justify-content: center;
-    align-items: center;
-    display: flex;
-  }
+/* Footer: centrato orizzontalmente e verticalmente */
+.footer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-  #app{
-    height: 1080px;
-    width: 1920px;
-    overflow: hidden;
-    align-items: center;
-    display: block;
-  }
-
+/* #app: per sicurezza, ci assicuriamo che l'elemento radice occupi tutto lo spazio */
+#app {
+  width: 100%;
+  height: 100%;
+}
 </style>
