@@ -30,6 +30,8 @@ const convertEvent = require('./routes/convertEvent');
 const addTag = require('./routes/addTag');
 const tags = require('./routes/tags');
 const deleteComment = require('./routes/deleteComment');
+const addForm = require('./routes/addForm');
+const prenotations2 = require('./routes/prenotations2');
 
 //connesione al database
 let url;
@@ -96,6 +98,8 @@ app.use('/convertEvent', convertEvent);
 app.use('/addTag', addTag);
 app.use('/tags', tags);
 app.use('/deleteComment', deleteComment);
+app.use('/addForm', addForm);
+app.use('/prenotations2', prenotations2);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
