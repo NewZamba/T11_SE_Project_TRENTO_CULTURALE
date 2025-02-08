@@ -1,7 +1,7 @@
 <script>
 import LISTEVENTS from './ListEvents.vue';
 import BarChartTemplate from './BarChartTemplate.vue';
-import {values} from "lodash";
+import _ from 'lodash';
 
   export default {
     components: {
@@ -16,16 +16,13 @@ import {values} from "lodash";
         sugg_events: [],
         prenotations: [],
         arrData: [],
+        expDataG1: [],
         num_prenotations: [],
         eventsLoaded: false,
         suggLoaded: false,
         prenotationsLoaded: false,
         numPrenotationsLoaded: false
       };
-    },
-    props: {
-      x: this.$router.query.x,
-      y: this.$router.query.y
     },
     created() {
       this.verifyUserType();
@@ -126,15 +123,20 @@ import {values} from "lodash";
       },
       countEventPerMonth() {
         const arr = Array(12).fill(0);
+        const stackArr = _.map(_.range(12), () => []);
 
         if (this.events.length !== 0) {
           this.events.forEach(event => {
             if (event.date_event) {
               const month = new Date(event.date_event).getMonth();
               arr[month] += 1;
+
+              stackArr[month].push(event.name_event);
             }
           });
+
           this.arrData = arr;
+          this.expDataG1 = stackArr;
         }
       },
       async countPrenotations(id, i) {
@@ -156,22 +158,37 @@ import {values} from "lodash";
           console.log(error);
         }
       },
-      downloadJSON(data, labels) {
-        const json = labels.map((label, index) => ({
-          labels_asse_x: label,
-          values_x_y: data[index]
-        }));
+      downloadJSON(data, labels, x) {
+        switch (x) {
+          case 1:
+            const jsonData1 = JSON.stringify(this.expDataG1, null, 2);
+            const blob1 = new Blob([jsonData1], { type: "application/json" });
+            const downloadUrl1 = URL.createObjectURL(blob1);
+            const link1 = document.createElement("a");
 
-        const jsonData = JSON.stringify(json, null, 2);
-        const blob = new Blob([jsonData], { type: "application/json" });
-        const downloadUrl = URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = downloadUrl;
-        link.download = "data.json";
-        link.click();
-      },
-      goCreategraphic() {
-        this.$router.push('/CreateGraphic');
+            link1.href = downloadUrl1;
+            link1.download = "data.json";
+            link1.click();
+
+            break;
+          case 2:
+            const json = labels.map((label, index) => ({
+              event: ,
+
+            }));
+
+            const jsonData2 = JSON.stringify(json, null, 2);
+            const blob2 = new Blob([jsonData2], { type: "application/json" });
+            const downloadUrl2 = URL.createObjectURL(blob2);
+            const link2 = document.createElement("a");
+
+            link2.href = downloadUrl2;
+            link2.download = "data.json";
+            link2.click();
+
+            break;
+          default: break;
+        }
       }
     }
   };
@@ -191,7 +208,7 @@ import {values} from "lodash";
                     :titles="titile1"
                     v-if="eventsLoaded"/>
           <button class="export"
-                  @click="downloadJSON(arrData, ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'])">
+                  @click="downloadJSON(arrData, ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'], 1)">
             data.json
           </button>
         </div>
@@ -202,14 +219,10 @@ import {values} from "lodash";
                     :titles="title2"
                     v-if="numPrenotationsLoaded && eventsLoaded"/>
           <button class="export"
-                  @click="downloadJSON(num_prenotations, events.map(event => event.name_event))">
+                  @click="downloadJSON(num_prenotations, events.map(event => event.name_event), 2)">
             data.json
           </button>
         </div>
-
-        <button class="createGraphic" @click="goCreategraphic">
-          Create Graphic
-        </button>
       </div>
 
       <div class="events-list">
@@ -327,21 +340,6 @@ import {values} from "lodash";
     box-shadow: 0 0 40px rgba(104, 85, 224, 0.6);
     background-color: rgba(104, 85, 224, 1);
   }
-
-  .createGraphic {
-    color: rgba(255, 255, 255, 1);
-    background-color: rgb(104, 85, 224);
-    border: 1px solid rgba(255, 255, 255, 1);
-    justify-self: center;
-  }
-
-  .createGraphic:hover {
-    color: white;
-    box-shadow: 0 0 40px rgba(104, 85, 224, 0.6);
-    background-color: rgba(104, 85, 224, 1);
-    transform: scale(1.1);
-  }
-
 
 </style>
 
