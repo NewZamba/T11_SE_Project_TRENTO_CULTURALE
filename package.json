@@ -1,12 +1,13 @@
 {
   "scripts": {
     "start": "concurrently \"npm run start-express\" \"npm run start-vite\"",
-    "start-express": "cd ./BackEnd/bin && node -r dotenv/config ./www",
+    "start-express": "cd ./BackEnd && node -r dotenv/config ./bin/www",
     "start-vite": "cd ./FrontEnd && vite"
   },
   "dependencies": {
     "chart.js": "^4.4.7",
     "concurrently": "^8.0.0",
-    "vite": "^6.0.2"
+    "vite": "^6.0.2",
+    "dotenv": "^16.4.5"
   }
 }

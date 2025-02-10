@@ -21,7 +21,7 @@ export default {
   methods: {
     async verifyUserType() {
       try {
-        const response = await fetch('http://localhost:3000/verificaUserType/test', {
+        const response = await fetch('http://localhost:3000/verificaUserType/is_mod', {
           method: 'GET',
           credentials: 'include',
         });
@@ -39,10 +39,6 @@ export default {
         }
 
         const user_data = await response.json();
-
-        if (user_data.type_user !== 2) {
-          throw new Error('User not authorized');
-        }
 
         Cookie.set('id_user', user_data._id);
         this.id_user = Cookie.get('id_user');
