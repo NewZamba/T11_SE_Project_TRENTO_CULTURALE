@@ -55,7 +55,7 @@ export default {
   methods: {
     async verifyUserType() {
       try {
-        const response = await fetch('http://localhost:3000/verificaUserType/test', {
+        const response = await fetch('http://localhost:3000/verificaUserType/is_logged', {
           method: 'GET',
           credentials: 'include',
         });
@@ -71,11 +71,12 @@ export default {
         this.id_user = Cookie.get('id_user');
       } catch (error) {
         alert(`Error: ${error.message}`);
+        await this.$router.push('/');
       }
     },
     fetchEvents() {
       try {
-        fetch('http://localhost:3000/events', {
+        fetch('http://localhost:3000/events/not_expired', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'
@@ -143,7 +144,7 @@ export default {
     },
     async fetchUserPrenotations() {
       try {
-        const response = await fetch(`http://localhost:3000/prenotations2?id=${Cookie.get('id_user')}`);
+        const response = await fetch(`http://localhost:3000/prenotations/?id=${Cookie.get('id_user')}`);
         if (!response.ok) {
           const errorMessage = await response.text();
           alert(`Errore dal server: ${errorMessage}`);
