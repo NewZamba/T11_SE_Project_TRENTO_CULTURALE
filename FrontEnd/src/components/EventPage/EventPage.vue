@@ -20,12 +20,13 @@ import CommentSection from "../Comment/CommentSection.vue";
         description_event: '',
         location_event: '',
         date_event: null,
-        tags: 0,
+        tags: [],
+        tagDetails: [],
         guests: 0,
         user: {}
       };
     },
-    created() {
+    async created() {
       this._id = this.$route.query._id;
       this.id_event = this._id;
       this.name_event = this.$route.query.name_event;
@@ -33,10 +34,21 @@ import CommentSection from "../Comment/CommentSection.vue";
       this.description_event = this.$route.query.description_event;
       this.location_event = this.$route.query.location_event;
       this.date_event = this.$route.query.date_event;
-      this.tags = this.$route.query.tags;
       this.guests = this.$route.query.guests_event;
+      this.tags = JSON.parse(this.$route.query.tags);
+      await this.fetchTagDetails();
     },
     methods: {
+      async fetchTagDetails() {
+        try {
+          const response = await fetch('http://localhost:3000/tags');
+          const allTags = await response.json();
+          // Filter to get only the tags that belong to this event
+          this.tagDetails = allTags.filter(tag => this.tags.includes(tag._id));
+        } catch (error) {
+          console.error('Error fetching tag details:', error);
+        }
+      },
       backToHome() {
         this.$router.push('/UserHome');
       },
@@ -98,10 +110,12 @@ import CommentSection from "../Comment/CommentSection.vue";
           <p class="info2">{{ name_event }}</p>
           <hr class="hr_info"/>
           <p class="info1">Tag:</p>
-          <p class="info2">{{ tags }}</p>
+          <p class="info2">
+            {{ tagDetails.map(tag => tag.name_tag).join(', ') }}
+          </p>
           <hr class="hr_info"/>
           <p class="info1">Date:</p>
-          <p class="info2">{{ date_event }}</p>
+          <p class="info2">{{ new Date(date_event).toLocaleString() }}</p>
           <hr class="hr_info"/>
           <p class="info1">Location:</p>
           <p class="info2">{{ location_event }}</p>

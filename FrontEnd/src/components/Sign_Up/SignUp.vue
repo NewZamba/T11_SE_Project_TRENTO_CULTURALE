@@ -16,13 +16,12 @@
       handleSubmit() {
         try {
           let tipo;
-
           if (this.email.includes('@admin.trento.it')) {
-            tipo = 1;
+            tipo = 3;
           } else if (this.email.includes('@data.trento.it')) {
             tipo = 2;
           } else {
-            tipo = 3;
+            tipo = 1;
           }
 
           fetch('http://localhost:3000/auth/signUp', {

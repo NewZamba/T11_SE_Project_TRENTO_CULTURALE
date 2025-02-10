@@ -48,11 +48,12 @@ export default {
         Cookie.set('id_user', user_data._id);
       } catch (error) {
         alert(`Error: ${error.message}`);
+        await this.$router.push('/');
       }
     },
     fetchEvents() {
       try {
-        fetch('http://localhost:3000/events', {
+        fetch('http://localhost:3000/events/not_expired', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'

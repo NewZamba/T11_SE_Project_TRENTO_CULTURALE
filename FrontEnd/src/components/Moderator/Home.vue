@@ -2,6 +2,7 @@
 import HANDLEUSER from './HandleUsers.vue';
 import APPROVEEVENT from './ApproveEvent.vue';
 import CREATEEVENT from './CreateEvent.vue';
+import Cookie from "js-cookie";
 
 export default {
   components: {
@@ -15,7 +16,7 @@ export default {
     };
   },
   created() {
-    // this.verifyUserType();
+    this.verifyUserType();
   },
   methods: {
     async verifyUserType() {
@@ -38,10 +39,18 @@ export default {
         }
 
         const user_data = await response.json();
+
+        if (user_data.type_user !== 2) {
+          throw new Error('User not authorized');
+        }
+
+        Cookie.set('id_user', user_data._id);
+        this.id_user = Cookie.get('id_user');
       } catch (error) {
         alert(`Error: ${error.message}`);
+        await this.$router.push('/');
       }
-    }
+    },
   },
 };
 </script>
