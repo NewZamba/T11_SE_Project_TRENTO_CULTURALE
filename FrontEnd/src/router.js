@@ -10,6 +10,7 @@ import Comment from './components/Comment/CommentSection.vue';
 import SuggestionEvent from "./components/User/SuggestionEvent.vue";
 import SuggEvents from './components/User/SuggEvents.vue';
 import FormEvents from './components/User/FormEvents.vue';
+import BookingsPage from './components/User/BookingsPage.vue';
 
 Vue.use(Router);
 
@@ -53,6 +54,10 @@ const routes = [
     {
         path: '/FormEvents',
         component: FormEvents
+    },
+    {
+        path: '/BookingsPage',
+        component: BookingsPage
     },
     {
         path: '*', // Rotte non definite

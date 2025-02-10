@@ -7,13 +7,12 @@ const mongoose = require('mongoose');
 router.post('/', async (req, res) => {
 
     try {
-        const { id_user, id_event, name_event, feedback } = req.body;
+        const { id_user, id_event, name_event, feedback,rating } = req.body;
 
-        if (!id_user || !id_event || !name_event || !feedback) {
+        if (!id_user || !id_event || !name_event || !feedback||!rating) {
             return res.status(400).json({ message: 'Campi necessari!' });
         }
-
-        const newForm = new FormEvents({ id_user, id_event, name_event, feedback });
+        const newForm = new FormEvents({ id_user, id_event, name_event, feedback,rating });
 
         await newForm.save();
 

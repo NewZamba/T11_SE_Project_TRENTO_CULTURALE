@@ -11,6 +11,7 @@ router.post('/', async (req, res) => {
         if (!id_event) {
             return res.status(400).json({ message: 'Tutti i campi sono obbligatori.' });
         }
+
         if(!id_user){
             const evaluations = await Evaluations.find({id_event:id_event});
             return res.status(200).json(evaluations);
