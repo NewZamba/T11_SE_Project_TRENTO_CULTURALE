@@ -27,6 +27,7 @@ Chart.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
         chartData: {
           labels: this.labels,
           datasets: [{
+            label: 'eventi',
             data: this.data,
             backgroundColor: 'rgba(75, 192, 192, 0.2)',
             borderColor: 'rgba(75, 192, 192, 1)',
@@ -58,7 +59,12 @@ Chart.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
               }
             },
             tooltip: {
-              enabled: true
+              enabled: true,
+              callbacks: {
+                label: function (context) {
+                  return 'eventi: ' + context.parsed.y;
+                }
+              }
             }
           }
         }

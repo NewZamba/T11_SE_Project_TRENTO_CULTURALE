@@ -227,7 +227,7 @@ import { EventBus } from '../../eventBus.js';
                     v-if="eventsLoaded"/>
           <button class="export"
                   @click="downloadJSON(arrData, ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'], 1)">
-            data.json
+            scarica dati
           </button>
         </div>
 
@@ -238,7 +238,7 @@ import { EventBus } from '../../eventBus.js';
                     v-if="numPrenotationsLoaded && eventsLoaded"/>
           <button class="export"
                   @click="downloadJSON(num_prenotations, events.map(event => event.name_event), 2)">
-            data.json
+            scarica dati
           </button>
         </div>
       </div>

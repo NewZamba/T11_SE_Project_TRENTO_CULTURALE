@@ -203,7 +203,7 @@ export default {
         this.fetchUserPrenotations()
       ]);
       const today = new Date();
-      const f1 = this.userPrenotations.filter(p => new Date(p.date_event) < today);
+      const f1 = this.userPrenotations.filter(p => new Date(p.date_event) > today);
       this.$router.push({
         path: '/FormEvents',
         query: {

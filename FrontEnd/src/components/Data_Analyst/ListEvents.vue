@@ -110,22 +110,9 @@
         <div class="info">
           <p class="p1">Name:</p>
           <p class="p2">{{ t_event.name_event }} </p>
-          <hr />
-          <p class="p1">Location: </p>
-          <p class="p2">{{ t_event.location_event }} </p>
-          <hr />
-          <p class="p1">Date:</p>
-          <p class="p2">{{ t_event.location_event }} </p>
-          <hr />
-          <p class="p1">Tag:</p>
-          <p class="p2">{{ t_event.location_event }} </p>
-          <hr />
-          <p class="p1">Description:</p>
-          <p class="p2">{{ t_event.location_event }} </p>
-          <hr />
           <button class="export"
                   @click="downloadJSON(t_event.name_event, t_event._id)">
-            feedback_and_vote.json
+            scarica dati evento
           </button>
         </div>
       </div>
@@ -136,28 +123,34 @@
 
 <style scoped>
 
-  .container {
-    display: flex;
-    gap: 20px;
-    height: 100%;
-    padding: 5px;
-  }
+.container {
+  display: flex;
+  gap: 20px;
+  height: 100vh; /* Full viewport height */
+  padding: 5px;
+  overflow: hidden; /* Prevent container scrolling */
+}
 
-  .left-column {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    gap: 10px;
-    align-items: flex-start;
-  }
+.left-column {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+  overflow-y: auto; /* Enable vertical scrolling */
+  padding-right: 10px; /* Add some padding for the scrollbar */
+  max-height: 100%; /* Ensure it doesn't exceed container height */
+}
 
-  .right-column {
-    display: flex;
-    flex: 3;
-    flex-direction: column;
-    gap: 20px;
-    font-family: "Roboto Light", sans-serif;
-  }
+.right-column {
+  display: flex;
+  flex: 3;
+  flex-direction: column;
+  gap: 20px;
+  font-family: "Roboto Light", sans-serif;
+  overflow-y: auto; /* Enable vertical scrolling */
+  max-height: 100%; /* Ensure it doesn't exceed container height */
+}
 
   .graphics {
     display: flex;
