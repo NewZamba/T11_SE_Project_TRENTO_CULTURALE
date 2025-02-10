@@ -131,6 +131,7 @@ import Cookie from "js-cookie";
     justify-content: center;
     align-items: center;
     position: relative;
+    min-height: 100vh;
   }
 
   .background img {
@@ -141,15 +142,14 @@ import Cookie from "js-cookie";
     min-width: 100%;
     max-width: 100%;
     min-height: 100%;
-    max-height: 100%;
   }
 
   .container {
     padding: 0;
     display: flex;
     flex-direction: column;
-    height: 70%;
     width: 70%;
+    min-height: 60vh;
     justify-content: center;
     align-items: flex-start;
     border-radius: 30px;
@@ -267,6 +267,8 @@ import Cookie from "js-cookie";
   }
 
   .back_btn {
+    display: flex;
+    justify-content: center;
     width: 45px;
     height: 45px;
     border-radius: 50%;
@@ -274,7 +276,7 @@ import Cookie from "js-cookie";
     background-color: rgba(104, 85, 224, 1);
     color: rgb(255, 245, 238);
     font-size: xx-large;
-    font-family: 'Roboto Light';
+    font-family: 'Roboto Light',sans-serif;
     cursor: pointer;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     transition: transform 0.2s;

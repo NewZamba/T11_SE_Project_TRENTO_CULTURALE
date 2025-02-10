@@ -81,7 +81,7 @@ import button from "bootstrap/js/src/button.js";
 
   ::v-deep(img.img-fluid) {
     width: 100%;
-    height: 360px !important;
+    height: 480px !important;
     object-fit: cover;
     border-top-right-radius: 30px;
     border-top-left-radius: 30px;
