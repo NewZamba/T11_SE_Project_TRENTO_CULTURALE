@@ -1,5 +1,7 @@
 <script>
 
+  import {EventBus} from "../../eventBus.js";
+
   export default {
     name: 'SIGN_UP',
     data() {
@@ -41,13 +43,19 @@
             }),
           }).then(res => {
             if (res.ok) {
-              alert('Utente registrato con successo!');
+              this.showModal('Utente registrato con successo!');
               this.$router.push('/');
             }
           });
         } catch (err) {
-          alert(err);
+          this.showModal(err);
         }
+      },
+      showModal(mess) {
+        EventBus.$emit('open-global-modal', {
+          title: '⚠️Attenzione⚠️',
+          message: mess,
+        });
       }
     }
   };
@@ -55,19 +63,6 @@
 </script>
 
 <template>
-
-  <!--
-    obbligatori:
-      nome
-      cognome
-      email
-      pass
-      conferma pass
-
-    volontari:
-      age
-  -->
-
   <div class="background">
     <img src="https://images.pexels.com/photos/571169/pexels-photo-571169.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" />
 
