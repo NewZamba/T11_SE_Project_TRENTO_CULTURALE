@@ -1,6 +1,5 @@
 <script>
 import DESCRIPTION from './Description.vue';
-import EVALUATION from '../Evaluation/Evaluation.vue';
 import Cookies from 'js-cookie';
 import CommentSection from "../Comment/CommentSection.vue";
 
@@ -9,7 +8,6 @@ import CommentSection from "../Comment/CommentSection.vue";
     components: {
       CommentSection,
       DESCRIPTION,
-      EVALUATION
     },
     data() {
       return {

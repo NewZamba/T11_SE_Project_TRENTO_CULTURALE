@@ -35,7 +35,6 @@ export default {
     width: 100%;
     align-items: center;
     justify-content: center;
-    height: 10vh;
   }
 
   .text {
