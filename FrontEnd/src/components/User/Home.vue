@@ -2,7 +2,7 @@
 import CAROUSEL from './Carousel.vue';
 import CARDS from './Cards.vue';
 import Cookie from 'js-cookie';
-import { RouterLink } from "vue-router";
+
 // Importiamo i componenti necessari di Bootstrap Vue
 import {
   BNavbar,
@@ -14,6 +14,7 @@ import {
   BNavItemDropdown,
   BDropdownItem
 } from 'bootstrap-vue';
+import {EventBus} from "../../eventBus.js";
 
 export default {
   name: 'UserHome',
@@ -70,7 +71,7 @@ export default {
         Cookie.set('id_user', user_data._id);
         this.id_user = Cookie.get('id_user');
       } catch (error) {
-        alert(`Error: ${error.message}`);
+        this.showModal();
         await this.$router.push('/');
       }
     },
@@ -146,8 +147,6 @@ export default {
       try {
         const response = await fetch(`http://localhost:3000/prenotations/${Cookie.get("id_user")}` );
         if (!response.ok) {
-          const errorMessage = await response.text();
-          alert(`Errore dal server: ${errorMessage}`);
           return [];
         }
         const data = await response.json();
@@ -185,6 +184,12 @@ export default {
         query: {
           bookings: this.userPrenotations
         }
+      });
+    },
+    showModal() {
+      EventBus.$emit('open-global-modal', {
+        title: '⚠️Attenzione⚠️',
+        message: "L'Utente non è loggato",
       });
     }
   }
