@@ -3,7 +3,7 @@ import PASS from './password.vue';
 import USER from './user.vue';
 import TITLE from './title.vue';
 import BTN_SIGN_UP from '../Sign_Up/SignUpBtn.vue';
-import Cookies from 'js-cookie';
+import {EventBus} from "../../eventBus.js";
 
   export default {
     name: 'BTN_LOGIN',
@@ -57,11 +57,17 @@ import Cookies from 'js-cookie';
                 throw new Error('type_user non esistente');
             }
           } catch (error) {
-            alert(error.message);
+            this.showModal(error.message);
           }
         } else {
-          alert('email o password non inserita');
+          this.showModal('email o password non inserita');
         }
+      },
+      showModal(mess) {
+        EventBus.$emit('open-global-modal', {
+          title: '⚠️Attenzione⚠️',
+          message: mess,
+        });
       }
     },
   };
