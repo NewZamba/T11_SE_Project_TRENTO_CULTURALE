@@ -19,7 +19,7 @@
     "vue-chartjs": "^5.3.2",
     "vue-echarts": "latest",
     "vue-router": "^3.6.5",
-    "js-cookie": "^3.0.5"
+    "js-cookie": "latest"
   },
   "devDependencies": {
     "@vitejs/plugin-vue2": "^2.3.3",

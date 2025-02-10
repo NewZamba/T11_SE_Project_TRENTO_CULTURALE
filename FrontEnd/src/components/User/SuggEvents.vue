@@ -1,5 +1,6 @@
 <script>
 import Cookie from "js-cookie";
+import {computed} from "vue";
 export default {
   name: 'SuggEvents',
   data() {
@@ -29,6 +30,15 @@ export default {
       }
     });
   },
+  computed: {
+    sortedEvents() {
+      return [...this.events].sort((a, b) => {
+        const avgA = parseFloat(this.averageRatings[a._id]) || 0;
+        const avgB = parseFloat(this.averageRatings[b._id]) || 0;
+        return avgB - avgA; // Ordine decrescente
+      });
+    }
+  },
   methods: {
     toggleMenu(eventId) {
       const index = this.openEvents.indexOf(eventId);
@@ -57,6 +67,7 @@ export default {
       this.getAverageRating(eventId);
     },
     async addRating(eventId, newRating) {
+      console.log(eventId, this.id_user,newRating);
       try {
         const response = await fetch("http://localhost:3000/addEvaluation", {
           method: "POST",
@@ -73,8 +84,9 @@ export default {
         const data = await response.json();
         // Salva la valutazione dell'utente per questo evento (se presente)
         if (data) {
-          this.$set(this.evaluations, eventId, data);
-          this.$set(this.ratings, eventId, data.rating);
+          console.log(data.evaluation);
+          this.$set(this.evaluations, eventId, data.evaluation);
+          this.$set(this.ratings, eventId, data.evaluation.rating);
           console.log("Valutazione aggiornata per l'evento", eventId, ":", data.rating);
         }
       } catch (error) {
@@ -146,7 +158,7 @@ export default {
         </button>
       </header>
       <nav class="navbar">
-        <div v-for="event in events" :key="event._id" class="event-container">
+        <div v-for="event in sortedEvents" :key="event._id" class="event-container">
           <div class="ec2">
             <label @click="toggleMenu(event._id)">
               <span>{{ event.name_event }}</span>
@@ -157,19 +169,6 @@ export default {
               <span v-if="averageRatings[event._id]">{{ averageRatings[event._id] }}</span>
               <span v-else>N/A</span>
             </div>
-            <b-form-group
-                :label="'Dai un voto:'"
-                :label-for="'rating-' + event._id"
-                style="background-color: transparent"
-            >
-              <b-form-rating
-                  :id="'rating-' + event._id"
-                  v-model="ratings[event._id]"
-                  inline
-                  @change="(newRating) => submitRating(event._id, newRating)"
-                  variant="warning"
-              ></b-form-rating>
-            </b-form-group>
           </div>
           <ul class="slide" v-show="isEventOpen(event._id)">
             <li>
@@ -180,6 +179,22 @@ export default {
             <li>
               <strong><i>Description:</i></strong>
               {{ event.description_event }}
+            </li>
+            <hr/>
+            <li>
+              <b-form-group
+                  :label="'Dai un voto:'"
+                  :label-for="'rating-' + event._id"
+                  style="background-color: transparent"
+              >
+                <b-form-rating
+                    :id="'rating-' + event._id"
+                    v-model="ratings[event._id]"
+                    inline
+                    @change="(newRating) => submitRating(event._id, newRating)"
+                    variant="warning"
+                ></b-form-rating>
+              </b-form-group>
             </li>
           </ul>
         </div>
