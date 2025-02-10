@@ -1,4 +1,6 @@
 <script>
+import {EventBus} from "../../eventBus.js";
+
 export default {
   data() {
     return {
@@ -32,7 +34,7 @@ export default {
         );
       } catch (error) {
         console.error('Error fetching users:', error);
-        alert('Failed to fetch users');
+        this.showModal('Failed to fetch users');
       }
     },
     async suspendUser(user) {
@@ -57,7 +59,7 @@ export default {
 
         await this.fetchUsers();
       } catch (error) {
-        alert(error);
+        this.showModal(error);
       }
     },
     async unsuspendUser(user_id) {
@@ -77,11 +79,11 @@ export default {
 
         await this.fetchUsers();
       } catch (error) {
-        alert(error);
+        this.showModal(error);
       }
     },
     viewUserDetails(user) {
-      alert(`
+      this.showModal(`
       Email: ${user.email_user}\n
       Nome: ${user.name_user}\n
       Cognome: ${user.surname_user}\n
@@ -91,6 +93,12 @@ export default {
     formatDate(date) {
       return date ? new Date(date).toLocaleDateString() : 'N/A';
     },
+    showModal(mess) {
+      EventBus.$emit('open-global-modal', {
+        title: '⚠️Attenzione⚠️',
+        message: mess,
+      });
+    }
   }
 };
 </script>

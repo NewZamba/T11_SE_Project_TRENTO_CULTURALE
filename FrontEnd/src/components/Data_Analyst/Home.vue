@@ -202,7 +202,7 @@ import { EventBus } from '../../eventBus.js';
           default: break;
         }
       },
-      showModal() {
+      showModal(mess) {
         EventBus.$emit('open-global-modal', {
           title: '⚠️Attenzione⚠️',
           message: 'Non si dispone dei diritti necessari per accedere a questa pagina',

@@ -1,4 +1,6 @@
 <script>
+import {EventBus} from "../../eventBus.js";
+
 export default {
   name: 'CreateEventPage',
   data() {
@@ -74,10 +76,16 @@ export default {
           throw new Error(errorResponse.message || 'Errore nel Backend');
         }
 
-        alert('Evento creato');
+        this.showModal('Evento creato');
       } catch (error) {
-        alert(error.message);
+        this.showModal(error.message);
       }
+    },
+    showModal(mess) {
+      EventBus.$emit('open-global-modal', {
+        title: '⚠️Attenzione⚠️',
+        message: mess,
+      });
     }
   }
 };

@@ -1,4 +1,6 @@
 <script>
+import {EventBus} from "../../eventBus.js";
+
 export default {
   name: 'ApproveEvent',
   data() {
@@ -12,6 +14,12 @@ export default {
     this.fetchSuggEvents();
   },
   methods: {
+    showModal(mess) {
+      EventBus.$emit('open-global-modal', {
+        title: '⚠️Attenzione⚠️',
+        message: mess,
+      });
+    },
     async fetchSuggEvents() {
       try {
         const response = await fetch('http://localhost:3000/suggEvents', {
@@ -27,7 +35,7 @@ export default {
 
         this.events = await response.json();
       } catch (err) {
-        alert(err.message);
+        this.showModal(err.message);
       }
     },
     toggleMenu(eventId) {
@@ -70,7 +78,7 @@ export default {
         // Reset location
         this.location = '';
       } catch (err) {
-        alert(err.message);
+        this.showModal(err.message);
       }
     },
     backToHome() {

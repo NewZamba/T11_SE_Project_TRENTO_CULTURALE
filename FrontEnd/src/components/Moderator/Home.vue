@@ -43,14 +43,14 @@ export default {
         Cookie.set('id_user', user_data._id);
         this.id_user = Cookie.get('id_user');
       } catch (error) {
-        this.showModal()
+        this.showModal('Non si dispone dei diritti necessari per accedere a questa pagina')
         await this.$router.push('/');
       }
     },
-    showModal() {
+    showModal(mess) {
       EventBus.$emit('open-global-modal', {
         title: '⚠️Attenzione⚠️',
-        message: 'Non si dispone dei diritti necessari per accedere a questa pagina',
+        message: mess,
       });
     }
   },
