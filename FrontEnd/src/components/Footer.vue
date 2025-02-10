@@ -28,6 +28,7 @@ export default {
     font-family: 'Roboto Light';
     font-size: small;
     font-weight: bold;
+    background-color: rgb(255, 245, 238);
   }
 
 </style>

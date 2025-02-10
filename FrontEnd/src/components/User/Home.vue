@@ -152,7 +152,7 @@ export default {
         }
         const data = await response.json();
         this.userPrenotations = data.filter(p => {
-          return new Date(p.date_event) <= new Date();
+          return new Date(p.date_event) > new Date();
         });
       } catch (err) {
         alert(`Errore: ${err.message}`);
@@ -251,11 +251,16 @@ export default {
     flex-direction: column;
     align-items: center;
   }
+
   .background img {
     position: absolute;
     width: 100%;
     object-fit: cover;
     z-index: -1;
+    min-width: 100%;
+    max-width: 100%;
+    min-height: 100%;
+    max-height: 100%;
   }
 
   /* Il container ora non ha un'altezza fissa; crescerà in base al contenuto */

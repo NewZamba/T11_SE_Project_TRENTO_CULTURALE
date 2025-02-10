@@ -89,6 +89,7 @@ import button from "bootstrap/js/src/button.js";
 
   b-carousel-slide {
     cursor: pointer;
+    color: rgb(255, 245, 238);
   }
 
   .btn {
@@ -104,7 +105,7 @@ import button from "bootstrap/js/src/button.js";
   }
 
   .btn:hover {
-    color: white;
+    color: rgb(255, 245, 238);
     background: none;
     transform: scale(1.1);
   }

@@ -251,6 +251,8 @@ import Cookie from "js-cookie";
 
   .background {
     display: flex;
+    height: 100%;
+
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -259,7 +261,8 @@ import Cookie from "js-cookie";
 
   .background img {
     position: absolute;
-    object-fit: cover;
+    width: 100%;
+    object-fit: fill;
     z-index: -1;
     min-width: 100%;
     max-width: 100%;
@@ -271,8 +274,9 @@ import Cookie from "js-cookie";
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    height: 100%;
-    width: 100%;
+    height: 90%;
+    width: 90%;
+
     padding: 0;
     margin: 0;
     z-index: 1;
@@ -305,6 +309,7 @@ import Cookie from "js-cookie";
     padding: 0;
     gap: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color:  rgb(255, 245, 238);
   }
 
   .events-list {
@@ -316,7 +321,7 @@ import Cookie from "js-cookie";
     min-height: 300px;
     max-height: 400px;
     overflow-y: auto;
-    background-color: rgba(255, 255, 255, 1);
+    background-color: rgb(255, 245, 238);
     border-radius: 15px;
   }
 
@@ -340,13 +345,13 @@ import Cookie from "js-cookie";
 
   .export {
     color: rgb(104, 85, 224);
-    background-color: rgba(255, 255, 255, 1);
+    background-color:  rgb(255, 245, 238);
     border: 1px solid rgba(104, 85, 224, 1);
     justify-self: center;
   }
 
   .export:hover {
-    color: white;
+    color:  rgb(255, 245, 238);
     box-shadow: 0 0 40px rgba(104, 85, 224, 0.6);
     background-color: rgba(104, 85, 224, 1);
   }

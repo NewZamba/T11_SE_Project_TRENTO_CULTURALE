@@ -180,7 +180,7 @@
     flex-direction: column;
     justify-content: center;
     gap: 10px;
-    color: rgba(255, 255, 255, 1);
+    color: rgb(255, 245, 238);
   }
 
   hr {
@@ -204,12 +204,6 @@
     font-size: 25px;
   }
 
-  /*.info img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 5px;
-  }*/
-
   button {
     cursor: pointer;
     border: 0;
@@ -224,19 +218,19 @@
 
   .btn_event {
     color: rgb(104, 85, 224);
-    background-color: rgba(255, 255, 255, 1);
+    background-color: rgb(255, 245, 238);
     border: 1px solid rgba(104, 85, 224, 1);
   }
 
   .btn_event:hover {
-    color: rgba(255, 255, 255, 1);
+    color:  rgb(255, 245, 238);
     box-shadow: 0 0 40px rgba(104, 85, 224, 0.6);
     background-color: rgba(104, 85, 224, 1);
   }
 
   .export {
     color: rgb(104, 85, 224);
-    background-color: rgba(255, 255, 255, 1);
+    background-color:  rgb(255, 245, 238);
     border: 1px solid rgba(104, 85, 224, 1);
     justify-self: center;
   }

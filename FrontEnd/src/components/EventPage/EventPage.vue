@@ -80,14 +80,6 @@ import CommentSection from "../Comment/CommentSection.vue";
         } catch (err) {
           alert(err);
         }
-      },
-      showComment() {
-        this.$router.push({
-          path: `/Comment`,
-          query: {
-            id_event : this._id,
-          }
-        });
       }
     }
   };
@@ -129,10 +121,6 @@ import CommentSection from "../Comment/CommentSection.vue";
               Subscribe
             </button>
 
-            <button class="subscribe_btn" @click="showComment">
-              Comments
-            </button>
-
             <button class="back_btn" @click="backToHome">
               <b-icon icon="arrow-left"/>
             </button>
@@ -147,46 +135,9 @@ import CommentSection from "../Comment/CommentSection.vue";
 
 <style scoped>
 
-  /*.event-page {
-    display: flex;
-    flex-direction: column;
-    width: 45%;
-    height: 80%;
-    border-radius: 20px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1),
-                0px -4px 6px rgba(0, 0, 0, 0.05),
-                4px 0px 6px rgba(0, 0, 0, 0.05),
-                -4px 0px 6px rgba(0, 0, 0, 0.05);
-    margin: auto auto;
-    background-color: azure;
-  }
-
-  .event {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    background-color: rgba(104, 85, 224, 1);
-    color: white;
-    font-family: 'Helvetica', sans-serif;
-    font-size: larger;
-  }
-
-  .headerEP {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    padding: 5px;
-  }
-
-  .footerEP {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 7px;
-  } */
-
   .background {
     display: flex;
+    height: 100%;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -215,9 +166,9 @@ import CommentSection from "../Comment/CommentSection.vue";
                 4px 0px 6px rgba(0, 0, 0, 0.1),
                 -4px 0px 6px rgba(0, 0, 0, 0.1);
     background-color: rgba(0, 0, 0, 0.45);
-    z-index: 1;
     padding: 0;
     margin: 0;
+    z-index: 1;
   }
 
   .imgEvent {

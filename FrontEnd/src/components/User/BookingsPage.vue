@@ -73,27 +73,28 @@
     justify-content: center;
     align-items: center;
     position: relative;
+    width: 100%;
+    height: 100%;
   }
 
   .background img {
     position: absolute;
-    width: 100%;
+    min-width: 100vw;
+    max-width: 100vw;
+    min-height: 100vh;
+    max-height: 100vh;
     object-fit: fill;
     z-index: -1;
-    min-width: 100%;
-    max-width: 100%;
-    min-height: 100%;
-    max-height: 100%;
   }
 
   .container {
     padding: 0;
     display: flex;
     flex-direction: column;
-    height: 100vh;
-    width: 70%;
-    justify-content: center;
-    align-items: flex-start;
+    height: 60vh;
+    width: 60%;
+    justify-content: space-between;
+    align-items: center;
     border-radius: 30px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1),
     0px -4px 6px rgba(0, 0, 0, 0.1),
@@ -101,13 +102,14 @@
     -4px 0px 6px rgba(0, 0, 0, 0.1);
     background-color: rgb(255, 245, 238);
     z-index: 1;
+    position: relative;
   }
 
   header {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    height: 10%;
+    height: 8%;
     width: 100%;
     margin: 0;
     padding: 2px;
@@ -116,7 +118,7 @@
   footer {
     display: flex;
     flex-direction: column;
-    height: 10%;
+    height: 8%;
     width: 100%;
   }
 
@@ -134,17 +136,17 @@
 
   .event-container {
     margin: 0;
+    padding: 0;
     font-family: "Roboto Light", sans-serif;
     width: 100%;
-    justify-content: space-between;
   }
 
   .navbar {
-    height: 90%;
-    overflow-y: auto;
+    height: 100%;
+    overflow-y: scroll;
     border: none;
-    padding: 2px;
     scroll-behavior: smooth;
+    gap: 0;
   }
 
   .ec2 {
@@ -153,7 +155,7 @@
     width: 100%;
     margin: 0;
     align-items: center;
-    justify-content: space-between;
+    justify-items: flex-start;
     border: 2px solid rgba(255, 245, 238);
   }
 

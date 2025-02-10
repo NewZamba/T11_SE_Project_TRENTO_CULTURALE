@@ -121,7 +121,7 @@ export default {
 
 <style scoped>
 .comments-container {
-  background: #f9f9f9;
+  background: rgb(255, 245, 238);
   border-radius: 8px;
 }
 

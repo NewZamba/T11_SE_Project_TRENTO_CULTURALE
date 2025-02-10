@@ -87,6 +87,7 @@ Chart.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
     height: 100%;
     border: 1px solid #ddd;
     border-radius: 8px;
+    background-color:  rgb(255, 245, 238);
   }
 
 </style>
