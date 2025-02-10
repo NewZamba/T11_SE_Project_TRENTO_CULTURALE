@@ -2,6 +2,8 @@
 import CAROUSEL from './Carousel.vue';
 import CARDS from './Cards.vue';
 import Cookie from 'js-cookie';
+import {RouterLink} from "vue-router";
+import * as events from "node:events";
 
 export default {
   name: 'UserHome',
@@ -16,13 +18,13 @@ export default {
       sortN: true,
       sortD: false,
       arrSortN: [],
-      arrSortD: []
+      arrSortD: [],
+      userPrenotations: [],
+      id_user: null
     };
   },
   created() {
     this.verifyUserType();
-  },
-  mounted() {
     this.fetchEvents();
     this.fetchSuggEvents();
   },
@@ -36,16 +38,24 @@ export default {
       try {
         const response = await fetch('http://localhost:3000/verificaUserType/is_logged', {
           method: 'GET',
-          credentials: 'include'
+          credentials: 'include',
         });
+
         if (response.status === 401) {
           throw new Error('utente non loggato');
         } else if (!response.ok) {
           const errorResponse = await response.json();
           throw new Error(errorResponse.message || 'Server error');
         }
+
+        if (!response.ok) {
+          const errorResponse = await response.json();
+          throw new Error(errorResponse.message || 'Server error');
+        }
+
         const user_data = await response.json();
         Cookie.set('id_user', user_data._id);
+        this.id_user = Cookie.get('id_user');
       } catch (error) {
         alert(`Error: ${error.message}`);
         await this.$router.push('/');
@@ -56,202 +66,249 @@ export default {
         fetch('http://localhost:3000/events/not_expired', {
           method: 'GET',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
           }
-        })
-            .then(response => {
-              if (!response.ok) {
-                throw new Error('Error fetching events');
-              }
-              return response.json();
-            })
-            .then(data => {
-              this.events = data;
-              Promise.all([this.sortByName(), this.sortByDate()]);
-            });
+        }).then(response => {
+          if (!response.ok) {
+            throw new Error('Error fetching events');
+          }
+          return response.json();
+        }).then(data => {
+          this.events = data;
+          Promise.all([this.sortByName(), this.sortByDate()]);
+        });
       } catch (err) {
         alert(err.message);
       }
     },
-    fetchSuggEvents() {
+    async fetchSuggEvents() {
       try {
         fetch('http://localhost:3000/suggEvents', {
           method: 'GET',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
           }
-        })
-            .then(response => {
-              if (!response.ok) {
-                throw new Error('Error fetching events');
-              }
-              return response.json();
-            })
-            .then(data => {
-              this.suggEvents = data;
-            });
+        }).then(response => {
+          if (!response.ok) {
+            throw new Error('Error fetching events');
+          }
+          return response.json();
+        }).then(data => {
+          this.suggEvents = data;
+        });
       } catch (err) {
         alert(err.message);
       }
     },
     async sortByName() {
-      this.arrSortN = this.events.slice().sort((a, b) =>
-          a.name_event.localeCompare(b.name_event)
-      );
+      this.arrSortN = this.events.sort((a, b) => {return a.name_event.localeCompare(b.name_event)});
       this.sortN = true;
       this.sortD = false;
     },
     async sortByDate() {
-      this.arrSortD = this.events.slice().sort((a, b) =>
-          a.date_event.localeCompare(b.date_event)
-      );
+      this.arrSortD = this.events.sort((a, b) => {return a.date_event.localeCompare(b.date_event)});
       this.sortD = true;
       this.sortN = false;
     },
-    suggEvent() {
-      this.$router.push({ path: '/SuggestionEvent' });
+    async suggEvent() {
+      this.$router.push({path: '/SuggestionEvent'});
     },
     viewSuggEvents() {
       this.$router.push({
         path: '/SuggEvents',
-        query: { events: this.suggEvents }
+        query: {
+          events: this.suggEvents
+        }
+      });
+    },
+    async fetchUserPrenotations() {
+      try {
+        const response = await fetch(`http://localhost:3000/prenotations/get_prev?id=${Cookie.get('id_user')}`);
+        if (!response.ok) {
+          const errorMessage = await response.text();
+          alert(`Errore dal server: ${errorMessage}`);
+          return [];
+        }
+
+        const data = await response.json();
+        this.userPrenotations = data;
+      } catch (err) {
+        alert(`Errore: ${err.message}`);
+        return [];
+      }
+    },
+    async viewForm() {
+
+      await Promise.all([
+        this.fetchUserPrenotations()
+      ]);
+
+      const today = new Date();
+
+      const f1 = this.userPrenotations.filter(p => {
+        return new Date(p.date_event) < today
+      });
+
+      this.$router.push({
+        path: '/FormEvents',
+        query: {
+          events: f1
+        }
       });
     }
   }
 };
+
 </script>
 
 <template>
+
   <div class="background">
-    <img
-        src="https://images.pexels.com/photos/571169/pexels-photo-571169.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-        alt="Background"
-    />
+    <img src="https://images.pexels.com/photos/571169/pexels-photo-571169.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" />
 
-    <!-- Il container si adatta in altezza al contenuto -->
     <div class="container">
-      <!-- Header: il Carousel -->
-      <header class="header">
-        <CAROUSEL :events="events" />
-      </header>
+      <div class="Carousel">
+        <CAROUSEL :events="events" class="Carousel" />
+      </div>
 
-      <!-- Main: le Cards (la griglia degli eventi) -->
-      <main class="main">
+      <div class="Cards">
         <CARDS :events="sortedEvents" />
-      </main>
+      </div>
 
-      <!-- Footer: posizionato al termine del contenuto -->
-      <footer class="footer">
+      <footer>
         <div class="Sort">
-          <b-dropdown text="Sort by">
+          <b-dropdown class="" text="Sort by">
             <b-dropdown-item @click="sortByName">Name</b-dropdown-item>
             <b-dropdown-item @click="sortByDate">Date</b-dropdown-item>
           </b-dropdown>
+
           <button class="sugg_btn" @click="suggEvent">
             Suggest Event
           </button>
+
           <button class="sugg_btn" @click="viewSuggEvents">
             View Suggest Events
+          </button>
+
+          <button class="sugg_btn" @click="viewForm">
+            Form
           </button>
         </div>
       </footer>
     </div>
   </div>
+
 </template>
 
 <style scoped>
-/* Sfondo: l'immagine copre lo sfondo ma non forza altezze fisse */
-.background {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.background img {
-  position: absolute;
-  width: 100%;
-  object-fit: cover;
-  z-index: -1;
-  /* Rimuoviamo i vincoli di altezza per non forzare il layout */
-  /* min-width, max-width, min-height, max-height possono essere omessi o regolati */
-}
 
-/* Il container ora non ha un'altezza fissa; crescerà in base al contenuto */
-.container {
-  display: flex;
-  flex-direction: column;
-  width: 95%;
-  margin-top: 20px;
-  padding: 20px;
-  background: rgb(255, 245, 238);
-  border-radius: 30px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1),
-  0px -4px 6px rgba(0, 0, 0, 0.1),
-  4px 0px 6px rgba(0, 0, 0, 0.1),
-  -4px 0px 6px rgba(0, 0, 0, 0.1);
-  gap: 20px;
-  min-height: 100%;
-}
+  .background {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
 
-/* Header: il Carousel in cima */
-.header {
-  width: 100%;
-}
+  .background img {
+    position: absolute;
+    width: 100%;
+    object-fit: fill;
+    z-index: -1;
+    min-width: 100%;
+    max-width: 100%;
+    min-height: 100%;
+    max-height: 100%;
+  }
 
-/* Main: le Cards si dispongono in base al contenuto */
-.main {
-  width: 100%;
-  margin-top: 10px;
-}
+  .container {
+    display: flex;
+    flex-direction: column;
+    height: 90%;
+    width: 95%;
+    align-items: center;
+    justify-content: center;
+    border-radius: 30px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1),
+                0px -4px 6px rgba(0, 0, 0, 0.1),
+                4px 0px 6px rgba(0, 0, 0, 0.1),
+               -4px 0px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 0;
+    padding: 0;
+    background: rgb(255, 245, 238);
+    gap: 20px;
+  }
 
-/* Footer: segue il contenuto senza essere forzato a un'altezza fissa */
-.footer {
-  width: 100%;
-  padding: 5px;
-}
+  .Carousel {
+    display: flex;
+    width: 100%;
+    height: 40%;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+  }
 
-/* Layout interno del footer */
-.Sort {
-  display: flex;
-  width: 100%;
-  align-items: center;
-  justify-content: space-evenly;
-}
+  .Cards {
+    display: flex;
+    height: 50%;
+    width: 100%;
+    margin-top: 10px;
+    scroll-behavior: smooth;
+  }
 
-/* Stili per i bottoni */
-button {
-  cursor: pointer;
-  border: 0;
-  border-radius: 10px;
-  font-weight: 600;
-  margin: 0 10px;
-  width: 70%;
-  padding: 10px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1),
-  0px -4px 6px rgba(0, 0, 0, 0.1),
-  4px 0px 6px rgba(0, 0, 0, 0.1),
-  -4px 0px 6px rgba(0, 0, 0, 0.1);
-  transition: 0.4s;
-}
-.sugg_btn {
-  width: 160px;
-  height: 60px;
-  border-radius: 20px;
-  border: 1px solid rgba(104, 85, 224, 1);
-  background-color: rgba(104, 85, 224, 1);
-  color: rgb(255, 245, 238);
-  font-size: medium;
-  font-family: 'Roboto Light';
-  cursor: pointer;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-  transition: transform 0.2s;
-}
-.sugg_btn:hover {
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1),
-  0px -4px 6px rgba(0, 0, 0, 0.1),
-  4px 0px 6px rgba(0, 0, 0, 0.1),
-  -4px 0px 6px rgba(0, 0, 0, 0.1);
-  background-color: rgba(104, 85, 224, 1);
-  transform: scale(1.1);
-}
+  footer {
+    height: 10%;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+  }
+
+  .Sort {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: space-evenly;
+  }
+
+  button {
+    cursor: pointer;
+    border: 0;
+    border-radius: 10px;
+    font-weight: 600;
+    margin: 0 10px;
+    width: 70%;
+    padding: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1),
+                0px -4px 6px rgba(0, 0, 0, 0.1),
+                4px 0px 6px rgba(0, 0, 0, 0.1),
+                -4px 0px 6px rgba(0, 0, 0, 0.1);
+    transition: 0.4s;
+  }
+
+  .sugg_btn {
+    width: 160px;
+    height: 60px;
+    border-radius: 20px;
+    border: 1px solid rgba(104, 85, 224, 1);
+    background-color: rgba(104, 85, 224, 1);
+    color: rgb(255, 245, 238);
+    font-size: medium;
+    font-family: 'Roboto Light';
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s;
+  }
+
+  .sugg_btn:hover {
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1),
+                0px -4px 6px rgba(0, 0, 0, 0.1),
+                4px 0px 6px rgba(0, 0, 0, 0.1),
+                -4px 0px 6px rgba(0, 0, 0, 0.1);
+    background-color: rgba(104, 85, 224, 1);
+    transform: scale(1.1);
+  }
+
 </style>
