@@ -1,7 +1,8 @@
 <script>
-import Cookie from "js-cookie";
+import Cookie from "js-cookie"
+import {EventBus} from "../../eventBus.js";
 
-  export default {
+export default {
     name: 'SuggestionEvent',
     data() {
       return {
@@ -28,8 +29,14 @@ import Cookie from "js-cookie";
           this.allTags = await response.json();
         } catch (error) {
           console.error('Error fetching tags:', error);
-          alert('Failed to fetch tags');
+          this.showModal('Failed to fetch tags');
         }
+      },
+      showModal(mess) {
+        EventBus.$emit('open-global-modal', {
+          title: '⚠️Attenzione⚠️',
+          message: mess,
+        });
       },
       filterTags() {
         if (!this.tagInput) {
@@ -95,14 +102,14 @@ import Cookie from "js-cookie";
               this.selectedTags = [];
               this.showAutocomplete = false;
 
-              alert('Evento suggerito creato');
+              this.showModal('Evento suggerito creato');
             } else {
               const errorResponse = res.json();
               throw new Error(errorResponse.message || 'Errore nel Backend');
             }
           });
         } catch (error) {
-          alert(error.message);
+          this.showModal(error.message);
         }
       }
     }
