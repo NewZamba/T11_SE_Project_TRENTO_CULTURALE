@@ -49,14 +49,19 @@ router.put('/', async (req, res) => {
     }
 });
 
-router.get('/', async (req, res, next) => {
+router.get('/', async (req, res) => {
     try {
-        const { id } = req.query;
-        if (!id) {
-            return res.status(400).json({ message: 'Event ID is required' });
+        const { id_event } = req.query;  // Changed from req.body to req.query
+
+        if (!id_event || !mongoose.Types.ObjectId.isValid(id_event)) {
+            return res.status(400).json({ message: 'Valid Event ID is required' });
         }
 
-        const lstForm = await FormEvents.find({ id_event: id });
+        const lstForm = await FormEvents.find({ id_event: id_event });
+
+        if (!lstForm || lstForm.length === 0) {
+            return res.status(404).json({ message: 'No forms found for this event' });
+        }
 
         return res.status(200).json(lstForm);
     } catch (error) {

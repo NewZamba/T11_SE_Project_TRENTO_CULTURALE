@@ -30,7 +30,7 @@
       },
       async fetchForm(id) {
         try {
-          const response = await fetch(`http://localhost:3000/addForm?id=${id}`, {
+          const response = await fetch(`http://localhost:3000/addForm?id_event=${id}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json'
@@ -52,12 +52,16 @@
       async downloadJSON(label, id) {
         await this.fetchForm(id);
 
-        console.log('->' + this.formEvent);
-
         if(this.formEvent.length > 0) {
+          // Format feedback data
+          const feedbackData = this.formEvent.map(form => ({
+            user_id: form.id_user,
+            feedback: form.feedback
+          }));
+
           const json = {
-            labels: label,
-            feedback: this.formEvent
+            event_name: label,
+            feedback: feedbackData
           };
 
           const jsonData = JSON.stringify(json, null, 2);
@@ -66,10 +70,13 @@
           const link = document.createElement("a");
 
           link.href = downloadUrl;
-          link.download = "data.json";
+          link.download = `feedback_${label}.json`;  // More descriptive filename
           link.click();
+
+          // Cleanup
+          URL.revokeObjectURL(downloadUrl);
         } else {
-          alert ('Nothing to extract!');
+          alert ('No feedback data available for this event!');
         }
       }
     }
