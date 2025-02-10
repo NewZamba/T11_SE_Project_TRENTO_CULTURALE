@@ -22,6 +22,7 @@ router.get('/:id', async function (req, res, next) {
         if (!id) {
             return res.status(400).json({ message: 'ID necessario' });
         }
+        console.error(id);
 
         const lstPrenotations = await Prenotation.find({id_user: id, form: false});
 
