@@ -39,7 +39,9 @@ export default {
       arrSortN: [],
       arrSortD: [],
       userPrenotations: [],
-      id_user: null
+      id_user: null,
+      allTags: [],
+      selectedFilterTags: [],
     };
   },
   created() {
@@ -47,13 +49,50 @@ export default {
     this.fetchEvents();
     this.fetchSuggEvents();
     this.fetchUserPrenotations();
+    this.fetchTags();
   },
   computed: {
     sortedEvents() {
-      return this.sortN ? this.arrSortN : this.arrSortD;
+      let filteredEvents = this.sortN ? this.arrSortN : this.arrSortD;
+
+      // If there are selected filter tags, filter the events
+      if (this.selectedFilterTags.length > 0) {
+        filteredEvents = filteredEvents.filter(event => {
+          return this.selectedFilterTags.every(filterTag =>
+              event.tags_event.includes(filterTag._id)
+          );
+        });
+      }
+      return filteredEvents;
     }
   },
   methods: {
+    async fetchTags() {
+      try {
+        const response = await fetch('http://localhost:3000/tags');
+        if (!response.ok) {
+          throw new Error('Error fetching tags');
+        }
+        this.allTags = await response.json();
+      } catch (error) {
+        console.error('Error fetching tags:', error);
+        alert('Failed to fetch tags');
+      }
+    },
+    toggleTagFilter(tag) {
+      const index = this.selectedFilterTags.findIndex(t => t._id === tag._id);
+      if (index === -1) {
+        this.selectedFilterTags.push(tag);
+      } else {
+        this.selectedFilterTags.splice(index, 1);
+      }
+    },
+    isTagSelected(tag) {
+      return this.selectedFilterTags.some(t => t._id === tag._id);
+    },
+    clearTagFilters() {
+      this.selectedFilterTags = [];
+    },
     async verifyUserType() {
       try {
         const response = await fetch('http://localhost:3000/verificaUserType/is_logged', {
@@ -219,18 +258,36 @@ export default {
           <b-navbar-toggle target="nav-collapse" />
           <b-collapse is-nav id="nav-collapse">
             <b-navbar-nav class="center-navbar" style="width: 100%">
-              <b-nav-item @click="viewForm">Form</b-nav-item>
-              <div class="separator" />
-              <b-nav-item @click="suggEvent">Suggest Event</b-nav-item>
-              <div class="separator" />
-              <b-nav-item @click="viewSuggEvents">View Suggest Events</b-nav-item>
-              <div class="separator" />
               <b-nav-item-dropdown text="Sort" right>
                 <b-dropdown-item @click="sortByName">By Name</b-dropdown-item>
                 <b-dropdown-item @click="sortByDate">By Date</b-dropdown-item>
               </b-nav-item-dropdown>
               <div class="separator" />
+              <b-nav-item-dropdown text="Filter by Tags" right>
+                <div class="tags-dropdown-content">
+                  <b-dropdown-item
+                      v-for="tag in allTags"
+                      :key="tag._id"
+                      @click="toggleTagFilter(tag)"
+                      :class="{ 'tag-selected': isTagSelected(tag) }"
+                  >
+                    <span class="tag-indicator" :style="{ backgroundColor: tag.color_tag }"></span>
+                    {{ tag.name_tag }}
+                  </b-dropdown-item>
+                  <b-dropdown-divider v-if="selectedFilterTags.length > 0" />
+                  <b-dropdown-item v-if="selectedFilterTags.length > 0" @click="clearTagFilters">
+                    Clear Filters
+                  </b-dropdown-item>
+                </div>
+              </b-nav-item-dropdown>
+              <div class="separator" />
+              <b-nav-item @click="suggEvent">Suggest Event</b-nav-item>
+              <div class="separator" />
+              <b-nav-item @click="viewSuggEvents">View Suggest Events</b-nav-item>
+              <div class="separator" />
               <b-nav-item @click="goViewBookings">View Bookings</b-nav-item>
+              <div class="separator" />
+              <b-nav-item @click="viewForm">Form</b-nav-item>
             </b-navbar-nav>
           </b-collapse>
         </b-navbar>
@@ -339,4 +396,20 @@ export default {
     background-color: rgba(255, 245, 238, 0.3);
   }
 
+  tags-dropdown-content {
+    max-height: 300px;
+    overflow-y: auto;
+  }
+
+  .tag-selected {
+    background-color: rgba(104, 85, 224, 0.1);
+  }
+
+  .tag-indicator {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 8px;
+  }
 </style>
