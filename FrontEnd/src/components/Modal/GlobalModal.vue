@@ -1,14 +1,22 @@
-<!-- src/components/GlobalModal.vue -->
 <template>
-  <b-modal ref="modal" :title="title" hide-footer>
+  <b-modal ref="modal" hide-footer centered>
+    <!-- Custom Header -->
+    <template #modal-header="{ close }">
+      <div class="custom-header">
+        <h5 class="modal-title">{{ title }}</h5>
+        <span class="custom-close" @click="close()">×</span>
+      </div>
+    </template>
+
+    <!-- Corpo del modal -->
     <div>
-      <p>{{ message }}</p>
+      {{ message }}
     </div>
   </b-modal>
 </template>
 
 <script>
-import { EventBus } from '@/eventBus';
+import { EventBus } from '../../eventBus.js';
 
 export default {
   name: 'GlobalModal',
@@ -16,26 +24,44 @@ export default {
     return {
       title: '',
       message: '',
-      showInput: false  // per decidere se mostrare l'input
     };
   },
   methods: {
-    // Funzione per aprire il modal e impostare i dati passati
     open(payload) {
       this.title = payload.title || 'Titolo di default';
       this.message = payload.message || '';
-      // Se si vuole mostrare la casella di testo, controlla la proprietà showInput
-      this.showInput = payload.showInput || false;
       this.$refs.modal.show();
     }
   },
   created() {
-    // Ascolta l'evento "open-global-modal" sull'Event Bus
     EventBus.$on('open-global-modal', this.open);
   },
   beforeDestroy() {
-    // Rimuovi il listener prima di distruggere il componente
     EventBus.$off('open-global-modal', this.open);
   }
 };
 </script>
+
+<style scoped>
+/* Stile per la barra del titolo */
+.custom-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+/* Stile per la X di chiusura */
+.custom-close {
+  font-size: 24px;  /* Grandezza simile a quella dell'immagine */
+  font-weight: bold;
+  cursor: pointer;
+  user-select: none;
+  line-height: 1;
+  color: #333; /* Colore simile */
+}
+
+.custom-close:hover {
+  color: #000; /* Cambia colore al passaggio del mouse */
+}
+</style>

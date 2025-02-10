@@ -3,6 +3,8 @@ import LISTEVENTS from './ListEvents.vue';
 import BarChartTemplate from './BarChartTemplate.vue';
 import _ from 'lodash';
 import Cookie from "js-cookie";
+import { EventBus } from '../../eventBus.js';
+
 
   export default {
     components: {
@@ -58,7 +60,7 @@ import Cookie from "js-cookie";
           Cookie.set('id_user', user_data._id);
           this.id_user = Cookie.get('id_user');
         } catch (error) {
-          alert(`Error: ${error.message}`);
+          this.showModal();
           await this.$router.push('/');
         }
       },
@@ -199,6 +201,12 @@ import Cookie from "js-cookie";
             break;
           default: break;
         }
+      },
+      showModal() {
+        EventBus.$emit('open-global-modal', {
+          title: '⚠️Attenzione⚠️',
+          message: 'Non si dispone dei diritti necessari per accedere a questa pagina',
+        });
       }
     }
   };

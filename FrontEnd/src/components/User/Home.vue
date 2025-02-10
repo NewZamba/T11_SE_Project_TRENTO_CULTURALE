@@ -144,13 +144,14 @@ export default {
     },
     async fetchUserPrenotations() {
       try {
-        const response = await fetch(`http://localhost:3000/prenotations/?id=${Cookie.get('id_user')}`);
+        const response = await fetch(`http://localhost:3000/prenotations/${Cookie.get("id_user")}` );
         if (!response.ok) {
           const errorMessage = await response.text();
           alert(`Errore dal server: ${errorMessage}`);
           return [];
         }
         const data = await response.json();
+        console.log(data);
         this.userPrenotations = data.filter(p => {
           return new Date(p.date_event) > new Date();
         });

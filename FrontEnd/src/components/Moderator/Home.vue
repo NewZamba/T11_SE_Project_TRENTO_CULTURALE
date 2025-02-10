@@ -3,7 +3,7 @@ import HANDLEUSER from './HandleUsers.vue';
 import APPROVEEVENT from './ApproveEvent.vue';
 import CREATEEVENT from './CreateEvent.vue';
 import Cookie from "js-cookie";
-import {EventBus} from '@/eventBus';
+import {EventBus} from '../../eventBus.js';
 export default {
   components: {
     HANDLEUSER,
@@ -49,8 +49,8 @@ export default {
     },
     showModal() {
       EventBus.$emit('open-global-modal', {
-        title: 'Messaggio Importante',
-        message: 'Non hai i diritti necessari per accedere a questa pagina',
+        title: '⚠️Attenzione⚠️',
+        message: 'Non si dispone dei diritti necessari per accedere a questa pagina',
       });
     }
   },

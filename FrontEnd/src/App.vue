@@ -1,7 +1,7 @@
 <script>
 import Footer from "./components/Footer.vue";
 import Header from "./components/Header.vue";
-import GlobalModal from "@/components/Modal/GlobalModal.vue";
+import GlobalModal from "./components/Modal/GlobalModal.vue";
 
 export default {
   name: 'app',

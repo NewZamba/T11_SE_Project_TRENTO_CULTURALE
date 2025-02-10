@@ -1,5 +1,7 @@
 <script>
 
+  import {EventBus} from "../../eventBus.js";
+
   export default {
     name: "BookingsPage",
     data() {
@@ -10,6 +12,9 @@
     },
     created() {
       this.bookings = this.$route.query.bookings;
+      if(this.bookings.length === 0){
+        this.showModal()
+      }
     },
     methods: {
       toggleMenu(eventId) {
@@ -25,8 +30,16 @@
       },
       backToHome() {
         this.$router.push('/UserHome');
+      },
+      showModal() {
+        EventBus.$emit('open-global-modal', {
+          title: '⚠️Attenzione⚠️',
+          message: 'Non sono presenti prenotazioni',
+        });
       }
-    }
+    },
+
+
   };
 
 </script>
