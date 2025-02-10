@@ -14,10 +14,10 @@ router.get('/', async function (req, res, next) {
     }
 });
 
-router.get('/get_prev', async function (req, res, next) {
+router.get('/:id', async function (req, res, next) {
 
     try{
-        const { id } = req.query;
+        const { id } = req.params;
 
         if (!id) {
             return res.status(400).json({ message: 'ID necessario' });
