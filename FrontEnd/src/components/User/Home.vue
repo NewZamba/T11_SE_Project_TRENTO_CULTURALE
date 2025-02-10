@@ -45,6 +45,7 @@ export default {
     this.verifyUserType();
     this.fetchEvents();
     this.fetchSuggEvents();
+    this.fetchUserPrenotations();
   },
   computed: {
     sortedEvents() {
@@ -149,7 +150,9 @@ export default {
           return [];
         }
         const data = await response.json();
-        this.userPrenotations = data;
+        this.userPrenotations = data.filter(p => {
+          return new Date(p.date_event) <= new Date();
+        });
       } catch (err) {
         alert(`Errore: ${err.message}`);
         return [];
@@ -172,15 +175,24 @@ export default {
     logout() {
       Cookie.remove('id_user');
       this.$router.push('/login');
+    },
+    goViewBookings() {
+      console.log(this.userPrenotations);
+      this.$router.push({
+        path: '/BookingsPage',
+        query: {
+          bookings: this.userPrenotations
+        }
+      });
     }
   }
 };
+
 </script>
 
 <template>
+
   <div>
-
-
     <!-- Contenuto principale -->
     <div class="background">
       <img
@@ -196,17 +208,22 @@ export default {
         </header>
 
         <!-- Navbar di Bootstrap Vue -->
-        <b-navbar toggleable="lg" type="dark" variant="primary">
-          <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+        <b-navbar toggleable="lg" type="dark" variant="primary" class="custom-navbar-bg">
+          <b-navbar-toggle target="nav-collapse" />
           <b-collapse is-nav id="nav-collapse">
-            <b-navbar-nav>
+            <b-navbar-nav class="center-navbar" style="width: 100%">
               <b-nav-item @click="viewForm">Form</b-nav-item>
+              <div class="separator" />
               <b-nav-item @click="suggEvent">Suggest Event</b-nav-item>
+              <div class="separator" />
               <b-nav-item @click="viewSuggEvents">View Suggest Events</b-nav-item>
+              <div class="separator" />
               <b-nav-item-dropdown text="Sort" right>
                 <b-dropdown-item @click="sortByName">By Name</b-dropdown-item>
                 <b-dropdown-item @click="sortByDate">By Date</b-dropdown-item>
               </b-nav-item-dropdown>
+              <div class="separator" />
+              <b-nav-item @click="goViewBookings">View Bookings</b-nav-item>
             </b-navbar-nav>
           </b-collapse>
         </b-navbar>
@@ -226,70 +243,88 @@ export default {
 </template>
 
 <style scoped>
-/* Sfondo: l'immagine copre lo sfondo ma non forza altezze fisse */
-.background {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.background img {
-  position: absolute;
-  width: 100%;
-  object-fit: cover;
-  z-index: -1;
-}
-.b-navbar-nav {
+  /* Sfondo: l'immagine copre lo sfondo ma non forza altezze fisse */
+  .background {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .background img {
+    position: absolute;
+    width: 100%;
+    object-fit: cover;
+    z-index: -1;
+  }
 
-}
+  /* Il container ora non ha un'altezza fissa; crescerà in base al contenuto */
+  .container {
+    display: flex;
+    flex-direction: column;
+    width: 95%;
+    margin-top: 20px;
+    padding: 20px;
+    background: rgb(255, 245, 238);
+    border-radius: 30px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1),
+    0px -4px 6px rgba(0, 0, 0, 0.1),
+    4px 0px 6px rgba(0, 0, 0, 0.1),
+    -4px 0px 6px rgba(0, 0, 0, 0.1);
+    gap: 20px;
+    min-height: 100%;
+  }
 
-/* Il container ora non ha un'altezza fissa; crescerà in base al contenuto */
-.container {
-  display: flex;
-  flex-direction: column;
-  width: 95%;
-  margin-top: 20px;
-  padding: 20px;
-  background: rgb(255, 245, 238);
-  border-radius: 30px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1),
-  0px -4px 6px rgba(0, 0, 0, 0.1),
-  4px 0px 6px rgba(0, 0, 0, 0.1),
-  -4px 0px 6px rgba(0, 0, 0, 0.1);
-  gap: 20px;
-  min-height: 100%;
-}
+  /* Header: il Carousel in cima */
+  .header {
+    width: 100%;
+  }
 
-/* Header: il Carousel in cima */
-.header {
-  width: 100%;
-}
+  /* Main: le Cards si dispongono in base al contenuto */
+  .main {
+    width: 100%;
+    margin-top: 10px;
+  }
 
-/* Main: le Cards si dispongono in base al contenuto */
-.main {
-  width: 100%;
-  margin-top: 10px;
-}
+  /* Footer: segue il contenuto senza essere forzato a un'altezza fissa */
+  .footer {
+    width: 100%;
+    padding: 5px;
+  }
 
-/* Footer: segue il contenuto senza essere forzato a un'altezza fissa */
-.footer {
-  width: 100%;
-  padding: 5px;
-}
+  /* Esempio di stili per eventuali bottoni personalizzati */
+  button {
+    cursor: pointer;
+    border: 0;
+    border-radius: 10px;
+    font-weight: 600;
+    margin: 0 10px;
+    width: 70%;
+    padding: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1),
+    0px -4px 6px rgba(0, 0, 0, 0.1),
+    4px 0px 6px rgba(0, 0, 0, 0.1),
+    -4px 0px 6px rgba(0, 0, 0, 0.1);
+    transition: 0.4s;
+  }
 
-/* Esempio di stili per eventuali bottoni personalizzati */
-button {
-  cursor: pointer;
-  border: 0;
-  border-radius: 10px;
-  font-weight: 600;
-  margin: 0 10px;
-  width: 70%;
-  padding: 10px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1),
-  0px -4px 6px rgba(0, 0, 0, 0.1),
-  4px 0px 6px rgba(0, 0, 0, 0.1),
-  -4px 0px 6px rgba(0, 0, 0, 0.1);
-  transition: 0.4s;
-}
+  .custom-navbar-bg {
+    font-family: "Roboto Light", sans-serif;
+    font-weight: bold;
+    font-size: larger;
+    background-color: rgba(104, 85, 224, 1) !important;
+  }
+
+  .center-navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 15px;
+  }
+
+  .separator {
+    height: 25px;
+    width: 1px;
+    background-color: rgba(255, 245, 238, 0.3);
+  }
+
 </style>
