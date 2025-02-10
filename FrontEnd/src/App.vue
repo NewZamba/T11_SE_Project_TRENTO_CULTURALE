@@ -34,8 +34,10 @@ export default {
 .container {
   display: grid;
   grid-template-rows: auto 1fr auto;
-  height: 100vh;
+  min-width: 100vw;
+  min-height: 100vh;
   width: 100%;
+  height: 100%;
 }
 
 .header {

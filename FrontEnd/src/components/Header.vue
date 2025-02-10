@@ -1,10 +1,14 @@
 <script>
-
 export default {
   name: 'Header',
   components: {},
   data() {
     return {};
+  },
+  computed: {
+    isLoginPage() {
+      return this.$route.path === '/';
+    }
   },
   methods: {
     backLogin() {
@@ -12,7 +16,6 @@ export default {
     }
   }
 };
-
 </script>
 
 <template>
@@ -22,8 +25,11 @@ export default {
     </div>
 
     <div class="buttons">
-      <button class="back_btn" @click="backLogin">
-        Back To Login Page
+      <button v-if="!isLoginPage" class="back_btn" @click="backLogin" title="Back to Login">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 12H5"/>
+          <path d="M12 19l-7-7 7-7"/>
+        </svg>
       </button>
     </div>
   </div>
@@ -69,17 +75,23 @@ export default {
   }
 
   .back_btn {
-    width: 160px;
+    width: 60px;
     height: 60px;
-    border-radius: 20px;
+    border-radius: 50%;
     border: 1px solid rgba(104, 85, 224, 1);
     background-color: rgba(104, 85, 224, 1);
     color: rgb(255, 245, 238);
-    font-size: medium;
-    font-family: 'Roboto Light';
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     transition: transform 0.2s;
+  }
+
+  .back_btn svg {
+    width: 24px;
+    height: 24px;
   }
 
   .back_btn:hover {
