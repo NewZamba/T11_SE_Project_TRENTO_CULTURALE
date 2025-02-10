@@ -31,7 +31,6 @@ const addTag = require('./routes/addTag');
 const tags = require('./routes/tags');
 const deleteComment = require('./routes/deleteComment');
 const addForm = require('./routes/addForm');
-const prenotations2 = require('./routes/prenotations2');
 
 //connesione al database
 let url;
@@ -39,6 +38,7 @@ if (process.env.DB_USERNAME && process.env.DB_PASSWORD) {
     url = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.c9u75.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 } else {
     //TODO: rimuovere credenziali hardcoded
+    console.log("pociadsadasaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
     url = `mongodb+srv://fraCok:fraCok@cluster0.c9u75.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 }
 mongoose.connect(url);
@@ -99,7 +99,6 @@ app.use('/addTag', addTag);
 app.use('/tags', tags);
 app.use('/deleteComment', deleteComment);
 app.use('/addForm', addForm);
-app.use('/prenotations2', prenotations2);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
