@@ -148,17 +148,40 @@ router.post('/signup', async function (req, res, next) {
 });
 
 /* POST logout user */
+// router.post('/logout', (req, res, next) => {
+//     // Controlla se l'User e' loggato
+//     if (!req.isAuthenticated()) {
+//         return res.status(403).json({ message: "Nessun utente da sloggare" });
+//     }
+//
+//     // logout
+//     req.logout((err) => {
+//         if (err) {
+//             return res.status(500).json({ message: "Errore durante il logout", error: err });
+//         }
+//         return res.status(200).json({ message: "Logout avvenuto con sucesso" });
+//     });
+// });
+
+/* POST logout user */
 router.post('/logout', (req, res, next) => {
     // Controlla se l'User e' loggato
     if (!req.isAuthenticated()) {
         return res.status(403).json({ message: "Nessun utente da sloggare" });
     }
 
-    // logout
+    // Clear session and cookies
     req.logout((err) => {
         if (err) {
             return res.status(500).json({ message: "Errore durante il logout", error: err });
         }
+
+        // Clear session cookie
+        res.clearCookie('connect.sid');
+
+        // Clear any other cookies we set
+        res.clearCookie('id_user');
+
         return res.status(200).json({ message: "Logout avvenuto con sucesso" });
     });
 });
