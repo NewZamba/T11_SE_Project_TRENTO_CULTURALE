@@ -48,7 +48,7 @@ export default {
     this.verifyUserType();
     this.fetchEvents();
     this.fetchSuggEvents();
-    this.fetchUserPrenotations();
+    this.fetchUserPrenotations(1);
     this.fetchTags();
   },
   computed: {
@@ -182,25 +182,43 @@ export default {
         }
       });
     },
-    async fetchUserPrenotations() {
-      try {
-        const response = await fetch(`http://localhost:3000/prenotations/${Cookie.get("id_user")}` );
-        if (!response.ok) {
-          return [];
-        }
-        const data = await response.json();
-        console.log(data);
-        this.userPrenotations = data.filter(p => {
-          return new Date(p.date_event) > new Date();
-        });
-      } catch (err) {
-        alert(`Errore: ${err.message}`);
-        return [];
+    async fetchUserPrenotations(x) {
+      switch (x) {
+        case 1:
+          try {
+            const response = await fetch(`http://localhost:3000/prenotations/${Cookie.get("id_user")}` );
+            if (!response.ok) {
+              return [];
+            }
+            const data = await response.json();
+            console.log(data);
+            this.userPrenotations = data.filter(p => {
+              return new Date(p.date_event) > new Date();
+            });
+          } catch (err) {
+            alert(`Errore: ${err.message}`);
+            return [];
+          }
+        break;
+        case 2:
+          try {
+            const response = await fetch(`http://localhost:3000/prenotations/${Cookie.get("id_user")}` );
+            if (!response.ok) {
+              return [];
+            }
+            const data = await response.json();
+            console.log(data);
+            this.userPrenotations = data;
+          } catch (err) {
+            alert(`Errore: ${err.message}`);
+            return [];
+          }
+          break;
       }
     },
     async viewForm() {
       await Promise.all([
-        this.fetchUserPrenotations()
+        this.fetchUserPrenotations(2)
       ]);
       const today = new Date();
       const f1 = this.userPrenotations.filter(p => new Date(p.date_event) > today);
