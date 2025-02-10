@@ -35,9 +35,9 @@ export default {
   display: grid;
   grid-template-rows: auto 1fr auto;
   min-width: 100vw;
-  min-height: 100vh;
   width: 100%;
   height: 100%;
+
 }
 
 .header {
