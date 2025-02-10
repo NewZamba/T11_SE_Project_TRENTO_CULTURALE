@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const FormEvents = require('../models/FormEvents');
 const Prenotations = require('../models/Prenotations');
+const mongoose = require('mongoose');
 
 router.post('/', async (req, res) => {
 
@@ -47,5 +48,22 @@ router.put('/', async (req, res) => {
         return res.status(500).json({ message: 'Errore del server.' });
     }
 });
+
+router.get('/', async (req, res, next) => {
+    try {
+        const { id } = req.query;
+        if (!id) {
+            return res.status(400).json({ message: 'Event ID is required' });
+        }
+
+        const lstForm = await FormEvents.find({ id_event: id });
+
+        return res.status(200).json(lstForm);
+    } catch (error) {
+        console.error('Error fetching form events:', error);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
 
 module.exports = router;

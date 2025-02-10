@@ -6,7 +6,8 @@
     data() {
       return {
         t_event: null,
-        graphicOn: false
+        graphicOn: false,
+        formEvent: []
       };
     },
     props: {
@@ -26,6 +27,50 @@
     methods: {
       showDetails(event) {
         this.t_event = event;
+      },
+      async fetchForm(id) {
+        try {
+          const response = await fetch(`http://localhost:3000/addForm?id=${id}`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          });
+
+          if (!response.ok) {
+            alert(response.statusText || "Error fetching form");
+            return;
+          }
+
+          const data = await response.json();
+          this.formEvent = data;
+
+        } catch (error) {
+          console.error("Fetch error:", error);
+        }
+      },
+      async downloadJSON(label, id) {
+        await this.fetchForm(id);
+
+        console.log('->' + this.formEvent);
+
+        if(this.formEvent.length > 0) {
+          const json = {
+            labels: label,
+            feedback: this.formEvent
+          };
+
+          const jsonData = JSON.stringify(json, null, 2);
+          const blob = new Blob([jsonData], { type: "application/json" });
+          const downloadUrl = URL.createObjectURL(blob);
+          const link = document.createElement("a");
+
+          link.href = downloadUrl;
+          link.download = "data.json";
+          link.click();
+        } else {
+          alert ('Nothing to extract!');
+        }
       }
     }
   };
@@ -67,6 +112,11 @@
           <hr />
           <p class="p1">Description:</p>
           <p class="p2">{{ t_event.location_event }} </p>
+          <hr />
+          <button class="export"
+                  @click="downloadJSON(t_event.name_event, t_event._id)">
+            feedback_and_vote.json
+          </button>
         </div>
       </div>
     </div>
@@ -162,16 +212,28 @@
     transition: 0.4s;
   }
 
-  button:hover {
+  .btn_event {
+    color: rgb(104, 85, 224);
+    background-color: rgba(255, 255, 255, 1);
+    border: 1px solid rgba(104, 85, 224, 1);
+  }
+
+  .btn_event:hover {
     color: rgba(255, 255, 255, 1);
     box-shadow: 0 0 40px rgba(104, 85, 224, 0.6);
     background-color: rgba(104, 85, 224, 1);
   }
 
-  .btn_event {
+  .export {
     color: rgb(104, 85, 224);
     background-color: rgba(255, 255, 255, 1);
     border: 1px solid rgba(104, 85, 224, 1);
+    justify-self: center;
+  }
+
+  .export:hover {
+    box-shadow: 0 0 40px rgba(104, 85, 224, 0.6);
+    transform: scale(1.1);
   }
 
 </style>
