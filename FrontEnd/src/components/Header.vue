@@ -16,8 +16,7 @@ export default {
 </script>
 
 <template>
-
-  <div class="container">
+  <div class="header-container">
     <div class="text">
       <p>Trento Culturale</p>
     </div>
@@ -28,39 +27,29 @@ export default {
       </button>
     </div>
   </div>
-
 </template>
 
 <style scoped>
-
-  .container {
+  .header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
     color: rgba(104, 85, 224, 1);
     font-family: 'Roboto Light';
     font-size: 20px;
     font-weight: bold;
-    width: 100%;
-    height: 100%;
-    align-items: center;
-    justify-content: space-between;
   }
 
   .text {
     display: flex;
-    flex: 1;
-    height: 100%;
-    width: 100%;
     align-items: center;
-    justify-content: flex-end;
   }
 
   .buttons {
     display: flex;
-    flex: 1;
-    height: 100%;
-    width: 100%;
     align-items: center;
     justify-content: flex-end;
-    padding-right: 30px;
   }
 
   button {
