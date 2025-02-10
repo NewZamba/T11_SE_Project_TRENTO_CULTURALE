@@ -3,7 +3,7 @@ import HANDLEUSER from './HandleUsers.vue';
 import APPROVEEVENT from './ApproveEvent.vue';
 import CREATEEVENT from './CreateEvent.vue';
 import Cookie from "js-cookie";
-
+import {EventBus} from '@/eventBus';
 export default {
   components: {
     HANDLEUSER,
@@ -43,10 +43,16 @@ export default {
         Cookie.set('id_user', user_data._id);
         this.id_user = Cookie.get('id_user');
       } catch (error) {
-        alert(`Error: ${error.message}`);
+        this.showModal()
         await this.$router.push('/');
       }
     },
+    showModal() {
+      EventBus.$emit('open-global-modal', {
+        title: 'Messaggio Importante',
+        message: 'Non hai i diritti necessari per accedere a questa pagina',
+      });
+    }
   },
 };
 </script>

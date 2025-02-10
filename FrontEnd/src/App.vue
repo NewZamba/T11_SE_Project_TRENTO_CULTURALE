@@ -1,18 +1,21 @@
 <script>
 import Footer from "./components/Footer.vue";
 import Header from "./components/Header.vue";
+import GlobalModal from "@/components/Modal/GlobalModal.vue";
 
 export default {
   name: 'app',
   components: {
     Footer,
-    Header
+    Header,
+    GlobalModal,
   }
 };
 </script>
 
 <template>
   <div id="app" class="container">
+    <GlobalModal />
     <Header class="header" />
 
     <main class="mains">
