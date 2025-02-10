@@ -56,7 +56,17 @@ import Cookie from "js-cookie";
       backToHome() {
         this.$router.push('/UserHome');
       },
+      validateDate(dateString) {
+        const eventDate = new Date(dateString);
+        const currentDate = new Date();
+        return eventDate > currentDate;
+      },
       addSuggestionEvent() {
+        if (!this.validateDate(this.date_event)) {
+          alert('Non puoi creare un evento con una data nel passato');
+          return;
+        }
+
         try {
           fetch('http://localhost:3000/addSuggEvent', {
             method: 'POST',
@@ -74,9 +84,17 @@ import Cookie from "js-cookie";
             }),
           }).then(res => {
             if (res.status === 200) {
+              // Reset all fields
               this.name_event = '';
+              this.location_event = '';
               this.date_event = '';
               this.description_event = '';
+              this.img_event = '';
+              this.guests_event = '';
+              this.tagInput = '';
+              this.selectedTags = [];
+              this.showAutocomplete = false;
+
               alert('Evento suggerito creato');
             } else {
               const errorResponse = res.json();
@@ -84,8 +102,8 @@ import Cookie from "js-cookie";
             }
           });
         } catch (error) {
-            alert(error.message);
-          }
+          alert(error.message);
+        }
       }
     }
   };
