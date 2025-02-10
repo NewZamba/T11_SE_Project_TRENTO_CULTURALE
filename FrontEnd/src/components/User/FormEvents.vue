@@ -1,5 +1,6 @@
 <script>
 import Cookie from "js-cookie";
+import { EventBus } from '../../eventBus.js';
 
 
 export default {
@@ -15,6 +16,9 @@ export default {
   created() {
     // Gli eventi vengono passati come query parameter (adatta in base alle tue esigenze)
     this.events = this.$route.query.events;
+    if(this.events.length === 0){
+      this.showModal();
+    }
   },
   methods: {
     toggleMenu(toggleId) {
@@ -91,6 +95,12 @@ export default {
       } catch (err) {
         alert(`Errore: ${err.message}`);
       }
+    },
+    showModal() {
+      EventBus.$emit('open-global-modal', {
+        title: '⚠️Attenzione⚠️',
+        message: 'Non sono presenti eventi da recensire',
+      });
     }
   }
 };
