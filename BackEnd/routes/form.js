@@ -5,7 +5,6 @@ const Prenotations = require('../models/Prenotations');
 const mongoose = require('mongoose');
 
 router.post('/', async (req, res) => {
-
     try {
         const { id_user, id_event, name_event, feedback,rating } = req.body;
 
