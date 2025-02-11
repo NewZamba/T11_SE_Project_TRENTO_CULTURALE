@@ -3,7 +3,7 @@ const router = express.Router();
 const User = require("../models/User");
 
 /* GET users listing. */
-router.get('/', async function (req, res, next) {
+router.get('/get', async function (req, res, next) {
 
   const lstUser = await User.find();
   if (lstUser) {
@@ -14,7 +14,7 @@ router.get('/', async function (req, res, next) {
 });
 
 /* GET users listing, only public data */
-router.get('/public-for-mod', async function (req, res, next) {
+router.get('/public_for_mod', async function (req, res, next) {
   try {
     const lstUser = await User.find().select('name_user surname_user age_user email_user ban_until_date _id');
     if (lstUser.length > 0) {
@@ -69,5 +69,17 @@ router.patch('/unsuspend', async function (req, res, next) {
   }
 });
 
+/* GET users listing. */
+router.put('/add', function(req, res, next)
+{
+  try {
+    const user = new User(req.body);
+    user.save();
+  }catch(err)
+  {
+    return res.status(401).json({message: err.message});
+  }
+  return res.status(200).json({message: "Utente aggiunto con sucesso"});
+})
 
 module.exports = router;
