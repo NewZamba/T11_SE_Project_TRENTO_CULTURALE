@@ -1,5 +1,5 @@
 <script>
-import {EventBus} from "../../eventBus.js";
+import { EventBus } from "../../eventBus.js";
 
 export default {
   name: 'ApproveEvent',
@@ -22,6 +22,7 @@ export default {
     },
     async fetchSuggEvents() {
       try {
+        // Recupera la lista degli eventi suggeriti
         const response = await fetch('http://localhost:3000/suggEvents', {
           method: 'GET',
           headers: {
@@ -33,7 +34,46 @@ export default {
           throw new Error('Error fetching events');
         }
 
-        this.events = await response.json();
+        // Ottieni gli eventi dal body della risposta
+        let events = await response.json();
+        console.log(events);
+
+        // Per ogni evento, recupera le valutazioni e calcola il voto medio
+        events = await Promise.all(events.map(async (event) => {
+          try {
+            const evalResponse = await fetch(`http://localhost:3000/getEvaluation/`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ id_event: event._id })
+            });
+
+            if (evalResponse.ok) {
+              const evaluations = await evalResponse.json();
+              if (evaluations.length > 0) {
+                // Somma tutti i rating e calcola la media
+                const total = evaluations.reduce((acc, cur) => acc + cur.rating, 0);
+                event.averageRating = total / evaluations.length;
+              } else {
+                // Se non ci sono valutazioni, imposto a 0 il voto medio
+                event.averageRating = 0;
+              }
+            } else {
+              event.averageRating = 0;
+            }
+          } catch (error) {
+            // In caso di errore nella fetch delle valutazioni, assegno 0 come voto medio
+            event.averageRating = 0;
+          }
+          return event;
+        }));
+
+        // Ordina gli eventi in base al voto medio (dal più alto al più basso)
+        events.sort((a, b) => b.averageRating - a.averageRating);
+
+        // Aggiorna la variabile events del componente
+        this.events = events;
       } catch (err) {
         this.showModal(err.message);
       }
@@ -52,7 +92,7 @@ export default {
     async approveEvent(event) {
       try {
         if (!this.location) {
-          alert("Please enter a location for the event");
+          this.showModal("Please enter a location for the event");
           return;
         }
 
@@ -72,10 +112,10 @@ export default {
         }
 
         alert('Event approved successfully!');
-        // Remove the event from the list and close the collapse
+        // Rimuove l'evento dalla lista e chiude il collapse
         this.events = this.events.filter(e => e._id !== event._id);
         this.openEvents = this.openEvents.filter(id => id !== event._id);
-        // Reset location
+        // Reset della location
         this.location = '';
       } catch (err) {
         this.showModal(err.message);
@@ -90,7 +130,8 @@ export default {
 
 <template>
   <div class="background">
-    <img src="https://images.pexels.com/photos/571169/pexels-photo-571169.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" />
+    <img
+        src="https://images.pexels.com/photos/571169/pexels-photo-571169.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"/>
 
     <div class="container">
       <nav class="navbar">
@@ -102,7 +143,7 @@ export default {
         >
           <div class="ec2">
             <b-button variant="link" @click="toggleMenu(event._id)">
-              <span>{{ event.name_event }}</span>
+              <span>{{ event.name_event }} (Voto medio: {{ event.averageRating.toFixed(2) }})</span>
             </b-button>
           </div>
 
