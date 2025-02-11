@@ -10,10 +10,8 @@ const cors = require('cors');
 const passport = require("passport");
 
 //import file di api
-const indexRouter = require('./routes/index');
 const addUser = require('./routes/addUser');
 const addEvent = require('./routes/addEvent');
-const addFavorite = require('./routes/addFavorite');
 const users = require('./routes/users');
 const events = require('./routes/events');
 const verificaUserType = require('./routes/verificaUserType');
@@ -77,10 +75,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
 app.use('/addUser',addUser);
 app.use('/addEvent',addEvent);
-app.use('/addFavorite',addFavorite);
 app.use('/users',users);
 app.use('/events',events);
 app.use('/addBooking',addBooking);
