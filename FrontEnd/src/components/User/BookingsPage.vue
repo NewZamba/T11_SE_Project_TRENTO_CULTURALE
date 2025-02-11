@@ -36,10 +36,22 @@
           title: '⚠️Attenzione⚠️',
           message: 'Non sono presenti prenotazioni',
         });
+      },
+      deleteBooking(id) {
+        fetch(`http://localhost:3001/addBooking?_id=${id}`, {
+          method: 'DELETE'
+        }).then(res => {
+          if (!res.ok) {
+            alert('Errore durante la cancellazione');
+            return;
+          }
+
+          this.bookings = this.bookings.filter(event => event._id !== id);
+        }).catch(err => {
+          alert('Errore di rete!');
+        });
       }
     },
-
-
   };
 
 </script>
@@ -60,6 +72,10 @@
             <label @click="toggleMenu(event._id)">
               <span>{{ event.name_event }}</span>
             </label>
+
+            <button @click="deleteBooking(event._id)">
+              Delete Booking
+            </button>
           </div>
 
           <ul class="slide" v-show="isEventOpen(event._id)">
@@ -166,7 +182,7 @@
     width: 100%;
     margin: 0;
     align-items: center;
-    justify-items: flex-start;
+    justify-content: space-between;
     border: 2px solid rgba(255, 245, 238);
   }
 
@@ -216,6 +232,7 @@
     padding: 10px;
     box-shadow: 0 0 20px rgba(115, 99, 238, 0.2);
     transition: 0.4s;
+    border: 1px solid rgba(104, 85, 224, 1);
   }
 
   .back_btn {
