@@ -87,7 +87,6 @@ import CommentSection from "../Comment/CommentSection.vue";
 </script>
 
 <template>
-
   <div class="background">
     <div class="container">
       <div class="imgEvent">
@@ -112,6 +111,9 @@ import CommentSection from "../Comment/CommentSection.vue";
         </div>
 
         <div class="description">
+          <header class="headerEP">
+            <button class="back_btn" @click="backToHome">×</button>
+          </header>
           <DESCRIPTION />
 
           <hr class="hr_desc"/>
@@ -120,17 +122,12 @@ import CommentSection from "../Comment/CommentSection.vue";
             <button class="subscribe_btn" @click="subscribe">
               Subscribe
             </button>
-
-            <button class="back_btn" @click="backToHome">
-              <b-icon icon="arrow-left"/>
-            </button>
           </div>
         </div>
       </div>
       <CommentSection :id_event="id_event"/>
     </div>
   </div>
-
 </template>
 
 <style scoped>
@@ -267,18 +264,42 @@ import CommentSection from "../Comment/CommentSection.vue";
     transition: 0.4s;
   }
 
+  .headerEP {
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px;
+    width: 100%;
+  }
+
   .back_btn {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    border: 1px solid rgba(104, 85, 224, 1);
-    background-color: rgba(104, 85, 224, 1);
-    color: rgb(255, 245, 238);
-    font-size: xx-large;
-    font-family: 'Roboto Light';
     cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-    transition: transform 0.2s;
+    border: none;
+    background: rgba(104, 85, 224, 1);
+    font-size: 1.5em;
+    color: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
+    position: relative;
+    margin-right: 10px;
+  }
+
+  .back_btn:hover {
+    transform: scale(1.3);
+  }
+
+  .description {
+    display: flex;
+    flex: 2;
+    flex-direction: column;
+    background-color: rgb(255, 245, 238);
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+    position: relative; /* Added this */
   }
 
   .subscribe_btn {
@@ -293,15 +314,6 @@ import CommentSection from "../Comment/CommentSection.vue";
     cursor: pointer;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     transition: transform 0.2s;
-  }
-
-  .back_btn:hover, .subscribe_btn:hover {
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1),
-                0px -4px 6px rgba(0, 0, 0, 0.1),
-                4px 0px 6px rgba(0, 0, 0, 0.1),
-                -4px 0px 6px rgba(0, 0, 0, 0.1);
-    background-color: rgba(104, 85, 224, 1);
-    transform: scale(1.1);
   }
 
 </style>

@@ -50,10 +50,8 @@
     <img src="https://images.pexels.com/photos/571169/pexels-photo-571169.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" />
 
     <div class="container">
-      <header>
-        <button class="backBtn" @click="backToHome">
-          <b-icon icon="arrow-left" />
-        </button>
+      <header class="headerEP">
+        <button class="back_btn" @click="backToHome">×</button>
       </header>
 
       <nav class="navbar">
@@ -220,23 +218,23 @@
     transition: 0.4s;
   }
 
-  .backBtn {
-    width: 40px;
-    height: 40px;
+  .back_btn {
+    cursor: pointer;
+    border: none;
+    background: rgba(104, 85, 224, 1);
+    font-size: 1.5em;
+    color: white;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
-    border: solid 1px rgba(104, 85, 224, 1);
-    background-color: rgba(104, 85, 224, 1);
-    color: whitesmoke;
-    font-family: "Roboto Light";
-    font-size: 1.2em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
   }
 
-  button:hover {
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1),
-    0px -4px 6px rgba(0, 0, 0, 0.1),
-    4px 0px 6px rgba(0, 0, 0, 0.1),
-    -4px 0px 6px rgba(0, 0, 0, 0.1);
-    transform: scale(1.1);
+  .back_btn:hover {
+    transform: scale(1.3);
   }
 
 </style>

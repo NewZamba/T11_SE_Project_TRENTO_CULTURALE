@@ -70,7 +70,7 @@ export default {
       },
       addSuggestionEvent() {
         if (!this.validateDate(this.date_event)) {
-          alert('Non puoi creare un evento con una data nel passato');
+          this.showModal('Non puoi creare un evento con una data nel passato');
           return;
         }
 
@@ -120,7 +120,7 @@ export default {
 <template>
   <div class="event-page">
     <header class="headerEP">
-      <button class="back_btn" @click="backToHome">X</button>
+      <button class="back_btn" @click="backToHome">×</button>
     </header>
     <div class="event">
       <input type="text" v-model="name_event" placeholder="Inserisci il nome dell'evento">

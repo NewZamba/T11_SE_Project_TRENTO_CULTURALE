@@ -111,10 +111,8 @@ export default {
     <img src="https://images.pexels.com/photos/571169/pexels-photo-571169.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" />
 
     <div class="container">
-      <header>
-        <b-button variant="outline-primary" class="back_btn" @click="backToHome">
-          <b-icon icon="arrow-left" />
-        </b-button>
+      <header class="headerEP">
+        <button class="back_btn" @click="backToHome">×</button>
       </header>
 
       <nav class="navbar">
@@ -276,28 +274,22 @@ span {
 }
 
 .back_btn {
-  display: flex;
-  justify-content: center;
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
-  border: 1px solid rgba(104, 85, 224, 1);
-  background-color: rgba(104, 85, 224, 1);
-  color: rgb(255, 245, 238);
-  font-size: xx-large;
-  font-family: 'Roboto Light', sans-serif;
   cursor: pointer;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-  transition: transform 0.2s;
+  border: none;
+  background: rgba(104, 85, 224, 1);
+  font-size: 1.5em;
+  color: white;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.3s;
 }
 
 .back_btn:hover {
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1),
-  0px -4px 6px rgba(0, 0, 0, 0.1),
-  4px 0px 6px rgba(0, 0, 0, 0.1),
-  -4px 0px 6px rgba(0, 0, 0, 0.1);
-  background-color: rgba(104, 85, 224, 1);
-  transform: scale(1.1);
+  transform: scale(1.3);
 }
 
 .voteBtn:hover {
