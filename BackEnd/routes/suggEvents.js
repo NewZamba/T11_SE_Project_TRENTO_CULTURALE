@@ -14,4 +14,18 @@ router.get('/', async function (req, res, next) {
     }
 });
 
+router.delete('/:id', async function (req, res) {
+    try {
+        const deletedEvent = await suggEvents.findByIdAndDelete(req.params.id);
+
+        if (!deletedEvent) {
+            return res.status(404).json({ message: 'Event not found' });
+        }
+
+        return res.status(200).json({ message: 'Event deleted successfully' });
+    } catch (error) {
+        return res.status(500).json({ message: 'Error deleting event', error: error.message });
+    }
+});
+
 module.exports = router;
