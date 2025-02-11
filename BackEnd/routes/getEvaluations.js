@@ -2,11 +2,10 @@ const express = require('express');
 const router = express.Router();
 const Evaluations = require('../models/Evaluations'); // Importa il modello Evaluations
 
-// Endpoint per aggiungere una valutazione
+// Endpoint per ricevere una valutazione
 router.post('/', async (req, res) => {
     try {
         const { id_event, id_user} = req.body;
-
         // Controllo dei parametri
         if (!id_event) {
             return res.status(400).json({ message: 'Tutti i campi sono obbligatori.' });
