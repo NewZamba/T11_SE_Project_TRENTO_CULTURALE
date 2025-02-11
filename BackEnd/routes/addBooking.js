@@ -57,19 +57,23 @@ router.post('/', async (req, res) => {
 });
 
 router.delete('/', async (req, res) => {
-
     try {
-        const { _id } = req.params;
+        const { _id } = req.query;  // Changed from req.params to req.query
         if (!_id) {
             return res.status(400).json({ message: 'Parametro id mancante' });
         }
 
-        await Prenotations.deleteOne({ _id: _id });
+        const result = await Prenotations.deleteOne({ _id: _id });
+
+        if (result.deletedCount === 0) {
+            return res.status(404).json({ message: 'Prenotazione non trovata' });
+        }
 
         return res.status(200).json({ message: 'Prenotazione eliminata con successo' });
     } catch (err) {
+        console.error(err);
         return res.status(500).json({ message: 'Errore del server.' });
     }
-})
+});
 
 module.exports = router;
