@@ -1,7 +1,0 @@
-addForm                                     -> Form
-addBooking + prenotations                   -> Bookings
-addComment + deleteComment + getComment     -> Comment
-addEvaluation + getEvaluations              -> Evaluation
-addEvent + events                           -> Event
-addSuggEvent + suggEvents                   -> SuggEvent
-addTag + tags                               -> Tag

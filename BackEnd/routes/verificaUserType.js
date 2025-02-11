@@ -9,7 +9,6 @@ const User = require('../models/User');
 */
 
 router.get('/is_logged', (req, res) => {
-    // console.log(req.user);
     return req.user ? res.send(req.user) : res.sendStatus(401)
 });
 

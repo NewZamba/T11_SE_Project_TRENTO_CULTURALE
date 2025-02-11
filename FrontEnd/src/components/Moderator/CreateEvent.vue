@@ -24,7 +24,7 @@ export default {
   methods: {
     async fetchTags() {
       try {
-        const response = await fetch('http://localhost:3000/tags');
+        const response = await fetch('http://localhost:3000/tags/get');
         this.allTags = await response.json();
       } catch (error) {
         console.error('Error fetching tags:', error);
@@ -55,7 +55,7 @@ export default {
     },
     async createEvent() {
       try {
-        const response = await fetch('http://localhost:3000/addEvent', {
+        const response = await fetch('http://localhost:3000/events/add', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

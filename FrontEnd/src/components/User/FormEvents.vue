@@ -42,7 +42,7 @@ export default {
     sendForm(event) {
       try {
         // Prima eseguiamo la richiesta POST per inviare feedback e rating
-        fetch('http://localhost:3000/addForm', {
+        fetch('http://localhost:3000/form', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -64,7 +64,7 @@ export default {
             })
             .then(() => {
               // Eseguiamo una PUT per aggiornare l’evento
-              return fetch('http://localhost:3000/addForm', {
+              return fetch('http://localhost:3000/form', {
                 method: 'PUT',
                 headers: {
                   'Content-Type': 'application/json',

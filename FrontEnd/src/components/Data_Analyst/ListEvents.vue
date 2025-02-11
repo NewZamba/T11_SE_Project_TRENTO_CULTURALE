@@ -30,7 +30,7 @@
       },
       async fetchForm(id) {
         try {
-          const response = await fetch(`http://localhost:3000/addForm?id_event=${id}`, {
+          const response = await fetch(`http://localhost:3000/form?id_event=${id}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json'

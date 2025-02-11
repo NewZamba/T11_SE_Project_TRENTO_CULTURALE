@@ -22,7 +22,7 @@ export default {
   methods: {
     async fetchUsers() {
       try {
-        const response = await fetch('http://localhost:3000/users/public-for-mod');
+        const response = await fetch('http://localhost:3000/users/public_for_mod');
         const allUsers = await response.json();
 
         this.suspendedUsers = allUsers.filter(user =>

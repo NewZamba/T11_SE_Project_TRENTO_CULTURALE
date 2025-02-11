@@ -66,7 +66,7 @@ import { EventBus } from '../../eventBus.js';
       },
       async fetchEvents() {
         try {
-          const response = await fetch('http://localhost:3000/events', {
+          const response = await fetch('http://localhost:3000/events/get', {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -92,7 +92,7 @@ import { EventBus } from '../../eventBus.js';
         }
       },
       fetchPrenotations() {
-        fetch('http://localhost:3000/prenotations', {
+        fetch('http://localhost:3000/bookings/get', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -110,7 +110,7 @@ import { EventBus } from '../../eventBus.js';
         });
       },
       fetchSuggEvents() {
-        fetch('http://localhost:3000/suggEvents', {
+        fetch('http://localhost:3000/suggEvents/get', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -153,7 +153,7 @@ import { EventBus } from '../../eventBus.js';
       },
       async countPrenotations(id, i) {
         try {
-          const response = await fetch(`http://localhost:3000/addBooking?id=${id}`, {
+          const response = await fetch(`http://localhost:3000/bookings?id=${id}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',

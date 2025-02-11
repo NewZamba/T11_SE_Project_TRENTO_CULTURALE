@@ -69,7 +69,7 @@ export default {
     async addRating(eventId, newRating) {
       console.log(eventId, this.id_user,newRating);
       try {
-        const response = await fetch("http://localhost:3000/addEvaluation", {
+        const response = await fetch("http://localhost:3000/evaluation/add", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -97,7 +97,7 @@ export default {
     async getAverageRating(eventId) {
       try {
         // Non passiamo id_user per far sì che la API restituisca tutte le valutazioni
-        const response = await fetch("http://localhost:3000/getEvaluation", {
+        const response = await fetch("http://localhost:3000/evaluation/get", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -124,7 +124,7 @@ export default {
     // Funzione per ottenere la valutazione specifica dell'utente per un determinato evento
     async getUserEvaluation(eventId) {
       try {
-        const response = await fetch("http://localhost:3000/getEvaluation", {
+        const response = await fetch("http://localhost:3000/evaluation/get", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
