@@ -121,9 +121,30 @@ export default {
         this.showModal(err.message);
       }
     },
+    async deleteEvent(event) {
+      try {
+        const response = await fetch(`http://localhost:3000/suggEvents/${event._id}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error('Error deleting event');
+        }
+
+        alert('Event deleted successfully!');
+        // Remove the event from the list and close the collapse
+        this.events = this.events.filter(e => e._id !== event._id);
+        this.openEvents = this.openEvents.filter(id => id !== event._id);
+      } catch (err) {
+        this.showModal(err.message);
+      }
+    },
     backToHome() {
       this.$router.push('/ModeratorHome');
-    }
+    },
   }
 };
 </script>
@@ -161,9 +182,14 @@ export default {
                 <p><strong>Date:</strong> {{ new Date(event.date_event).toLocaleDateString() }}</p>
                 <p><strong>Description:</strong> {{ event.description_event }}</p>
               </div>
-              <b-button type="submit" class="approveBtn">
-                Approve Event
-              </b-button>
+              <div class="button-group">
+                <b-button type="submit" class="approveBtn">
+                  Approve Event
+                </b-button>
+                <b-button @click="deleteEvent(event)" class="deleteBtn" type="button">
+                  Delete Event
+                </b-button>
+              </div>
             </b-form>
           </b-collapse>
         </div>
@@ -216,12 +242,6 @@ background {
   padding: 10px;
   background-color: rgba(104, 85, 224, 0.1);
   border-radius: 5px;
-}
-
-.event-list {
-  width: 100%;
-  height: 100%;
-  padding: 20px;
 }
 
 .navbar {
@@ -287,15 +307,37 @@ hr {
   background-color: rgb(104, 85, 224);
 }
 
-.approveBtn {
-  height: 10%;
-  color: rgb(104, 85, 224);
-  background-color: rgba(255, 255, 255, 1);
-  border: 1px solid rgba(104, 85, 224, 1);
+.button-group {
+  display: flex;
+  gap: 10px;
   margin-top: 10px;
 }
 
+.approveBtn {
+  height: 10%;
+  color: white;
+  background-color: #28a745;
+  border: 1px solid #28a745;
+}
+
 .approveBtn:hover {
+  background-color: #28a745;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1),
+  0px -4px 6px rgba(0, 0, 0, 0.1),
+  4px 0px 6px rgba(0, 0, 0, 0.1),
+  -4px 0px 6px rgba(0, 0, 0, 0.1);
+  transform: scale(1.1);
+}
+
+.deleteBtn {
+  height: 10%;
+  color: white;
+  background-color: #dc3545;
+  border: 1px solid #dc3545;
+}
+
+.deleteBtn:hover {
+  background-color: #dc3545;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1),
   0px -4px 6px rgba(0, 0, 0, 0.1),
   4px 0px 6px rgba(0, 0, 0, 0.1),
