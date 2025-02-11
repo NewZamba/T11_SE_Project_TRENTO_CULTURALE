@@ -37,7 +37,6 @@
               age_user: this.age,
               email_user: this.email,
               pass_user: this.pass1,
-              phone_user: this.phone,
               type_user: tipo,
               ban_until_date: null,
             }),
