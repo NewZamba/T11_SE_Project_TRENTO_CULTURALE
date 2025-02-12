@@ -5,9 +5,7 @@
     "start-vite": "cd ./FrontEnd && vite"
   },
   "dependencies": {
-    "chart.js": "^4.4.7",
-    "concurrently": "^8.0.0",
     "vite": "^6.0.2",
-    "dotenv": "^16.4.5"
+    "concurrently": "^8.0.0"
   }
 }

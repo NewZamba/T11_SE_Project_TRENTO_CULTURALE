@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Prenotation = require("../models/Prenotations");
-const {ObjectId} = require("mongodb");
+const {ObjectId} = require("mongoose");
 
 router.get('/get/:id', async function (req, res, next) {
 
