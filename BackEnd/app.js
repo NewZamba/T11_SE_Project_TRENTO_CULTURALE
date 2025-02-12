@@ -31,6 +31,7 @@ if (process.env.DB_USERNAME && process.env.DB_PASSWORD) {
 mongoose.connect(url);
 
 const app = express();
+expressOasGenerator.handleResponses(app, {});
 
 // Crea una sessione (biscotti temporanei) parte 1
 app.use(session({
@@ -60,7 +61,6 @@ app.use(granthai({
     docTitle: "Api3", // optional
     baseUrl: "localhost:3000"  // required
 }))
-
 app.use(cors(corsOptions))
 app.use(logger('dev'));
 app.use(express.json());
@@ -127,5 +127,4 @@ app.use(function(err, req, res, next) {
     res.status(err.status || 500);
     res.render('error');
 });
-
 module.exports = app;
