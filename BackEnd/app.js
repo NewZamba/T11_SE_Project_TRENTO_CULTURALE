@@ -30,7 +30,6 @@ if (process.env.DB_USERNAME && process.env.DB_PASSWORD) {
 }
 mongoose.connect(url);
 
-
 const app = express();
 
 // Crea una sessione (biscotti temporanei) parte 1
