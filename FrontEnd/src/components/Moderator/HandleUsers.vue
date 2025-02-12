@@ -62,6 +62,31 @@ export default {
         this.showModal(error);
       }
     },
+    async banUser(user) {
+      try {
+        const aLot = 99 * 365 * 24 * 60 * 60 * 1000;
+        const suspensionDate = new Date(Date.now() + aLot).toISOString();
+        const response = await fetch('http://localhost:3000/users/suspend', {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            ban_until_date: suspensionDate,
+            user_id: user._id,
+          }),
+        });
+
+        if (!response.ok) {
+          const errorResponse = await response.json();
+          throw new Error(errorResponse.message || 'Suspension failed');
+        }
+
+        await this.fetchUsers();
+      } catch (error) {
+        this.showModal(error);
+      }
+    },
     async unsuspendUser(user_id) {
       try {
         const response = await fetch('http://localhost:3000/users/unsuspend', {
@@ -93,6 +118,13 @@ export default {
     formatDate(date) {
       return date ? new Date(date).toLocaleDateString() : 'N/A';
     },
+    isUserBanned(user) {
+      if (!user.ban_until_date) return false;
+      const banDate = new Date(user.ban_until_date);
+      const now = new Date();
+      const tenYearsInMs = 10 * 365 * 24 * 60 * 60 * 1000;
+      return (banDate.getTime() - now.getTime()) > tenYearsInMs;
+    },
     showModal(mess) {
       EventBus.$emit('open-global-modal', {
         title: '⚠️Attenzione⚠️',
@@ -122,7 +154,12 @@ export default {
               <span>{{ user.email_user }}</span>
               <span class="suspension-time">Suspended until: {{ formatDate(user.ban_until_date) }}</span>
             </div>
-            <button @click="unsuspendUser(user._id)" class="unsuspend-btn">Unsuspend</button>
+            <button
+                @click="unsuspendUser(user._id)"
+                :class="isUserBanned(user) ? 'unban-btn' : 'unsuspend-btn'"
+            >
+              {{ isUserBanned(user) ? 'Unban' : 'Unsuspend' }}
+            </button>
           </li>
         </ul>
       </div>
@@ -141,6 +178,7 @@ export default {
             <td>{{ user.email_user }}</td>
             <td>
               <button @click="suspendUser(user)" class="suspend-btn">Suspend</button>
+              <button @click="banUser(user)" class="ban-btn">Ban</button>
               <button @click="viewUserDetails(user)" class="details-btn">Details</button>
             </td>
           </tr>
@@ -204,7 +242,7 @@ export default {
   margin-left: 10px;
 }
 
-.unsuspend-btn, .suspend-btn, .details-btn {
+.unsuspend-btn, .unban-btn, .suspend-btn, .ban-btn, .details-btn {
   padding: 5px 10px;
   margin: 0 5px;
 }
