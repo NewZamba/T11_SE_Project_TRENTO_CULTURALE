@@ -38,7 +38,7 @@ import { EventBus } from '../../eventBus.js';
     methods: {
       async verifyUserType() {
         try {
-          const response = await fetch('http://https://t11-se-project-trento-culturale.onrender.com//verificaUserType/is_data_analyst', {
+          const response = await fetch(process.env.DEPLOY_API + '/verificaUserType/is_data_analyst', {
             method: 'GET',
             credentials: 'include',
           });
