@@ -38,7 +38,7 @@
         });
       },
       deleteBooking(id) {
-        fetch(`http://https://t11-se-project-trento-culturale.onrender.com//bookings?_id=${id}`, {
+        fetch(process.env.DEPLOY_API + '/bookings?_id=${id}', {
           method: 'DELETE'
         }).then(res => {
           if (!res.ok) {

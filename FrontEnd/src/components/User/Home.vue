@@ -116,7 +116,7 @@ export default {
     },
     fetchEvents() {
       try {
-        fetch('http://https://t11-se-project-trento-culturale.onrender.com//events/not_expired', {
+        fetch(process.env.DEPLOY_API + '/events/not_expired', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'
@@ -138,7 +138,7 @@ export default {
     },
     async fetchSuggEvents() {
       try {
-        fetch('http://https://t11-se-project-trento-culturale.onrender.com//suggEvents/get', {
+        fetch(process.env.DEPLOY_API + '/suggEvents/get', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'
@@ -186,7 +186,7 @@ export default {
       switch (x) {
         case 1:
           try {
-            const response = await fetch(`http://https://t11-se-project-trento-culturale.onrender.com//bookings/get/${Cookie.get("id_user")}` );
+            const response = await fetch(process.env.DEPLOY_API + '/bookings/get/${Cookie.get("id_user")}' );
             if (!response.ok) {
               return [];
             }
@@ -202,7 +202,7 @@ export default {
         break;
         case 2:
           try {
-            const response = await fetch(`http://https://t11-se-project-trento-culturale.onrender.com//bookings/get/${Cookie.get("id_user")}` );
+            const response = await fetch(process.env.DEPLOY_API + '/bookings/get/${Cookie.get("id_user")}' );
             if (!response.ok) {
               return [];
             }

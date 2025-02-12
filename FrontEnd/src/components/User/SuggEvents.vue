@@ -97,7 +97,7 @@ export default {
     async getAverageRating(eventId) {
       try {
         // Non passiamo id_user per far sì che la API restituisca tutte le valutazioni
-        const response = await fetch("https://process.env.DEPLOY_API + \'//evaluation/get", {
+        const response = await fetch(process.env.DEPLOY_API + '/evaluation/get', {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -124,7 +124,7 @@ export default {
     // Funzione per ottenere la valutazione specifica dell'utente per un determinato evento
     async getUserEvaluation(eventId) {
       try {
-        const response = await fetch("https://process.env.DEPLOY_API + \'//evaluation/get", {
+        const response = await fetch(process.env.DEPLOY_API + '/evaluation/get', {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

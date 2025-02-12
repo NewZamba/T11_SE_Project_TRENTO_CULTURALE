@@ -89,7 +89,7 @@ import {EventBus} from "../../eventBus.js";
 
         <BTN_SIGN_UP />
 
-        <form action="http://https://t11-se-project-trento-culturale.onrender.com//auth/google" method="get" class="logGoogle">
+        <form :action="`${process.env.DEPLOY_API}/auth/google`" method="get" class="logGoogle">
           <input type="submit" value="G">
         </form>
       </div>
