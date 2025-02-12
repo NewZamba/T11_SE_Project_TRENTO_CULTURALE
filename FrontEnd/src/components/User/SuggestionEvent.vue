@@ -75,7 +75,7 @@ export default {
         }
 
         try {
-          fetch('http://https://t11-se-project-trento-culturale.onrender.com//suggEvents/add', {
+          fetch(process.env.DEPLOY_API + '/suggEvents/add', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'

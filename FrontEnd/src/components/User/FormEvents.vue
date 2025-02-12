@@ -64,7 +64,7 @@ export default {
             })
             .then(() => {
               // Eseguiamo una PUT per aggiornare l’evento
-              return fetch('http://https://t11-se-project-trento-culturale.onrender.com//form', {
+              return fetch(process.env.DEPLOY_API + '/form', {
                 method: 'PUT',
                 headers: {
                   'Content-Type': 'application/json',

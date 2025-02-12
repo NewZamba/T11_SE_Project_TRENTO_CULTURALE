@@ -26,7 +26,7 @@
             tipo = 1;
           }
 
-          fetch('http://https://t11-se-project-trento-culturale.onrender.com//auth/signUp', {
+          fetch(process.env.DEPLOY_API + '/auth/signUp', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
