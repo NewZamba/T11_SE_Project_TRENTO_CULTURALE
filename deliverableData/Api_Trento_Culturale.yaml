@@ -1,0 +1,1028 @@
+openapi: "3.0.0"
+info:
+  title: "Api3 Trento Culturale"
+  version: "1.0.0"
+  description: "API documentation"
+
+servers:
+  - url: "localhost:3000"
+    description: "Api3"
+
+paths:
+  /auth/login:
+    post:
+      summary: "User login"
+      description: "Authenticate a user with email and password"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                email_user:
+                  type: "string"
+                  description: "User's email address"
+                pass_user:
+                  type: "string"
+                  description: "User's password"
+              required: ["email_user", "pass_user"]
+      responses:
+        200:
+          description: "Successful login"
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  type_user:
+                    type: "number"
+                    description: "User type (1=user, 2=analyst, 3=mod)"
+        401:
+          description: "Authentication failed"
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  message:
+                    type: "string"
+                    description: "Error message"
+  /auth/signUp:
+    post:
+      summary: "User registration"
+      description: "Register a new user account"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                name_user:
+                  type: "string"
+                  description: "User's first name"
+                surname_user:
+                  type: "string"
+                  description: "User's last name"
+                age_user:
+                  type: "string"
+                  description: "User's age"
+                email_user:
+                  type: "string"
+                  description: "User's email address"
+                pass_user:
+                  type: "string"
+                  description: "User's password"
+                type_user:
+                  type: "number"
+                  description: "User type"
+                ban_until_date:
+                  type: "object"
+                  description: "Ban expiration date"
+              required: ["name_user", "surname_user", "email_user", "pass_user"]
+      responses:
+        200:
+          description: "Registration successful"
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  message:
+                    type: "string"
+                    description: "Success message"
+  /auth/google:
+    get:
+      summary: "Google OAuth authentication"
+      description: "Initiate Google OAuth authentication flow"
+      parameters:
+        - name: "scope"
+          in: "query"
+          required: true
+          schema:
+            type: "array"
+            items:
+              type: "string"
+              enum: [ "profile", "email" ]
+      responses:
+        302:
+          description: "Redirect to Google authentication"
+  /auth/google/callback:
+    get:
+      summary: "Google OAuth callback"
+      description: "Handle Google OAuth authentication callback"
+      responses:
+        302:
+          description: "Redirect to frontend with authentication result"
+        500:
+          description: "Authentication error"
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  message:
+                    type: "string"
+  /auth/logout:
+    post:
+      summary: "User logout"
+      description: "Log out the currently authenticated user"
+      responses:
+        200:
+          description: "Logout successful"
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  message:
+                    type: "string"
+        403:
+          description: "No user to logout"
+        500:
+          description: "Logout error"
+  /bookings:
+    get:
+      summary: "Count bookings for event"
+      description: "Get count of bookings for a specific event"
+      parameters:
+        - name: "id"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+          description: "Event ID"
+      responses:
+        200:
+          description: "Booking count retrieved"
+          content:
+            application/json:
+              schema:
+                type: "number"
+        400:
+          description: "Invalid ID parameter"
+        500:
+          description: "Server error"
+    post:
+      summary: "Create booking"
+      description: "Create a new booking for an event"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                id_user:
+                  type: "string"
+                id_event:
+                  type: "string"
+                name_event:
+                  type: "string"
+                date_Prenotation:
+                  type: "string"
+                  format: "date-time"
+                date_event:
+                  type: "string"
+                  format: "date-time"
+                form:
+                  type: "boolean"
+                guests_event:
+                  type: "number"
+      responses:
+        200:
+          description: "Booking created successfully"
+        405:
+          description: "No available spots"
+        409:
+          description: "Booking already exists"
+        500:
+          description: "Server error"
+    delete:
+      summary: "Delete booking"
+      description: "Delete a specific booking"
+      parameters:
+        - name: "_id"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+          description: "Booking ID"
+      responses:
+        200:
+          description: "Booking deleted successfully"
+        400:
+          description: "Missing ID parameter"
+        404:
+          description: "Booking not found"
+        500:
+          description: "Server error"
+  /bookings/get:
+    get:
+      summary: "Get all bookings"
+      description: "Retrieve all event bookings in the system"
+      responses:
+        200:
+          description: "List of all bookings retrieved successfully"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  type: "object"
+                  properties:
+                    id_user:
+                      type: "string"
+                      description: "ID of user who made booking"
+                    id_event:
+                      type: "string"
+                      description: "ID of booked event"
+                    name_event:
+                      type: "string"
+                      description: "Name of booked event"
+                    date_Prenotation:
+                      type: "string"
+                      description: "Date booking was made"
+                    form:
+                      type: "boolean"
+                      description: "Whether feedback form is completed"
+  /bookings/get{id}:
+    get:
+      summary: "Count bookings for event"
+      description: "Get count of bookings for a specific event"
+      parameters:
+        - name: "id"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+          description: "Event ID"
+      responses:
+        200:
+          description: "Booking count retrieved"
+          content:
+            application/json:
+              schema:
+                type: "number"
+        400:
+          description: "Invalid ID parameter"
+        500:
+          description: "Server error"
+  /comments/add:
+    post:
+      summary: "Add comment"
+      description: "Add a new comment to an event"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                id_event:
+                  type: "string"
+                id_user:
+                  type: "string"
+                id_Parent:
+                  type: "string"
+                  nullable: true
+                text:
+                  type: "string"
+                date:
+                  type: "string"
+                  format: "date-time"
+                z_index:
+                  type: "number"
+              required: [ "id_event", "id_user", "text", "date", "z_index" ]
+      responses:
+        201:
+          description: "Comment added successfully"
+        400:
+          description: "Invalid input"
+        500:
+          description: "Server error"
+  /comments/get:
+    post:
+      summary: "Get comments"
+      description: "Get all comments for a specific event"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                id:
+                  type: "string"
+                  description: "Event ID"
+      responses:
+        200:
+          description: "Comments retrieved successfully"
+        404:
+          description: "No comments found"
+        500:
+          description: "Server error"
+  /comments/del/{id}:
+    delete:
+      summary: "Delete comment"
+      description: "Delete a comment and all its replies"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+          description: "Comment ID"
+      responses:
+        200:
+          description: "Comment deleted successfully"
+        404:
+          description: "Comment not found"
+        500:
+          description: "Server error"
+  /convertEvent/sug_to_off:
+    post:
+      summary: "Convert suggested event"
+      description: "Convert a suggested event to an official event"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                suggEventId:
+                  type: "string"
+                location_event:
+                  type: "string"
+              required: [ "suggEventId", "location_event" ]
+      responses:
+        200:
+          description: "Event converted successfully"
+        400:
+          description: "Missing parameters"
+        404:
+          description: "Suggested event not found"
+        500:
+          description: "Server error"
+  /evaluations/get:
+    post:
+      summary: "Get evaluations"
+      description: "Get evaluations for an event or specific user-event combination"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                id_event:
+                  type: "string"
+                id_user:
+                  type: "string"
+                  nullable: true
+      responses:
+        200:
+          description: "Evaluations retrieved successfully"
+        400:
+          description: "Missing event ID"
+        500:
+          description: "Server error"
+  /evaluations/add:
+    post:
+      summary: "Add evaluation"
+      description: "Add or update an evaluation for an event"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                id_event:
+                  type: "string"
+                id_user:
+                  type: "string"
+                rating:
+                  type: "number"
+              required: ["id_event", "id_user", "rating"]
+      responses:
+        201:
+          description: "Evaluation added successfully"
+        202:
+          description: "Evaluation updated successfully"
+        400:
+          description: "Missing required fields"
+        500:
+          description: "Server error"
+  /events/add:
+    post:
+      summary: "Add event"
+      description: "Create a new event"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                name_event:
+                  type: "string"
+                location_event:
+                  type: "string"
+                date_event:
+                  type: "string"
+                  format: "date-time"
+                tags_event:
+                  type: "array"
+                  items:
+                    type: "string"
+                description_event:
+                  type: "string"
+                img_event:
+                  type: "string"
+                guests_event:
+                  type: "number"
+              required: ["name_event", "location_event", "date_event", "tags_event", "description_event", "img_event", "guests_event"]
+      responses:
+        200:
+          description: "Event created successfully"
+        400:
+          description: "Missing data"
+        500:
+          description: "Server error"
+  /events/get:
+    get:
+      summary: "Get events"
+      description: "Retrieve list of all events"
+      responses:
+        200:
+          description: "List of events retrieved successfully"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  type: "object"
+  /events/not_expired:
+    get:
+      summary: "Get upcoming events"
+      description: "Retrieve all events that have not yet occurred"
+      responses:
+        200:
+          description: "List of upcoming events retrieved successfully"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  type: "object"
+                  properties:
+                    name_event:
+                      type: "string"
+                      description: "Event name"
+                    location_event:
+                      type: "string"
+                      description: "Event location"
+                    date_event:
+                      type: "string"
+                      description: "Event date"
+                    tags_event:
+                      type: "array"
+                      description: "Event tags"
+                    description_event:
+                      type: "string"
+                      description: "Event description"
+                    img_event:
+                      type: "string"
+                      description: "Event image URL"
+                    guests_event:
+                      type: "number"
+                      description: "Maximum number of guests"
+        404:
+          description: "No upcoming events found"
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  message:
+                    type: "string"
+                    description: "Error message"
+  /form:
+    post:
+      summary: "Submit form"
+      description: "Submit feedback form for an event"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                id_user:
+                  type: "string"
+                id_event:
+                  type: "string"
+                name_event:
+                  type: "string"
+                feedback:
+                  type: "string"
+                rating:
+                  type: "number"
+              required: ["id_user", "id_event", "name_event", "feedback", "rating"]
+      responses:
+        200:
+          description: "Form submitted successfully"
+        400:
+          description: "Missing required fields"
+        500:
+          description: "Server error"
+    put:
+      summary: "Update form status"
+      description: "Update the form completion status for a booking"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                id_event:
+                  type: "string"
+                id_user:
+                  type: "string"
+              required: ["id_event", "id_user"]
+      responses:
+        200:
+          description: "Form status updated successfully"
+        400:
+          description: "Missing required fields"
+        500:
+          description: "Server error"
+    get:
+      summary: "Get form submissions"
+      description: "Get all form submissions for an event"
+      parameters:
+        - name: "id_event"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+          description: "Event ID"
+      responses:
+        200:
+          description: "Form submissions retrieved successfully"
+        400:
+          description: "Invalid event ID"
+        404:
+          description: "No forms found"
+        500:
+          description: "Server error"
+  /suggEvents/add:
+    post:
+      summary: "Add suggested event"
+      description: "Create a new suggested event"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                id_user:
+                  type: "string"
+                name_event:
+                  type: "string"
+                date_event:
+                  type: "string"
+                  format: "date-time"
+                tags_event:
+                  type: "array"
+                  items:
+                    type: "string"
+                description_event:
+                  type: "string"
+                img_event:
+                  type: "string"
+                guests_event:
+                  type: "number"
+              required: ["id_user", "name_event", "date_event", "tags_event", "description_event", "guests_event"]
+      responses:
+        200:
+          description: "Suggested event added successfully"
+        400:
+          description: "Missing parameters"
+        500:
+          description: "Server error"
+  /suggEvents/get/{id}:
+    delete:
+      summary: "Delete suggested event"
+      description: "Delete a specific suggested event"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+          description: "Suggested event ID"
+      responses:
+        200:
+          description: "Suggested event deleted successfully"
+        404:
+          description: "Suggested event not found"
+        500:
+          description: "Server error"
+  /suggEvents/get:
+    get:
+      summary: "Get suggested events"
+      description: "Retrieve list of all suggested events pending approval"
+      responses:
+        200:
+          description: "List of suggested events retrieved successfully"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  type: "object"
+                  properties:
+                    id_user:
+                      type: "string"
+                      description: "ID of user who suggested event"
+                    name_event:
+                      type: "string"
+                      description: "Event name"
+                    date_event:
+                      type: "string"
+                      description: "Proposed event date"
+                    tags_event:
+                      type: "array"
+                      description: "Event tags"
+                    description_event:
+                      type: "string"
+                      description: "Event description"
+                    img_event:
+                      type: "string"
+                      description: "Event image URL"
+                    guests_event:
+                      type: "number"
+                      description: "Maximum number of guests"
+  /tags/get:
+    get:
+      summary: "Get all tags"
+      description: "Retrieve list of all available event tags"
+      responses:
+        200:
+          description: "List of tags retrieved successfully"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  type: "object"
+                  properties:
+                    name_tag:
+                      type: "string"
+                      description: "Tag name"
+                    color_tag:
+                      type: "string"
+                      description: "Tag color code"
+  /tags/add:
+    post:
+      summary: "Add tag"
+      description: "Create a new event tag"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                name_tag:
+                  type: "string"
+                color_tag:
+                  type: "string"
+              required: ["name_tag", "color_tag"]
+      responses:
+        200:
+          description: "Tag added successfully"
+        400:
+          description: "Missing data"
+        500:
+          description: "Server error"
+  /users/get:
+    get:
+      summary: "Get all users"
+      description: "Retrieve all users in the system"
+      responses:
+        200:
+          description: "Users retrieved successfully"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  type: "object"
+                  properties:
+                    _id:
+                      type: "string"
+                    name_user:
+                      type: "string"
+                    surname_user:
+                      type: "string"
+                    age_user:
+                      type: "number"
+                    email_user:
+                      type: "string"
+                    pass_user:
+                      type: "string"
+                    type_user:
+                      type: "number"
+                    ban_until_date:
+                      type: "string"
+                      format: "date-time"
+                      nullable: true
+        404:
+          description: "No users found"
+  /users/public_for_mod:
+    get:
+      summary: "Get users for moderation"
+      description: "Retrieve public user information for moderation purposes"
+      responses:
+        200:
+          description: "List of users retrieved successfully"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  type: "object"
+                  properties:
+                    _id:
+                      type: "string"
+                      description: "User ID"
+                    name_user:
+                      type: "string"
+                      description: "User's first name"
+                    surname_user:
+                      type: "string"
+                      description: "User's last name"
+                    age_user:
+                      type: "number"
+                      description: "User's age"
+                    email_user:
+                      type: "string"
+                      description: "User's email"
+                    ban_until_date:
+                      type: "string"
+                      description: "Ban expiration date if user is banned"
+        500:
+          description: "Server error"
+  /users/suspend:
+    patch:
+      summary: "Suspend user"
+      description: "Temporarily suspend a user's account until specified date"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                ban_until_date:
+                  type: "string"
+                  description: "Date until which user should be suspended"
+                  format: "date-time"
+                user_id:
+                  type: "string"
+                  description: "ID of user to suspend"
+              required: ["ban_until_date", "user_id"]
+      responses:
+        200:
+          description: "User suspended successfully"
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  message:
+                    type: "string"
+                    description: "Success message"
+                  user:
+                    type: "object"
+                    description: "Updated user object"
+                    properties:
+                      _id:
+                        type: "string"
+                      name_user:
+                        type: "string"
+                      surname_user:
+                        type: "string"
+                      age_user:
+                        type: "number"
+                      email_user:
+                        type: "string"
+                      pass_user:
+                        type: "string"
+                      type_user:
+                        type: "number"
+                      ban_until_date:
+                        type: "string"
+                        format: "date-time"
+        404:
+          description: "User not found"
+        500:
+          description: "Server error"
+  /users/unsuspend:
+    patch:
+      summary: "Remove user suspension"
+      description: "Remove suspension from a user's account"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                user_id:
+                  type: "string"
+                  description: "ID of user to unsuspend"
+              required: ["user_id"]
+      responses:
+        200:
+          description: "User unsuspended successfully"
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  message:
+                    type: "string"
+                    description: "Success message"
+                  user:
+                    type: "object"
+                    description: "Updated user object"
+                    properties:
+                      _id:
+                        type: "string"
+                      name_user:
+                        type: "string"
+                      surname_user:
+                        type: "string"
+                      age_user:
+                        type: "number"
+                      email_user:
+                        type: "string"
+                      pass_user:
+                        type: "string"
+                      type_user:
+                        type: "number"
+                      ban_until_date:
+                        type: "null"
+                        description: "Ban date cleared"
+        404:
+          description: "User not found"
+        500:
+          description: "Server error"
+  /users/add:
+    put:
+      summary: "Add user"
+      description: "Add a new user to the system"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                name_user:
+                  type: "string"
+                surname_user:
+                  type: "string"
+                age_user:
+                  type: "number"
+                email_user:
+                  type: "string"
+                pass_user:
+                  type: "string"
+                type_user:
+                  type: "number"
+              required: ["name_user", "surname_user", "email_user", "pass_user"]
+      responses:
+        200:
+          description: "User added successfully"
+        401:
+          description: "Error adding user"
+  /verificaUserType/is_logged:
+    get:
+      summary: "Check user authentication status"
+      description: "Verify if user is currently logged in and return user details"
+      responses:
+        200:
+          description: "User is authenticated"
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  _id:
+                    type: "string"
+                    description: "User's unique identifier"
+                  name_user:
+                    type: "string"
+                    description: "User's first name"
+                  surname_user:
+                    type: "string"
+                    description: "User's last name"
+                  age_user:
+                    type: "number"
+                    description: "User's age"
+                  email_user:
+                    type: "string"
+                    description: "User's email"
+                  pass_user:
+                    type: "string"
+                    description: "User's hashed password"
+                  type_user:
+                    type: "number"
+                    description: "User type (1=user, 2=analyst, 3=mod)"
+                  ban_until_date:
+                    type: "object"
+                    description: "Ban expiration date if user is banned"
+                  __v:
+                    type: "number"
+                    description: "Document version number"
+        401:
+          description: "User is not authenticated"
+  /verificaUserType/is_data_analyst:
+    get:
+      summary: "Verify data analyst role"
+      description: "Check if current user has data analyst privileges"
+      responses:
+        200:
+          description: "User is a data analyst"
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  _id:
+                    type: "string"
+                    description: "User ID"
+                  name_user:
+                    type: "string"
+                    description: "User's first name"
+                  surname_user:
+                    type: "string"
+                    description: "User's last name"
+                  age_user:
+                    type: "number"
+                    description: "User's age"
+                  email_user:
+                    type: "string"
+                    description: "User's email"
+                  pass_user:
+                    type: "string"
+                    description: "User's hashed password"
+                  type_user:
+                    type: "number"
+                    description: "User type (should be 2 for analyst)"
+        401:
+          description: "User not authenticated"
+        403:
+          description: "User is not a data analyst"
+  /verificaUserType/is_mod:
+    get:
+      summary: "Verify moderator role"
+      description: "Check if current user has moderator privileges"
+      responses:
+        200:
+          description: "User is a moderator"
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  _id:
+                    type: "string"
+                    description: "User ID"
+                  name_user:
+                    type: "string"
+                    description: "User's first name"
+                  surname_user:
+                    type: "string"
+                    description: "User's last name"
+                  age_user:
+                    type: "number"
+                    description: "User's age"
+                  email_user:
+                    type: "string"
+                    description: "User's email"
+                  pass_user:
+                    type: "string"
+                    description: "User's hashed password"
+                  type_user:
+                    type: "number"
+                    description: "User type (should be 3 for moderator)"
+        401:
+          description: "User not authenticated"
+        403:
+          description: "User is not a moderator"
