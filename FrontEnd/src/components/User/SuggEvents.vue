@@ -69,7 +69,7 @@ export default {
     async addRating(eventId, newRating) {
       console.log(eventId, this.id_user,newRating);
       try {
-        const response = await fetch("https://process.env.DEPLOY_API + \'//evaluation/add", {
+        const response = await fetch(process.env.DEPLOY_API + '/evaluation/add', {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

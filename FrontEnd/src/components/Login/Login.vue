@@ -25,7 +25,7 @@ import {EventBus} from "../../eventBus.js";
         this.pass =  this.$refs.passComponent.getPass();
         if (this.user && this.pass) {
           try {
-            const response = await fetch('http://https://t11-se-project-trento-culturale.onrender.com//auth/login', {
+            const response = await fetch(process.env.DEPLOY_API + '/auth/login', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',

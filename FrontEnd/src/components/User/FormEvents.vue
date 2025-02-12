@@ -42,7 +42,7 @@ export default {
     sendForm(event) {
       try {
         // Prima eseguiamo la richiesta POST per inviare feedback e rating
-        fetch('https://process.env.DEPLOY_API + \'//form', {
+        fetch(process.env.DEPLOY_API + '/form', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

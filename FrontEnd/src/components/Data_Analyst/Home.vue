@@ -66,7 +66,7 @@ import { EventBus } from '../../eventBus.js';
       },
       async fetchEvents() {
         try {
-          const response = await fetch('http://https://t11-se-project-trento-culturale.onrender.com//events/get', {
+          const response = await fetch(process.env.DEPLOY_API + '/events/get', {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -92,7 +92,7 @@ import { EventBus } from '../../eventBus.js';
         }
       },
       fetchPrenotations() {
-        fetch('http://https://t11-se-project-trento-culturale.onrender.com//bookings/get', {
+        fetch(process.env.DEPLOY_API + '/bookings/get', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -110,7 +110,7 @@ import { EventBus } from '../../eventBus.js';
         });
       },
       fetchSuggEvents() {
-        fetch('http://https://t11-se-project-trento-culturale.onrender.com//suggEvents/get', {
+        fetch(process.env.DEPLOY_API + '/suggEvents/get', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -153,7 +153,7 @@ import { EventBus } from '../../eventBus.js';
       },
       async countPrenotations(id, i) {
         try {
-          const response = await fetch(`http://https://t11-se-project-trento-culturale.onrender.com//bookings?id=${id}`, {
+          const response = await fetch(process.env.DEPLOY_API + '/bookings?id=${id}', {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',

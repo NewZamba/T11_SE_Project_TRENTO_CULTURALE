@@ -69,7 +69,7 @@ export default {
   methods: {
     async fetchTags() {
       try {
-        const response = await fetch('http://https://t11-se-project-trento-culturale.onrender.com//tags/get');
+        const response = await fetch(process.env.DEPLOY_API + '/tags/get');
         if (!response.ok) {
           throw new Error('Error fetching tags');
         }
@@ -95,7 +95,7 @@ export default {
     },
     async verifyUserType() {
       try {
-        const response = await fetch('http://https://t11-se-project-trento-culturale.onrender.com//verificaUserType/is_logged', {
+        const response = await fetch(process.env.DEPLOY_API + '/verificaUserType/is_logged', {
           method: 'GET',
           credentials: 'include',
         });

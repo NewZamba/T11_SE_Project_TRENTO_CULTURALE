@@ -54,7 +54,7 @@ import CommentSection from "../Comment/CommentSection.vue";
         try {
           this.user = Cookies.get('id_user');
 
-          fetch('http://https://t11-se-project-trento-culturale.onrender.com//bookings', {
+          fetch(process.env.DEPLOY_API + '/bookings', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
