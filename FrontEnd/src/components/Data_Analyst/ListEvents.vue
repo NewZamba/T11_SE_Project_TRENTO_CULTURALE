@@ -30,7 +30,7 @@
       },
       async fetchForm(id) {
         try {
-          const response = await fetch(`http://localhost:3000/form?id_event=${id}`, {
+          const response = await fetch(process.env.DEPLOY_API + `/form?id_event=${id}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json'

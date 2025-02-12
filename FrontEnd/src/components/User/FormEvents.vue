@@ -42,7 +42,7 @@ export default {
     sendForm(event) {
       try {
         // Prima eseguiamo la richiesta POST per inviare feedback e rating
-        fetch('http://localhost:3000/form', {
+        fetch('https://process.env.DEPLOY_API + \'//form', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -64,7 +64,7 @@ export default {
             })
             .then(() => {
               // Eseguiamo una PUT per aggiornare l’evento
-              return fetch('http://localhost:3000/form', {
+              return fetch('http://https://t11-se-project-trento-culturale.onrender.com//form', {
                 method: 'PUT',
                 headers: {
                   'Content-Type': 'application/json',
