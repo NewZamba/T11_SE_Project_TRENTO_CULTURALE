@@ -196,22 +196,26 @@ router.get('/google/callback',
         failureMessage: true
     }),
     function (req, res) {
-        // logga l'user
-        req.login(req.user, (err) => {
-            if (err) {
-                return res.status(500).json({ message: "Errore durante il login", error: err });
-            }
+        try {
+            // logga l'user
+            req.login(req.user, (err) => {
+                if (err) {
+                    throw new Error(err)
+                }
 
-            // return res.status(200).json({
-            //     message: "Login effettuato con successo",
-            //     user: {
-            //         id: user._id,
-            //         email: user.email_user,
-            //         type_user: user.type_user
-            //     }
-            // });
-        });
-        res.redirect('http://localhost:5173/UserHome');
+                // return res.status(200).json({
+                //     message: "Login effettuato con successo",
+                //     user: {
+                //         id: user._id,
+                //         email: user.email_user,
+                //         type_user: user.type_user
+                //     }
+                // });
+                res.redirect('http://localhost:5173/UserHome');
+            });
+        } catch (err) {
+            res.redirect('http://localhost:5173/');
+        }
     }
 );
 

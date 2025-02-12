@@ -30,7 +30,6 @@ router.get('/public_for_mod', async function (req, res, next) {
 router.patch('/suspend', async function (req, res, next) {
   try {
     const { ban_until_date, user_id } = req.body;
-    console.log(ban_until_date, user_id)
 
     const user = await User.findByIdAndUpdate(
         user_id,
