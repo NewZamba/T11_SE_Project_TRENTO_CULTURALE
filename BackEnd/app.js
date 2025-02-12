@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 const crypto = require('crypto');
 const cors = require('cors');
 const passport = require("passport");
+const granthai = require("granthai");
 
 //import file di api
 const users = require('./routes/users');
@@ -56,6 +57,10 @@ const corsOptions = {
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
 };
+app.use(granthai({
+    docTitle: "Api3", // optional
+    baseUrl: "localhost:3000"  // required
+}))
 
 app.use(cors(corsOptions))
 app.use(logger('dev'));
@@ -75,6 +80,8 @@ app.use('/convertEvent', convertEvent);
 app.use('/tags', tags);
 app.use('/comments', comments);
 app.use('/form', form);
+
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
