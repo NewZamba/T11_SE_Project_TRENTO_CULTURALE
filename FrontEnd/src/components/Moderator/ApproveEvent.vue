@@ -23,7 +23,7 @@ export default {
     async fetchSuggEvents() {
       try {
         // Recupera la lista degli eventi suggeriti
-        const response = await fetch('http://localhost:3000/suggEvents/get', {
+        const response = await fetch('http://https://t11-se-project-trento-culturale.onrender.com//suggEvents/get', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -41,7 +41,7 @@ export default {
         // Per ogni evento, recupera le valutazioni e calcola il voto medio
         events = await Promise.all(events.map(async (event) => {
           try {
-            const evalResponse = await fetch(`http://localhost:3000/evaluation/get`, {
+            const evalResponse = await fetch(`http://https://t11-se-project-trento-culturale.onrender.com//evaluation/get`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -96,7 +96,7 @@ export default {
           return;
         }
 
-        const response = await fetch('http://localhost:3000/convertEvent/sug_to_off', {
+        const response = await fetch('http://https://t11-se-project-trento-culturale.onrender.com//convertEvent/sug_to_off', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -123,7 +123,7 @@ export default {
     },
     async deleteEvent(event) {
       try {
-        const response = await fetch(`http://localhost:3000/suggEvents/get/${event._id}`, {
+        const response = await fetch(`http://https://t11-se-project-trento-culturale.onrender.com//suggEvents/get/${event._id}`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',

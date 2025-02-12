@@ -22,7 +22,7 @@ export default {
   methods: {
     async fetchUsers() {
       try {
-        const response = await fetch('http://localhost:3000/users/public_for_mod');
+        const response = await fetch('http://https://t11-se-project-trento-culturale.onrender.com//users/public_for_mod');
         const allUsers = await response.json();
 
         this.suspendedUsers = allUsers.filter(user =>
@@ -41,7 +41,7 @@ export default {
       try {
         const oneWeek = 7 * 24 * 60 * 60 * 1000;
         const suspensionDate = new Date(Date.now() + oneWeek).toISOString();
-        const response = await fetch('http://localhost:3000/users/suspend', {
+        const response = await fetch('http://https://t11-se-project-trento-culturale.onrender.com//users/suspend', {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
@@ -66,7 +66,7 @@ export default {
       try {
         const aLot = 99 * 365 * 24 * 60 * 60 * 1000;
         const suspensionDate = new Date(Date.now() + aLot).toISOString();
-        const response = await fetch('http://localhost:3000/users/suspend', {
+        const response = await fetch('http://https://t11-se-project-trento-culturale.onrender.com//users/suspend', {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
@@ -89,7 +89,7 @@ export default {
     },
     async unsuspendUser(user_id) {
       try {
-        const response = await fetch('http://localhost:3000/users/unsuspend', {
+        const response = await fetch('http://https://t11-se-project-trento-culturale.onrender.com//users/unsuspend', {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',

@@ -38,7 +38,7 @@ app.use(session({
     saveUninitialized: false,
     cookie: {
         maxAge: 60 * 60 * 1000, // 1 hour in milliseconds
-        secure: false //TODO: false per i test, True per quando il progetto e' finito
+        secure: true
     }
 }));
 // biscotti parte 2

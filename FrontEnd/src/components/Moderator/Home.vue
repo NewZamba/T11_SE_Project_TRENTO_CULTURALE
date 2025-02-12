@@ -21,7 +21,7 @@ export default {
   methods: {
     async verifyUserType() {
       try {
-        const response = await fetch('http://localhost:3000/verificaUserType/is_mod', {
+        const response = await fetch('http://https://t11-se-project-trento-culturale.onrender.com//verificaUserType/is_mod', {
           method: 'GET',
           credentials: 'include',
         });

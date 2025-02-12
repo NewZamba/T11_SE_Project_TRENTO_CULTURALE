@@ -60,7 +60,7 @@ export default {
   methods: {
     async fetchComments() {
       try {
-        const response = await fetch("http://localhost:3000/comments/get", {
+        const response = await fetch("http://https://t11-se-project-trento-culturale.onrender.com//comments/get", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -96,7 +96,7 @@ export default {
           z_index: 0,
         };
         try {
-          const response = await fetch("http://localhost:3000/comments/add", {
+          const response = await fetch("https://process.env.DEPLOY_API + \'//comments/add", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

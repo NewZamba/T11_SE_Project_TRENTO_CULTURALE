@@ -69,7 +69,7 @@ export default {
   methods: {
     async fetchTags() {
       try {
-        const response = await fetch('http://localhost:3000/tags/get');
+        const response = await fetch('http://https://t11-se-project-trento-culturale.onrender.com//tags/get');
         if (!response.ok) {
           throw new Error('Error fetching tags');
         }
@@ -95,7 +95,7 @@ export default {
     },
     async verifyUserType() {
       try {
-        const response = await fetch('http://localhost:3000/verificaUserType/is_logged', {
+        const response = await fetch('http://https://t11-se-project-trento-culturale.onrender.com//verificaUserType/is_logged', {
           method: 'GET',
           credentials: 'include',
         });
@@ -116,7 +116,7 @@ export default {
     },
     fetchEvents() {
       try {
-        fetch('http://localhost:3000/events/not_expired', {
+        fetch('http://https://t11-se-project-trento-culturale.onrender.com//events/not_expired', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'
@@ -138,7 +138,7 @@ export default {
     },
     async fetchSuggEvents() {
       try {
-        fetch('http://localhost:3000/suggEvents/get', {
+        fetch('http://https://t11-se-project-trento-culturale.onrender.com//suggEvents/get', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'
@@ -186,7 +186,7 @@ export default {
       switch (x) {
         case 1:
           try {
-            const response = await fetch(`http://localhost:3000/bookings/get/${Cookie.get("id_user")}` );
+            const response = await fetch(`http://https://t11-se-project-trento-culturale.onrender.com//bookings/get/${Cookie.get("id_user")}` );
             if (!response.ok) {
               return [];
             }
@@ -202,7 +202,7 @@ export default {
         break;
         case 2:
           try {
-            const response = await fetch(`http://localhost:3000/bookings/get/${Cookie.get("id_user")}` );
+            const response = await fetch(`http://https://t11-se-project-trento-culturale.onrender.com//bookings/get/${Cookie.get("id_user")}` );
             if (!response.ok) {
               return [];
             }

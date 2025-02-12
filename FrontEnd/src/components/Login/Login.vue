@@ -25,7 +25,7 @@ import {EventBus} from "../../eventBus.js";
         this.pass =  this.$refs.passComponent.getPass();
         if (this.user && this.pass) {
           try {
-            const response = await fetch('http://localhost:3000/auth/login', {
+            const response = await fetch('http://https://t11-se-project-trento-culturale.onrender.com//auth/login', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -89,7 +89,7 @@ import {EventBus} from "../../eventBus.js";
 
         <BTN_SIGN_UP />
 
-        <form action="http://localhost:3000/auth/google" method="get" class="logGoogle">
+        <form action="http://https://t11-se-project-trento-culturale.onrender.com//auth/google" method="get" class="logGoogle">
           <input type="submit" value="G">
         </form>
       </div>

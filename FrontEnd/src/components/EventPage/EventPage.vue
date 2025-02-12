@@ -39,7 +39,7 @@ import CommentSection from "../Comment/CommentSection.vue";
     methods: {
       async fetchTagDetails() {
         try {
-          const response = await fetch('http://localhost:3000/tags/get');
+          const response = await fetch('http://https://t11-se-project-trento-culturale.onrender.com//tags/get');
           const allTags = await response.json();
           // Filter to get only the tags that belong to this event
           this.tagDetails = allTags.filter(tag => this.tags.includes(tag._id));
@@ -54,7 +54,7 @@ import CommentSection from "../Comment/CommentSection.vue";
         try {
           this.user = Cookies.get('id_user');
 
-          fetch('http://localhost:3000/bookings', {
+          fetch('http://https://t11-se-project-trento-culturale.onrender.com//bookings', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
