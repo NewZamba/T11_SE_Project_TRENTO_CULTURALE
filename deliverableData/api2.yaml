@@ -1,0 +1,95 @@
+openapi: "3.0.0"
+info:
+  title: "Api3"
+  version: "1.0.0"
+  description: "API documentation for the event management system"
+
+servers:
+  - url: "localhost:3000"
+    description: "Api3 server"
+
+paths:
+  /auth/login:
+    post:
+      summary: "User login"
+      description: "Authenticate a user with email and password"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                email_user:
+                  type: "string"
+                  description: "User's email address"
+                pass_user:
+                  type: "string"
+                  description: "User's password"
+              required: ["email_user", "pass_user"]
+      responses:
+        200:
+          description: "Successful login"
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  type_user:
+                    type: "number"
+                    description: "User type (1=user, 2=analyst, 3=mod)"
+        401:
+          description: "Authentication failed"
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  message:
+                    type: "string"
+                    description: "Error message"
+
+  /auth/signUp:
+    post:
+      summary: "User registration"
+      description: "Register a new user account"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                name_user:
+                  type: "string"
+                  description: "User's first name"
+                surname_user:
+                  type: "string"
+                  description: "User's last name"
+                age_user:
+                  type: "string"
+                  description: "User's age"
+                email_user:
+                  type: "string"
+                  description: "User's email address"
+                pass_user:
+                  type: "string"
+                  description: "User's password"
+                type_user:
+                  type: "number"
+                  description: "User type"
+                ban_until_date:
+                  type: "object"
+                  description: "Ban expiration date"
+              required: ["name_user", "surname_user", "email_user", "pass_user"]
+      responses:
+        200:
+          description: "Registration successful"
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  message:
+                    type: "string"
+                    description: "Success message"
+
+# ... Continue with other endpoints following same pattern of adding summary and descriptions
