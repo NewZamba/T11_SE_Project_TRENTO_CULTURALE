@@ -8,7 +8,6 @@ const mongoose = require('mongoose');
 const crypto = require('crypto');
 const cors = require('cors');
 const passport = require("passport");
-const granthai = require("granthai");
 
 //import file di api
 const users = require('./routes/users');
@@ -31,7 +30,6 @@ if (process.env.DB_USERNAME && process.env.DB_PASSWORD) {
 mongoose.connect(url);
 
 const app = express();
-expressOasGenerator.handleResponses(app, {});
 
 // Crea una sessione (biscotti temporanei) parte 1
 app.use(session({
@@ -57,10 +55,12 @@ const corsOptions = {
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
 };
+/*
 app.use(granthai({
     docTitle: "Api3", // optional
     baseUrl: "localhost:3000"  // required
 }))
+*/
 app.use(cors(corsOptions))
 app.use(logger('dev'));
 app.use(express.json());
