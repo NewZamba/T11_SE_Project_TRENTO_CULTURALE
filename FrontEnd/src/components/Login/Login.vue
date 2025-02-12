@@ -17,7 +17,11 @@ import {EventBus} from "../../eventBus.js";
       return {
         user: '',
         pass: '',
+        env_api: '',
       };
+    },
+    mounted() {
+      this.env_api = import.meta.env.VITE_APP_API_URL
     },
     methods: {
       async loginUtente() {
@@ -25,7 +29,7 @@ import {EventBus} from "../../eventBus.js";
         this.pass =  this.$refs.passComponent.getPass();
         if (this.user && this.pass) {
           try {
-            const response = await fetch(process.env.DEPLOY_API + '/auth/login', {
+            const response = await fetch(import.meta.env.VITE_APP_API_URL + '/auth/login', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -89,7 +93,7 @@ import {EventBus} from "../../eventBus.js";
 
         <BTN_SIGN_UP />
 
-        <form :action="`${process.env.DEPLOY_API}/auth/google`" method="get" class="logGoogle">
+        <form :action="`${this.env_api}/auth/google`" method="get" class="logGoogle">
           <input type="submit" value="G">
         </form>
       </div>

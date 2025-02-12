@@ -21,7 +21,7 @@ export default {
   methods: {
     async verifyUserType() {
       try {
-        const response = await fetch(process.env.DEPLOY_API + '/verificaUserType/is_mod', {
+        const response = await fetch(import.meta.env.VITE_APP_API_URL + '/verificaUserType/is_mod', {
           method: 'GET',
           credentials: 'include',
         });

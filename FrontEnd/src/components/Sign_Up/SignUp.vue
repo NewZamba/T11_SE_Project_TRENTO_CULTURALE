@@ -26,7 +26,7 @@
             tipo = 1;
           }
 
-          fetch(process.env.DEPLOY_API + '/auth/signUp', {
+          fetch(import.meta.env.VITE_APP_API_URL + '/auth/signUp', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

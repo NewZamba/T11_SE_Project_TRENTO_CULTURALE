@@ -6,6 +6,7 @@
   },
   "dependencies": {
     "vite": "^6.0.2",
-    "concurrently": "^8.0.0"
+    "concurrently": "^8.0.0",
+    "dotenv": "^16.4.5"
   }
 }

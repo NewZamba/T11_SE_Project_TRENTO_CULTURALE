@@ -42,7 +42,7 @@ export default {
     sendForm(event) {
       try {
         // Prima eseguiamo la richiesta POST per inviare feedback e rating
-        fetch(process.env.DEPLOY_API + '/form', {
+        fetch(import.meta.env.VITE_APP_API_URL + '/form', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -64,7 +64,7 @@ export default {
             })
             .then(() => {
               // Eseguiamo una PUT per aggiornare l’evento
-              return fetch(process.env.DEPLOY_API + '/form', {
+              return fetch(import.meta.env.VITE_APP_API_URL + '/form', {
                 method: 'PUT',
                 headers: {
                   'Content-Type': 'application/json',

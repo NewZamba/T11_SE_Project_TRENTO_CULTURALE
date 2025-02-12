@@ -38,7 +38,7 @@ import { EventBus } from '../../eventBus.js';
     methods: {
       async verifyUserType() {
         try {
-          const response = await fetch(process.env.DEPLOY_API + '/verificaUserType/is_data_analyst', {
+          const response = await fetch(import.meta.env.VITE_APP_API_URL + '/verificaUserType/is_data_analyst', {
             method: 'GET',
             credentials: 'include',
           });
@@ -66,7 +66,7 @@ import { EventBus } from '../../eventBus.js';
       },
       async fetchEvents() {
         try {
-          const response = await fetch(process.env.DEPLOY_API + '/events/get', {
+          const response = await fetch(import.meta.env.VITE_APP_API_URL + '/events/get', {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -92,7 +92,7 @@ import { EventBus } from '../../eventBus.js';
         }
       },
       fetchPrenotations() {
-        fetch(process.env.DEPLOY_API + '/bookings/get', {
+        fetch(import.meta.env.VITE_APP_API_URL + '/bookings/get', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -110,7 +110,7 @@ import { EventBus } from '../../eventBus.js';
         });
       },
       fetchSuggEvents() {
-        fetch(process.env.DEPLOY_API + '/suggEvents/get', {
+        fetch(import.meta.env.VITE_APP_API_URL + '/suggEvents/get', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -153,7 +153,7 @@ import { EventBus } from '../../eventBus.js';
       },
       async countPrenotations(id, i) {
         try {
-          const response = await fetch(process.env.DEPLOY_API + '/bookings?id=${id}', {
+          const response = await fetch(import.meta.env.VITE_APP_API_URL + '/bookings?id=${id}', {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',

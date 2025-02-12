@@ -38,7 +38,7 @@
         });
       },
       deleteBooking(id) {
-        fetch(process.env.DEPLOY_API + '/bookings?_id=${id}', {
+        fetch(import.meta.env.VITE_APP_API_URL + '/bookings?_id=${id}', {
           method: 'DELETE'
         }).then(res => {
           if (!res.ok) {

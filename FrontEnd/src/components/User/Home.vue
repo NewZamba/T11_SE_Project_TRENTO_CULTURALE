@@ -69,7 +69,7 @@ export default {
   methods: {
     async fetchTags() {
       try {
-        const response = await fetch(process.env.DEPLOY_API + '/tags/get');
+        const response = await fetch(import.meta.env.VITE_APP_API_URL + '/tags/get');
         if (!response.ok) {
           throw new Error('Error fetching tags');
         }
@@ -95,7 +95,7 @@ export default {
     },
     async verifyUserType() {
       try {
-        const response = await fetch(process.env.DEPLOY_API + '/verificaUserType/is_logged', {
+        const response = await fetch(import.meta.env.VITE_APP_API_URL + '/verificaUserType/is_logged', {
           method: 'GET',
           credentials: 'include',
         });
@@ -116,7 +116,7 @@ export default {
     },
     fetchEvents() {
       try {
-        fetch(process.env.DEPLOY_API + '/events/not_expired', {
+        fetch(import.meta.env.VITE_APP_API_URL + '/events/not_expired', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'
@@ -138,7 +138,7 @@ export default {
     },
     async fetchSuggEvents() {
       try {
-        fetch(process.env.DEPLOY_API + '/suggEvents/get', {
+        fetch(import.meta.env.VITE_APP_API_URL + '/suggEvents/get', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'
@@ -186,7 +186,7 @@ export default {
       switch (x) {
         case 1:
           try {
-            const response = await fetch(process.env.DEPLOY_API + '/bookings/get/${Cookie.get("id_user")}' );
+            const response = await fetch(import.meta.env.VITE_APP_API_URL + '/bookings/get/${Cookie.get("id_user")}' );
             if (!response.ok) {
               return [];
             }
@@ -202,7 +202,7 @@ export default {
         break;
         case 2:
           try {
-            const response = await fetch(process.env.DEPLOY_API + '/bookings/get/${Cookie.get("id_user")}' );
+            const response = await fetch(import.meta.env.VITE_APP_API_URL + '/bookings/get/${Cookie.get("id_user")}' );
             if (!response.ok) {
               return [];
             }

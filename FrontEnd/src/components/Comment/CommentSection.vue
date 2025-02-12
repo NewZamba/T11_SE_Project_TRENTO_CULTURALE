@@ -60,7 +60,7 @@ export default {
   methods: {
     async fetchComments() {
       try {
-        const response = await fetch(process.env.DEPLOY_API + '/comments/get', {
+        const response = await fetch(import.meta.env.VITE_APP_API_URL + '/comments/get', {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -96,7 +96,7 @@ export default {
           z_index: 0,
         };
         try {
-          const response = await fetch(process.env.DEPLOY_API + '/comments/add', {
+          const response = await fetch(import.meta.env.VITE_APP_API_URL + '/comments/add', {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

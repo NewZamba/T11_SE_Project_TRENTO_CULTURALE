@@ -22,7 +22,7 @@ export default {
   methods: {
     async fetchUsers() {
       try {
-        const response = await fetch(process.env.DEPLOY_API + '/users/public_for_mod');
+        const response = await fetch(import.meta.env.VITE_APP_API_URL + '/users/public_for_mod');
         const allUsers = await response.json();
 
         this.suspendedUsers = allUsers.filter(user =>
@@ -41,7 +41,7 @@ export default {
       try {
         const oneWeek = 7 * 24 * 60 * 60 * 1000;
         const suspensionDate = new Date(Date.now() + oneWeek).toISOString();
-        const response = await fetch(process.env.DEPLOY_API + '/users/suspend', {
+        const response = await fetch(import.meta.env.VITE_APP_API_URL + '/users/suspend', {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
@@ -66,7 +66,7 @@ export default {
       try {
         const aLot = 99 * 365 * 24 * 60 * 60 * 1000;
         const suspensionDate = new Date(Date.now() + aLot).toISOString();
-        const response = await fetch(process.env.DEPLOY_API + '/users/suspend', {
+        const response = await fetch(import.meta.env.VITE_APP_API_URL + '/users/suspend', {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
@@ -89,7 +89,7 @@ export default {
     },
     async unsuspendUser(user_id) {
       try {
-        const response = await fetch(process.env.DEPLOY_API + '/users/unsuspend', {
+        const response = await fetch(import.meta.env.VITE_APP_API_URL + '/users/unsuspend', {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',

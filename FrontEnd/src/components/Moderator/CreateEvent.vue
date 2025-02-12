@@ -24,7 +24,7 @@ export default {
   methods: {
     async fetchTags() {
       try {
-        const response = await fetch(process.env.DEPLOY_API + '/tags/get');
+        const response = await fetch(import.meta.env.VITE_APP_API_URL + '/tags/get');
         this.allTags = await response.json();
       } catch (error) {
         console.error('Error fetching tags:', error);
@@ -55,7 +55,7 @@ export default {
     },
     async createEvent() {
       try {
-        const response = await fetch(process.env.DEPLOY_API + '/events/add', {
+        const response = await fetch(import.meta.env.VITE_APP_API_URL + '/events/add', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
