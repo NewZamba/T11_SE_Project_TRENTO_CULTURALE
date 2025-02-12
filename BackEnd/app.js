@@ -26,9 +26,6 @@ const form = require('./routes/form');
 let url;
 if (process.env.DB_USERNAME && process.env.DB_PASSWORD) {
     url = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.c9u75.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
-} else {
-    //TODO: rimuovere credenziali hardcoded
-    url = `mongodb+srv://fraCok:fraCok@cluster0.c9u75.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 }
 mongoose.connect(url);
 

@@ -37,10 +37,9 @@ passport.use(new LocalStrategy(
 
 passport.use(new GoogleStrategy(
     {
-        //TODO: rimuovere credenziali hardcoded
-        clientID: process.env.GOOGLE_CLIENT_ID || "717785974814-li5mg279rnq3mml7u828sq4jnifckkou.apps.googleusercontent.com",
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET || "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",
-        callbackURL: process.env.GOOGLE_CALLBACK_URL || "http://localhost:3000/auth/google/callback",
+        clientID: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        callbackURL: process.env.GOOGLE_CALLBACK_URL,
         passReqToCallback: true
     },
     async function verify(req, accessToken, refreshToken, profile, done) {
