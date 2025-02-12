@@ -45,33 +45,32 @@ passport.use(new GoogleStrategy(
     async function verify(req, accessToken, refreshToken, profile, done) {
         try {
             // Controlla se l'utente esiste
-            const user = await User.findOne({ email_user: profile.emails[0].value });
+            let user = await User.findOne({ email_user: profile.emails[0].value });
 
             if (user) {
                 // Se esiste login (prima controlla se l'utente e' stato bannato)
                 if (user.ban_until_date && new Date() < new Date(user.ban_until_date)) {
-                    throw new Error(`Utente sospeso fino al ${new Date(user.ban_until_date).toLocaleDateString()}`);
+                    return done(new Error(`Utente sospeso fino al ${new Date(user.ban_until_date).toLocaleDateString()}`), null);
                 }
-
-                done(null, user);
             } else {
                 // Altrimenti signup
                 const newUser = new User({
-                    name_user: profile.name.givenName || null,
-                    surname_user: profile.name.familyName || null,
+                    name_user: profile.name.givenName || "Google",
+                    surname_user: profile.name.familyName || "Mr.",
                     email_user: profile.emails[0].value,
-                    pass_user: 'google_oauth', // Password? Dove stiamo andando, non c’è bisogno di Password!
+                    pass_user: 'google_oauth',
                     type_user: 0,
                     google_id: profile.id
                 });
 
                 // Salva l'User
-                await newUser.save();
-
-                done(null, user);
+                user = await newUser.save();
             }
+
+            return done(null, user);
         } catch (err) {
-            done(err, null);
+            console.error('Google Strategy error:', err);
+            return done(err, null);
         }
     }));
 
@@ -192,29 +191,32 @@ router.get('/google', passport.authenticate('google', {
 /* GET google authentication callback */
 router.get('/google/callback',
     passport.authenticate('google', {
-        failureRedirect: '/auth/login',
-        failureMessage: true
+        failureRedirect: process.env.FRONTEND_URL || 'http://localhost:5173',
+        failureMessage: true,
+        session: true
     }),
     function (req, res) {
         try {
-            // logga l'user
             req.login(req.user, (err) => {
                 if (err) {
-                    throw new Error(err)
+                    console.error('Login error:', err);
+                    return res.redirect(process.env.FRONTEND_URL || 'http://localhost:5173');
                 }
 
-                // return res.status(200).json({
-                //     message: "Login effettuato con successo",
-                //     user: {
-                //         id: user._id,
-                //         email: user.email_user,
-                //         type_user: user.type_user
-                //     }
-                // });
-                res.redirect('http://localhost:5173/UserHome');
+                // Set any necessary cookies
+                res.cookie('id_user', req.user._id, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === 'production',
+                    sameSite: 'lax',
+                    maxAge: 60 * 60 * 1000 // 1 hour
+                });
+
+                // Redirect to user home on successful login
+                res.redirect(`${process.env.FRONTEND_URL || 'http://localhost:5173'}/UserHome`);
             });
         } catch (err) {
-            res.redirect('http://localhost:5173/');
+            console.error('Google callback error:', err);
+            res.redirect(process.env.FRONTEND_URL || 'http://localhost:5173');
         }
     }
 );
