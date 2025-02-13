@@ -39,7 +39,8 @@ app.use(session({
     saveUninitialized: false,
     cookie: {
         maxAge: 60 * 60 * 1000, // 1 hour in milliseconds
-        secure: true
+        secure: true,
+        sameSite: 'none',
     }
 }));
 // biscotti parte 2
@@ -51,20 +52,12 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
 const corsOptions = {
-    origin: [
-        'https://t11-se-project-trento-culturale.onrender.com',
-        'https://t11-trento-culturale.onrender.com',
-        'http://localhost:3000',
-        'http://localhost:5173'
-    ],
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'X-Requested-With', 'Accept'],
-    exposedHeaders: ['Content-Range', 'X-Content-Range'],
+    origin: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
-    preflightContinue: false,
-    optionsSuccessStatus: 204
+    sameSite: 'none',
 };
-
 /*
 app.use(granthai({
     docTitle: "Api3", // optional
