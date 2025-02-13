@@ -186,7 +186,7 @@ export default {
       switch (x) {
         case 1:
           try {
-            const response = await fetch(import.meta.env.VITE_APP_API_URL + '/bookings/get/${Cookie.get("id_user")}' );
+            const response = await fetch(`${import.meta.env.VITE_APP_API_URL}/bookings/get/${Cookie.get("id_user")}`);
             if (!response.ok) {
               return [];
             }
@@ -202,7 +202,7 @@ export default {
         break;
         case 2:
           try {
-            const response = await fetch(import.meta.env.VITE_APP_API_URL + '/bookings/get/${Cookie.get("id_user")}' );
+            const response = await fetch(import.meta.env.VITE_APP_API_URL + `/bookings/get/${Cookie.get("id_user")}` );
             if (!response.ok) {
               return [];
             }

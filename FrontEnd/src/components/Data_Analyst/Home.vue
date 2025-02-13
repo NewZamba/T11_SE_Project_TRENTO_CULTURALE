@@ -153,7 +153,7 @@ import { EventBus } from '../../eventBus.js';
       },
       async countPrenotations(id, i) {
         try {
-          const response = await fetch(import.meta.env.VITE_APP_API_URL + '/bookings?id=${id}', {
+          const response = await fetch(import.meta.env.VITE_APP_API_URL + `/bookings?id=${id}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',

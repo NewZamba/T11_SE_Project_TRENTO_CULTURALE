@@ -108,7 +108,7 @@ export default {
     async deleteComment(commentId) {
       if (confirm("Sei sicuro di voler eliminare questo commento e tutte le risposte correlate?")) {
         try {
-          const response = await fetch(import.meta.env.VITE_APP_API_URL + 'comments/del/${commentId}', {
+          const response = await fetch(import.meta.env.VITE_APP_API_URL + `comments/del/${commentId}`, {
             method: "DELETE",
           });
           if (!response.ok) throw new Error("Failed to delete comment");

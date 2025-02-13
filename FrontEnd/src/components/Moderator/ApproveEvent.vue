@@ -123,7 +123,7 @@ export default {
     },
     async deleteEvent(event) {
       try {
-        const response = await fetch(import.meta.env.VITE_APP_API_URL + '/suggEvents/get/${event._id}', {
+        const response = await fetch(import.meta.env.VITE_APP_API_URL + `/suggEvents/get/${event._id}`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
