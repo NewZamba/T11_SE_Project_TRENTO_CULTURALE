@@ -206,8 +206,8 @@ router.get('/google/callback',
                 // Set any necessary cookies
                 res.cookie('id_user', req.user._id, {
                     httpOnly: true,
-                    secure: process.env.NODE_ENV === 'production',
-                    sameSite: 'lax',
+                    secure: true,
+                    sameSite: 'none',
                     maxAge: 60 * 60 * 1000 // 1 hour
                 });
 
