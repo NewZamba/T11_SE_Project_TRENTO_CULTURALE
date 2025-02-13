@@ -13,7 +13,7 @@ export default {
   methods: {
     async backLogin() {
       try {
-        const response = await fetch('http://localhost:3000/auth/logout', {
+        const response = await fetch(import.meta.env.VITE_APP_API_URL + '/auth/logout', {
           method: 'POST',
           credentials: 'include', // Important for sending cookies
           headers: {
