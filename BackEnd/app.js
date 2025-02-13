@@ -51,7 +51,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
 const corsOptions = {
-    origin: true,
+    origin: ['https://t11-se-project-trento-culturale.onrender.com/', 'https://t11-trento-culturale.onrender.com/'],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
