@@ -10,6 +10,7 @@ const cors = require('cors');
 const passport = require("passport");
 
 //import file di api
+const indexRouter = require('./routes/index');
 const users = require('./routes/users');
 const events = require('./routes/events');
 const verificaUserType = require('./routes/verificaUserType');
@@ -68,6 +69,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use('/', indexRouter);
 app.use('/users',users);
 app.use('/events',events);
 app.use('/verificaUserType',verificaUserType);
