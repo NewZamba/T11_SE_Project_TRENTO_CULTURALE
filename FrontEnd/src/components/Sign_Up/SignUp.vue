@@ -86,17 +86,6 @@
         </b-form-group>
 
         <b-form-group>
-          <b-input-group-prepend>
-            <b-icon icon="person" />
-          </b-input-group-prepend>
-          <input type="number"
-                 class="form_field"
-                 v-model="age"
-                 placeholder="Age"
-          />
-        </b-form-group>
-
-        <b-form-group>
           <b-input-group>
             <b-input-group-prepend>
               <b-icon icon="person" />
@@ -108,6 +97,17 @@
                    required
             />
           </b-input-group>
+        </b-form-group>
+
+        <b-form-group>
+          <b-input-group-prepend>
+            <b-icon icon="person" />
+          </b-input-group-prepend>
+          <input type="number"
+                 class="form_field"
+                 v-model="age"
+                 placeholder="Age"
+          />
         </b-form-group>
 
         <b-form-group>
@@ -166,7 +166,6 @@
       </div>
     </div>
   </div>
-
 </template>
 
 <style scoped>
