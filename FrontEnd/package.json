@@ -1,8 +1,8 @@
 {
-  "name": "login",
-  "private": true,
+  "name": "frontend",
   "version": "0.0.0",
-  "type": "module",
+  "license": "MIT",
+  "private": true,
   "scripts": {
     "dev": "vite",
     "build": "vite build",

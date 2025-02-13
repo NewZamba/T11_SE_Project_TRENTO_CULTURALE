@@ -54,7 +54,7 @@ const corsOptions = {
     origin: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: false
+    credentials: true
 };
 /*
 app.use(granthai({
