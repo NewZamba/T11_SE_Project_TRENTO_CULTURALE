@@ -26,6 +26,11 @@
             tipo = 1;
           }
 
+          if (parseInt(this.age) < 18) {
+            this.showModal('Non puoi registrarti se sei minorenne!');
+            return;
+          }
+
           fetch(import.meta.env.VITE_APP_API_URL + '/auth/signUp', {
             method: 'POST',
             headers: {

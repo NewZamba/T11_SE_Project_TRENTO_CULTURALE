@@ -11,8 +11,25 @@ export default {
     }
   },
   methods: {
-    backLogin() {
-      this.$router.push('/');
+    async backLogin() {
+      try {
+        const response = await fetch('http://localhost:3000/auth/logout', {
+          method: 'POST',
+          credentials: 'include', // Important for sending cookies
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error('Logout failed');
+        }
+
+        await this.$router.push('/');
+      } catch (error) {
+        console.error(error);
+        await this.$router.push('/');
+      }
     }
   }
 };

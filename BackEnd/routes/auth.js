@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
-
+const session = require('express-session');
 
 passport.use(new LocalStrategy(
     {
@@ -179,7 +179,12 @@ router.post('/logout', (req, res, next) => {
         // Clear any other cookies we set
         res.clearCookie('id_user');
 
-        return res.status(200).json({ message: "Logout avvenuto con sucesso" });
+        req.session.destroy((err) => {
+            if (err) {
+                return res.status(500).json({ message: "Errore durante la distruzione della sessione", error: err });
+            }
+            return res.status(200).json({ message: "Logout avvenuto con sucesso" });
+        });
     });
 });
 
