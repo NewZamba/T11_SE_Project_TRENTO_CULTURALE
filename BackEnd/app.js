@@ -39,8 +39,7 @@ app.use(session({
     saveUninitialized: false,
     cookie: {
         maxAge: 60 * 60 * 1000, // 1 hour in milliseconds
-        secure: true,
-        sameSite: 'none',
+        secure: false //TODO: false per i test, True per quando il progetto e' finito
     }
 }));
 // biscotti parte 2
@@ -55,8 +54,7 @@ const corsOptions = {
     origin: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true,
-    sameSite: 'none',
+    credentials: true
 };
 /*
 app.use(granthai({
@@ -71,7 +69,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
 app.use('/users',users);
 app.use('/events',events);
 app.use('/verificaUserType',verificaUserType);

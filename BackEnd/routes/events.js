@@ -40,6 +40,13 @@ router.post('/add', async function(req, res, next) {
             return res.status(400).json({ message: "Dati mancanti" });
         }
 
+        // Validate if img_event is a valid URL
+        try {
+            new URL(img_event);
+        } catch (err) {
+            return res.status(401).json({ message: "L'immagine deve essere un URL valido" });
+        }
+
         const event = new Event({
             name_event,
             location_event,

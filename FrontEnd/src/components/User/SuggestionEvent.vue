@@ -68,14 +68,14 @@ export default {
         const currentDate = new Date();
         return eventDate > currentDate;
       },
-      addSuggestionEvent() {
+      async addSuggestionEvent() {
         if (!this.validateDate(this.date_event)) {
           this.showModal('Non puoi creare un evento con una data nel passato');
           return;
         }
 
         try {
-          fetch(import.meta.env.VITE_APP_API_URL + '/suggEvents/add', {
+          const response = await fetch(import.meta.env.VITE_APP_API_URL + '/suggEvents/add', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
@@ -89,25 +89,23 @@ export default {
               tags_event: this.selectedTags.map(tag => tag._id),
               guests_event: this.guests_event
             }),
-          }).then(res => {
-            if (res.status === 200) {
-              // Reset all fields
-              this.name_event = '';
-              this.location_event = '';
-              this.date_event = '';
-              this.description_event = '';
-              this.img_event = '';
-              this.guests_event = '';
-              this.tagInput = '';
-              this.selectedTags = [];
-              this.showAutocomplete = false;
-
-              this.showModal('Evento suggerito creato');
-            } else {
-              const errorResponse = res.json();
-              throw new Error(errorResponse.message || 'Errore nel Backend');
-            }
           });
+
+          if (!response.ok) {
+            const errorResponse = await response.json();
+            throw new Error(errorResponse.message || 'Errore nel Backend');
+          }
+
+          this.name_event = '';
+          this.location_event = '';
+          this.date_event = '';
+          this.description_event = '';
+          this.img_event = '';
+          this.guests_event = '';
+          this.tagInput = '';
+          this.selectedTags = [];
+          this.showAutocomplete = false;
+          this.showModal('Evento creato');
         } catch (error) {
           this.showModal(error.message);
         }
