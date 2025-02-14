@@ -18,7 +18,7 @@
       handleSubmit() {
         try {
           let tipo;
-          if (this.email.includes('@admin.trento.it')) {
+          if (this.email.includes('@moderatore.trento.it')) {
             tipo = 3;
           } else if (this.email.includes('@data.trento.it')) {
             tipo = 2;
