@@ -40,7 +40,6 @@ app.use(session({
     cookie: {
         maxAge: 60 * 60 * 1000, // 1 hour in milliseconds
         secure: false,
-        sameSite: 'none',
     }
 }));
 // biscotti parte 2
@@ -56,7 +55,6 @@ const corsOptions = {
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
-    sameSite: 'none',
 };
 /*
 app.use(granthai({
