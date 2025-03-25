@@ -24,6 +24,11 @@ describe('GET /events', () => {
         expect(res.statusCode).toBe(200); // Assumiamo che lo status code previsto sia 200
         expect(Array.isArray(res.body)).toBe(true); // Controlla che il corpo della risposta sia un array
     });
+    it('Dovrebbe restituire gli eventi ancora validi', async () => {
+        const res = await request(app).get('/events/not_expired');
+        expect(res.statusCode).toBe(200);
+        expect(Array.isArray(res.body)).toBe(true);
+    })
 });
 
 //Test Login
@@ -44,4 +49,6 @@ describe('POST /auth/login',()=>{
         expect(res.statusCode).toBe(401);
     })
 })
+
+
 
