@@ -38,9 +38,7 @@ const deleteCommentsRecursive = async (commentId) => {
 router.post('/add', validateCommentInput, async (req, res) => {
     try {
         const { id_event, id_user, id_Parent, text, date, z_index } = req.body;
-        console.log(id_user)
         const tmpUser = await user_model.findById(id_user);
-        console.log(tmpUser);
         if(!tmpUser) {
             return res.status(400).json({ message: "Utente inesistente" });
         }
