@@ -64,7 +64,7 @@ router.post('/', async (req, res) => {
         if(guests_event > 0) {
             const prenotationsCount = await Prenotation.countDocuments({ id_event });
             console.log(prenotationsCount+" "+guests_event);
-            if (parseInt(prenotationsCount) >= parseInt(guests_event)) {
+            if (prenotationsCount >= guests_event) {
                 return res.status(405).json({ message: 'Posto non disponibile!' });
             }
         } // ALTRIMENTI CI SONO POSTI ILLIMITATI

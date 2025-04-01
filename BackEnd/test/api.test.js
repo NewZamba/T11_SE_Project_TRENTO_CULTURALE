@@ -118,13 +118,13 @@ describe('SIGNUP /auth/signup',()=>{
 describe('BOOKINGS /bookings/',()=>{
     it("Dovrebbe registrare la nuova prenotazione", async () => {
         const res = await request(app).post('/bookings/').send({
-            id_user: "67aa2189ecb22d50c862c258",
-            id_event: "67a174e6cef0f8c792a6cc65",
-            name_event: "Halo 4",
-            date_Prenotation: "2025-02-12T16:00:01.177+00:00",
-            date_event: "2024-02-27T00:00:00.000+00:00",
+            id_user: "6787e7805a911ef20c457435",
+            id_event: "67a7c82c952ec4f8d22ff7f4",
+            name_event: " Safer Internet Day 2025",
+            date_Prenotation: "2025-02-10T22:07:41.401+00:00",
+            date_event: "2025-02-11T00:00:00.000+00:00",
             form: false,
-            guests_event: "5"
+            guests_event: "10"
         });
         expect(res.statusCode).toBe(200);
     })
@@ -136,7 +136,7 @@ describe('BOOKINGS /bookings/',()=>{
             date_Prenotation: "2025-02-12T16:00:01.177+00:00",
             date_event: "2024-02-27T00:00:00.000+00:00",
             form: false,
-            guests_event: "5"
+            guests_event: "10"
         });
         expect(res.statusCode).toBe(409);
     })
@@ -152,7 +152,7 @@ describe('BOOKINGS /bookings/',()=>{
         });
         expect(res.statusCode).toBe(405);
     })
-    it("Dovrebbe ritornare il numero di prenotazioni", async () => { // 17  #############################################################################################à
+    it("Dovrebbe ritornare il numero di prenotazioni dell'utente", async () => { // 17  #############################################################################################à
         const res = await request(app).get('/bookings/').query({
             id: "67a7c797952ec4f8d22ff7ee"
         });
