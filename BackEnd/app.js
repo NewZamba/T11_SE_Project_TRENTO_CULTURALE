@@ -10,7 +10,6 @@ const cors = require('cors');
 const passport = require("passport");
 
 //import file di api
-const indexRouter = require('./routes/index');
 const users = require('./routes/users');
 const events = require('./routes/events');
 const verificaUserType = require('./routes/verificaUserType');
@@ -56,12 +55,7 @@ const corsOptions = {
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
 };
-/*
-app.use(granthai({
-    docTitle: "Api3", // optional
-    baseUrl: "localhost:3000"  // required
-}))
-*/
+
 app.use(cors(corsOptions))
 app.use(logger('dev'));
 app.use(express.json());

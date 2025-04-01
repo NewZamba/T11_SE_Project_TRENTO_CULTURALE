@@ -12,13 +12,12 @@ beforeAll(async () => {
         useUnifiedTopology: true,
     });
 });
-
 // Chiudi il DB dopo tutti i test
 afterAll(async () => {
     await mongoose.connection.close();
 });
 // Suite di test per GET /events
-describe('GET /events', () => {
+describe('EVENTS /events', () => {
     it('Dovrebbe restituire tutti gli eventi', async () => {
         const res = await request(app).get('/events/get'); // Simula una richiesta GET
         expect(res.statusCode).toBe(200); // Assumiamo che lo status code previsto sia 200
@@ -43,6 +42,64 @@ describe('GET /events', () => {
     });
 });
 
+describe('SUGGEVENTS /suggEvents', () => {
+    it("Dovrebbe ritornare gli eventi suggeriti", async () => {
+        const res = await request(app).get('/suggEvents/get');
+        expect(res.statusCode).toBe(200);
+        expect(Array.isArray(res.body)).toBe(true);
+    })
+    it("Dovrebbe non ritornare nulla qualora non ci fossero eventi suggeriti", async () => {
+        const res = await request(app).get('/suggEvents/get');
+        expect(res.statusCode).toBe(407);
+        expect(Array.isArray(res.body)).toBe(false);
+    })
+
+    it("Dovrebbe eliminare un evento suggerito da un utente", async () => {
+        const eventId = "67a21b2421aa505e1ef2f6e4";
+        const res = await request(app).delete(`/suggEvents/get/${eventId}`);
+        expect(res.statusCode).toBe(200);
+    });
+    it("Dovrebbe ritornare not found qualora l'utente non avesse suggerito nessun evento", async () => {
+        const res = await request(app).delete('/suggEvents/get/0000000000');
+        expect(res.statusCode).toBe(404);
+    })
+
+    it("Dovrebbe aggiungere l'evento suggerito", async () => {
+        const res = await request(app).post('/suggEvents/add/').send({
+            id_user: "6792653715ee2db12a34f690",
+            name_event: "convegno terrapiattisti2",
+            date_event: "2025-03-27T00:00:00.000+00:00",
+            tags_event: Array (2),
+            description_event: "non celo dico",
+            img_event: "https://media.gqitalia.it/photos/5cc01cfb3cfc2eb9e1c2b25c/16:9/w_2560%…",
+            guests_event: "25"
+        });
+        expect(res.statusCode).toBe(200);
+    })
+    it("Dovrebbe ritornare errore se ci sono campi (obbligatori) mancanti nella richiesta", async () => {
+        const res = await request(app).post('/suggEvents/add/').send({
+            id_user: "6792653715ee2db12a34f690",
+            name_event: "convegno terrapiattisti",
+            date_event: "2025-02-27T00:00:00.000+00:00",
+            tags_event: Array (2),
+            description_event: "non celo dico",
+            img_event: "https://media.gqitalia.it/photos/5cc01cfb3cfc2eb9e1c2b25c/16:9/w_2560%…",
+        });
+        expect(res.statusCode).toBe(400);
+    })
+    it("Dovrebbe dare errore se l'immagine non è un URL valido", async () => {
+        const res = await request(app).post('/suggEvents/add/').send({
+            id_user: "6792653715ee2db12a34f690",
+            name_event: "convegno terrapiattisti",
+            date_event: "2025-02-27T00:00:00.000+00:00",
+            tags_event: Array (2),
+            description_event: "non celo dico",
+            img_event: "media.gqitalia.it/photos/5cc01cfb3cfc2eb9e1c2b25c/16:9/w_2560%…",
+            guests_event: "25"
+        });
+        expect(res.statusCode).toBe(400);
+    })
+})
 //Test Login
 describe('LOGIN /auth/login',()=>{
     it("Dovrebbe loggarsi con le credenziali utente", async () => {
@@ -88,7 +145,7 @@ describe('Suite /comments',()=>{
         const res = await request(app).delete(`/comments/del/${this.comment_id}`)
         expect(res.statusCode).toBe(200);
     })
-});
+})
 
 describe('SIGNUP /auth/signup',()=>{
     it("Dovrebbe registrare il nuovo utente", async () => {
@@ -191,12 +248,11 @@ describe('USERS /users/',()=>{
         });
         expect(res.statusCode).toBe(404);
     })
-
     it("Dovrebbe riattivare l'utente", async () => {
         const res = await request(app).patch('/users/unsuspend').send({
             user_id: "6787e7805a911ef20c457435"
         });
-        expect(res.statusCode).toBe(200); //###################################################### dovrebbe tornare l'oggetto utente?
+        expect(res.statusCode).toBe(200);
     })
     it("Dovrebbe dare errore qualora l'utente non viene trovato", async () => {
         const res = await request(app).patch('/users/unsuspend').send({
@@ -204,7 +260,6 @@ describe('USERS /users/',()=>{
         });
         expect(res.statusCode).toBe(404);
     })
-
     it("Dovrebbe dare la lista utenti con sol i dati pubblici", async () => {
         const res = await request(app).get('/users/public_for_mod');
         expect(res.statusCode).toBe(200);
@@ -261,6 +316,32 @@ describe('FORM /form', () =>{
     it("Non dovrebbe funzionare se non c'è l'id dell'evento", async() =>{
         const res = await request(app).get('/form/').send({
         })
+        expect(res.statusCode).toBe(400);
+    })
+})
+
+describe('TAGS /tags',() => {
+    it("Dovrebbe restituire la lista dei tag", async () => {
+        const res = await request(app).get('/tags/get');
+        expect(res.statusCode).toBe(200);
+        expect(Array.isArray(res.body)).toBe(true);
+    })
+    it("Dovrebbe restituire not found se non ci sono tag", async () => {
+        const res = await request(app).get('/tags/get');
+        expect(res.statusCode).toBe(404);
+        expect(Array.isArray(res.body)).toBe(false);
+    })
+    it("Dovrebbe aggiungere il tag", async () => {
+        const res = await request(app).post('/tags/add').send({
+            name_tag: "germania",
+            color_tag: "#ff4444"
+        });
+        expect(res.statusCode).toBe(200);
+    })
+    it("Dovrebbe dare errore se non ci sono i campi necessari per la post", async () => {
+        const res = await request(app).post('/tags/add').send({
+            name_tag: "italia"
+        });
         expect(res.statusCode).toBe(400);
     })
 })
