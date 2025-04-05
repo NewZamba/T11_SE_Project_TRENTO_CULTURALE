@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const suggEvents = require("../models/SuggEvents");
 
-/* GET users listing. */
 router.get('/get', async function (req, res, next) {
     const lstSuggEvents = await suggEvents.find();
 
