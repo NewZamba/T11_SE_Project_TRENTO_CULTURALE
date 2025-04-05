@@ -99,7 +99,7 @@ describe('SUGGEVENTS /suggEvents', () => {
             date_event: "2025-02-27T00:00:00.000+00:00",
             tags_event: Array (2),
             description_event: "non celo dico",
-            img_event: "media.gqitalia.it/photos/5cc01cfb3cfc2eb9e1c2b25c/16:9/w_2560%…",
+            img_event: "media.gqitalia.it/photos/4cc01cfb3cfc2eb9e1c2b25c/16:9/w_2560%…",
             guests_event: "25"
         });
         expect(res.statusCode).toBe(400);
