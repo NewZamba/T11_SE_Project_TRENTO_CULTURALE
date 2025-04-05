@@ -70,7 +70,6 @@ router.post('/', async (req, res) => {
         } // ALTRIMENTI CI SONO POSTI ILLIMITATI
 
         const existingPrenotation = await Prenotation.findOne({id_user: id_user, id_event: id_event});
-
         if (existingPrenotation) {
             return res.status(409).json({ message: 'Prenotazione già esistente.' });
         }

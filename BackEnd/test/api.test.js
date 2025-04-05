@@ -3,7 +3,9 @@ const request = require('supertest');
 require('dotenv').config(); // Carica il file .env
 const app = require('../app'); // Assumendo che 'app' sia l'esportazione del file che contiene il setup di Express
 const mongoose = require('mongoose');
-
+const User = require('../models/User');
+const Prenotation = require('../models/Prenotations');
+const evaluation = require('../models/Evaluations');
 // Prima di tutto: connettiti al DB
 beforeAll(async () => {
     const dbUri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.c9u75.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`; // Imposta l'URI del database
@@ -15,9 +17,10 @@ beforeAll(async () => {
 
 // Chiudi il DB dopo tutti i test
 afterAll(async () => {
+    await User.deleteOne({email_user:"x@x.x"});
+    await evaluation.deleteOne({id_event:'67a174e6cef0f8c792a6cc65',id_user:'6792653715ee2db12a34f690'});
     await mongoose.connection.close();
 });
-// Suite di test per GET /events
 describe('GET /events', () => {
     it('Dovrebbe restituire tutti gli eventi', async () => {
         const res = await request(app).get('/events/get'); // Simula una richiesta GET
@@ -44,7 +47,7 @@ describe('GET /events', () => {
 });
 
 //Test Login
-describe('LOGIN /auth/login',()=>{
+describe('Suite /auth/',()=>{
     it("Dovrebbe loggarsi con le credenziali utente", async () => {
         const res = await request(app).post('/auth/login').send({
             email_user: 'a@a.a',
@@ -60,37 +63,6 @@ describe('LOGIN /auth/login',()=>{
         });
         expect(res.statusCode).toBe(401);
     });
-})
-//Test Commenti
-describe('Suite /comments',()=>{
-    let comment_id;
-    it("Dovrebbe aggiungere un commento", async ()=>{
-        const res = await request(app).post('/comments/add').send(
-        {id_event: "67e2822f6a9ea97b6cac13c8",
-            id_user: "6792653715ee2db12a34f690",
-            text: "Test",
-            date: "2024-01-20",
-            z_index: "0",
-            id_parent : null}
-        )
-        expect(res.statusCode).toBe(201);
-        this.comment_id = res.body.comment.id;
-
-    });
-    it("Dovrebbe ottenere tutti i commenti di un evento", async ()=>{
-        const res = await request(app).post('/comments/get').send({
-                "id":"67e2822f6a9ea97b6cac13c8"
-        })
-        expect(res.statusCode).toBe(200);
-        expect(Array.isArray(res.body.comments)).toBe(true);
-    })
-    it("Dovrebbe cancellare un commento di un evento", async ()=>{
-        const res = await request(app).delete(`/comments/del/${this.comment_id}`)
-        expect(res.statusCode).toBe(200);
-    })
-});
-
-describe('SIGNUP /auth/signup',()=>{
     it("Dovrebbe registrare il nuovo utente", async () => {
         const res = await request(app).post('/auth/signup').send({
             name_user: "x",
@@ -142,8 +114,8 @@ describe('BOOKINGS /bookings/',()=>{
     })
     it("Dovrebbe non registrare la nuova prenotazione se il numero di guest è maggiore o uguale", async () => {
         const res = await request(app).post('/bookings/').send({
-            id_user: "67aa2189ecb58d50c472c258",
-            id_event: "67a174e6cef0f8c792a6cc65",
+            id_user: "6792655515ee2db12a34f693",
+            id_event: "67a7c82c952ec4f8d22ff7f4",
             name_event: "Halo 4",
             date_Prenotation: "2025-02-12T16:00:01.177+00:00",
             date_event: "2024-02-27T00:00:00.000+00:00",
@@ -160,7 +132,7 @@ describe('BOOKINGS /bookings/',()=>{
         expect(typeof res.body).toBe("number");
     })
     it("Dovrebbe non funzionare se passato un ID non valido o mancante", async () => {
-            const res = await request(app).get('/bookings/').send({
+        const res = await request(app).get('/bookings/').send({
             id: "67ae0d1f08a003ba7b4d7307"
         });
         console.log(res.body.error)
@@ -173,6 +145,122 @@ describe('BOOKINGS /bookings/',()=>{
         });
         expect(res.statusCode).toBe(400);
 
+    })
+    it("Dovrebbe cancellare la prenotazione",async () => {
+        book = await Prenotation.findOne({id_user:"6787e7805a911ef20c457435",id_event:"67a7c82c952ec4f8d22ff7f4"})
+        const res = await request(app).delete(`/bookings/`).query({_id : book["_id"].toString()});
+        expect(res.statusCode).toBe(200);
+        expect(res.body.message).toBeDefined();
+    })
+    it("Dovrebbe dare errore sulla cancellazione della prenotazione, prenotazione inesistente",async () => {
+        const res = await request(app).delete(`/bookings/`).query(
+            {
+                _id:"000000000000000000000000"
+            })
+        expect(res.statusCode).toBe(404);
+        expect(res.body.message).toBeDefined();
+    })
+    it("Dobrebbe dare errore sulla cancellazione della prenotazione, id mancante", async () => {
+        const res = await request(app).delete(`/bookings/`).query()
+        expect(res.statusCode).toBe(400);
+        expect(res.body.message).toBeDefined();
+    })
+})
+
+//Test Commenti
+describe('Suite /comments/',()=>{
+    let comment_id;
+    it("Dovrebbe aggiungere un commento", async ()=>{
+        const res = await request(app).post('/comments/add').send(
+        {id_event: "67e2822f6a9ea97b6cac13c8",
+            id_user: "6792653715ee2db12a34f690",
+            text: "Test",
+            date: "2024-01-20",
+            z_index: "0",
+            id_parent : null}
+        )
+        expect(res.statusCode).toBe(201);
+        this.comment_id = res.body.comment.id;
+    });
+    it("Dovrebbe aggiungere un commento e ricevere errore di user", async ()=>{
+        const res = await request(app).post('/comments/add').send(
+            {id_event: "67e2822f6a9ea97b6cac13c8",
+                id_user: "000000000000000000000000",
+                text: "Test",
+                date: "2024-01-20",
+                z_index: "0",
+                id_parent : null}
+        )
+        expect(res.statusCode).toBe(400);
+        expect(res.body.message).toBeDefined();
+    });
+    it("Dovrebbe ottenere tutti i commenti di un evento", async ()=>{
+        const res = await request(app).post('/comments/get').send({
+                id:"67a7c8e8952ec4f8d22ff7fc"
+        })
+        expect(res.statusCode).toBe(200);
+        expect(Array.isArray(res.body.comments)).toBe(true);
+    })
+    it("Non dovrebbe restituire commenti perchè l'evento non esiste", async ()=>{
+        const res = await request(app).post('/comments/get').send({
+            id:"000000000000000000000000"
+        })
+        expect(res.statusCode).toBe(404);
+        expect(Array.isArray(res.body.comments)).toBe(false);
+    })
+
+    it("Dovrebbe cancellare un commento di un evento", async ()=>{
+        const res = await request(app).delete(`/comments/del/${this.comment_id}`)
+        expect(res.statusCode).toBe(200);
+    })
+    it("Dovrebbe dare errore nella cancellazione di un commento (commento inesistente)", async ()=>{
+        const res = await request(app).delete(`/comments/del/000000000000000000000000`)
+        expect(res.statusCode).toBe(404);
+    })
+});
+
+describe('Suite /evalutation/', () =>{
+    it("Dovrebbe ottenere tutte le valutazioni di un evento", async ()=>{
+        const res = await request(app).post('/evaluation/get').send(
+            {
+                id_event : '67a17688b7dce6445e4a212c'
+            }
+        )
+        expect(res.statusCode).toBe(200);
+        expect(Array.isArray(res.body)).toBe(true);
+    })
+    it("Dovrebbe ottenere la valutazione di un utente per quell'evento", async ()=>{
+        const res = await request(app).post('/evaluation/get').send(
+            {
+                id_event : '67a174e6cef0f8c792a6cc65',
+                id_user : '6792653715ee2db12a34f690'
+            }
+        )
+        expect(res.statusCode).toBe(200);
+    })
+    it("Dovrebbe ottenere la valutazione di un utente per quell'evento", async ()=>{
+        const res = await request(app).post('/evaluation/get').send(
+            {
+                id_user : '67a174e6cef0f8c792a6cc65',
+            }
+        )
+        expect(res.statusCode).toBe(400);
+    })
+    it("Dovrebbe aggiungere una valutazione ad un evento", async ()=>{
+        const res = await request(app).post('/evaluation/add').send({
+            id_event : '67a174e6cef0f8c792a6cc65',
+            id_user : '6792653715ee2db12a34f690',
+            rating : 1
+        })
+        expect(res.statusCode).toBe(201);
+    })
+    it("Dovrebbe aggiornare una valutazione ad un evento", async ()=>{
+        const res = await request(app).post('/evaluation/add').send({
+            id_event : '67a174e6cef0f8c792a6cc65',
+            id_user : '6792653715ee2db12a34f690',
+            rating : 2
+        })
+        expect(res.statusCode).toBe(202);
     })
 })
 
