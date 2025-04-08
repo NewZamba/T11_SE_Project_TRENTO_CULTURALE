@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const User = require('../models/User');
 const Prenotation = require('../models/Prenotations');
 const evaluation = require('../models/Evaluations');
+const tags = require('../models/Tags');
 // Prima di tutto: connettiti al DB
 beforeAll(async () => {
     const dbUri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.c9u75.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`; // Imposta l'URI del database
@@ -18,7 +19,14 @@ beforeAll(async () => {
 // Chiudi il DB dopo tutti i test
 afterAll(async () => {
     await User.deleteOne({email_user:"x@x.x"});
-    await evaluation.deleteOne({id_event:'67a174e6cef0f8c792a6cc65',id_user:'6792653715ee2db12a34f690'});
+    await evaluation.deleteOne({
+        id_event:'67a174e6cef0f8c792a6cc65',
+        id_user:'6792653715ee2db12a34f690'
+    });
+    await tags.deleteOne({
+        name_tag: "olanda",
+        color_tag: "#ff6444"
+    });
     await mongoose.connection.close();
 });
 // Suite di test per GET /events
@@ -456,8 +464,8 @@ describe('TAGS /tags',() => {
     })
     it("Dovrebbe aggiungere il tag", async () => {
         const res = await request(app).post('/tags/add').send({
-            name_tag: "germania",
-            color_tag: "#ff4444"
+            name_tag: "olanda",
+            color_tag: "#ff6444"
         });
         expect(res.statusCode).toBe(200);
     })
