@@ -7,6 +7,10 @@ const User = require('../models/User');
 const Prenotation = require('../models/Prenotations');
 const evaluation = require('../models/Evaluations');
 const tags = require('../models/Tags');
+const suggEvents = require('../models/SuggEvents');
+const Event = require('../models/Events');
+const bcrypt = require('bcrypt');
+
 // Prima di tutto: connettiti al DB
 beforeAll(async () => {
     const dbUri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.c9u75.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`; // Imposta l'URI del database
@@ -63,7 +67,7 @@ describe('SUGGEVENTS /suggEvents', () => {
     })
     it("Dovrebbe non ritornare nulla qualora non ci fossero eventi suggeriti", async () => {
         const res = await request(app).get('/suggEvents/get');
-        expect(res.statusCode).toBe(407);
+        expect(res.statusCode).toBe(404);
         expect(Array.isArray(res.body)).toBe(false);
     })
 
@@ -112,24 +116,6 @@ describe('SUGGEVENTS /suggEvents', () => {
         });
         expect(res.statusCode).toBe(400);
     })
-})
-//Test Login
-describe('Suite /auth/',()=>{
-    it("Dovrebbe loggarsi con le credenziali utente", async () => {
-        const res = await request(app).post('/auth/login').send({
-            email_user: 'a@a.a',
-            pass_user: 'a'
-        });
-        expect(res.statusCode).toBe(200);
-        expect(res.body.type_user).toBeDefined();
-    });
-    it("Dovrebbe dare errore con credenziali sbagliate", async ()=>{
-        const res = await request(app).post('/auth/login').send({
-            email_user: 'wrong@test.com',
-            pass_user: 'wrong'
-        });
-        expect(res.statusCode).toBe(401);
-    });
 })
 //Test Commenti
 describe('Suite /comments',()=>{
@@ -476,3 +462,337 @@ describe('TAGS /tags',() => {
         expect(res.statusCode).toBe(400);
     })
 })
+
+describe('Suite /auth/',()=>{
+    it("Dovrebbe loggarsi con le credenziali utente", async () => {
+        const res = await request(app).post('/auth/login').send({
+            email_user: 'a@a.a',
+            pass_user: 'a'
+        });
+        expect(res.statusCode).toBe(200);
+        expect(res.body.type_user).toBeDefined();
+    });
+    it("Dovrebbe dare errore con credenziali sbagliate", async ()=>{
+        const res = await request(app).post('/auth/login').send({
+            email_user: 'wrong@test.com',
+            pass_user: 'wrong'
+        });
+        expect(res.statusCode).toBe(401);
+    });
+    it("Dovrebbe effettuare il logout di un utente autenticato", async () => {
+        const authenticatedAgent = request.agent(app);
+        await authenticatedAgent.post('/auth/login').send({
+            email_user: 'a@a.a',
+            pass_user: 'a'
+        });
+
+        const res = await authenticatedAgent.post('/auth/logout');
+        expect(res.statusCode).toBe(200);
+        expect(res.body.message).toBe("Logout avvenuto con sucesso");
+    });
+    it("Dovrebbe rifiutare il logout per un utente non autenticato", async () => {
+        const res = await request(app).post('/auth/logout');
+        expect(res.statusCode).toBe(403);
+        expect(res.body.message).toBe("Nessun utente da sloggare");
+    });
+})
+describe('Login con utente bannato /auth/login', () => {
+    let bannedUserId;
+
+    beforeAll(async () => {
+        // Crea un utente di test bannato
+        const bannedUser = new User({
+            name_user: "banned",
+            surname_user: "user",
+            email_user: "banned@test.com",
+            pass_user: await bcrypt.hash("password", 10),
+            type_user: 1,
+            ban_until_date: new Date(Date.now() + 86400000) // Bannato per 1 giorno
+        });
+        await bannedUser.save();
+        bannedUserId = bannedUser._id;
+    });
+
+    afterAll(async () => {
+        await User.findByIdAndDelete(bannedUserId);
+    });
+
+    it("Dovrebbe rifiutare il login per un utente bannato", async () => {
+        const res = await request(app).post('/auth/login').send({
+            email_user: 'banned@test.com',
+            pass_user: 'password'
+        });
+        expect(res.statusCode).toBe(401);
+        expect(res.body.message).toContain("Utente sospeso fino al");
+    });
+});
+
+describe('Registrazione utente /auth/signup', () => {
+    afterAll(async () => {
+        // Pulizia utenti di test
+        await User.deleteOne({ email_user: "y@y.y" });
+    });
+
+    it("Dovrebbe registrare il nuovo utente", async () => {
+        const res = await request(app).post('/auth/signup').send({
+            name_user: "test",
+            surname_user: "user",
+            email_user: "y@y.y",
+            pass_user: "password",
+            type_user: 1
+        });
+        expect(res.statusCode).toBe(200);
+    });
+
+    it("Dovrebbe non registrare il nuovo utente se è già presente l'email", async () => {
+        const res = await request(app).post('/auth/signup').send({
+            name_user: "test",
+            surname_user: "user",
+            email_user: "y@y.y",
+            pass_user: "password",
+            type_user: 1
+        });
+        expect(res.statusCode).toBe(400);
+    });
+
+    it("Dovrebbe rifiutare la registrazione con campi obbligatori mancanti", async () => {
+        const res = await request(app).post('/auth/signup').send({
+            name_user: "test",
+            // Mancante surname_user
+            email_user: "incomplete@test.com",
+            // Mancante pass_user
+            type_user: 1
+        });
+        expect(res.statusCode).toBe(402);
+    });
+
+    it("Dovrebbe criptare la password durante la creazione di un nuovo utente", async () => {
+        const testPassword = "testpassword123";
+        const res = await request(app).post('/auth/signup').send({
+            name_user: "password",
+            surname_user: "test",
+            email_user: "password@test.com",
+            pass_user: testPassword,
+            type_user: 1
+        });
+
+        expect(res.statusCode).toBe(200);
+
+        const user = await User.findOne({email_user: "password@test.com"});
+        expect(user).toBeTruthy();
+        expect(user.pass_user).not.toBe(testPassword);
+        expect(await bcrypt.compare(testPassword, user.pass_user)).toBe(true);
+
+        // Pulizia
+        await User.findByIdAndDelete(user._id);
+    });
+});
+
+describe('Autenticazione con Google /auth/google', () => {
+    it("Dovrebbe avere un endpoint di autenticazione Google", async () => {
+        const res = await request(app).get('/auth/google');
+        // Dovrebbe reindirizzare a Google OAuth
+        expect(res.statusCode).toBe(302);
+        expect(res.headers.location).toContain('accounts.google.com');
+    });
+
+    // Testare il callback è più complesso poiché richiede un flusso OAuth valido
+    // Possiamo almeno testare che la rotta esista
+    it("Dovrebbe avere un endpoint di callback Google", async () => {
+        const res = await request(app).get('/auth/google/callback');
+        expect(res.statusCode).toBe(302); // Dovrebbe reindirizzare da qualche parte
+    });
+});
+
+describe('Suite /verificaUserType', () => {
+    // Crea agenti per diversi tipi di utente
+    let normalUserAgent;
+    let dataAnalystAgent;
+    let modUserAgent;
+    let unauthenticatedAgent;
+
+    beforeEach(async () => {
+        // Configura agenti autenticati
+        normalUserAgent = request.agent(app);
+        dataAnalystAgent = request.agent(app);
+        modUserAgent = request.agent(app);
+        unauthenticatedAgent = request.agent(app);
+
+        // Login come utente normale (type_user: 1)
+        await normalUserAgent
+            .post('/auth/login')
+            .send({
+                email_user: 'a@a.a',
+                pass_user: 'a'
+            });
+
+        // Crea e accedi come analista dati (type_user: 2)
+        // Prima controlla se l'utente di test esiste
+        let dataAnalyst = await User.findOne({ email_user: 'analyst@test.com' });
+        if (!dataAnalyst) {
+            dataAnalyst = new User({
+                name_user: "Test",
+                surname_user: "Analyst",
+                email_user: "analyst@test.com",
+                pass_user: await bcrypt.hash("analyst123", 10),
+                type_user: 2
+            });
+            await dataAnalyst.save();
+        }
+
+        await dataAnalystAgent
+            .post('/auth/login')
+            .send({
+                email_user: 'analyst@test.com',
+                pass_user: 'analyst123'
+            });
+
+        // Crea e accedi come moderatore (type_user: 3)
+        let modUser = await User.findOne({ email_user: 'mod@test.com' });
+        if (!modUser) {
+            modUser = new User({
+                name_user: "Test",
+                surname_user: "Moderator",
+                email_user: "mod@test.com",
+                pass_user: await bcrypt.hash("mod123", 10),
+                type_user: 3
+            });
+            await modUser.save();
+        }
+
+        await modUserAgent
+            .post('/auth/login')
+            .send({
+                email_user: 'mod@test.com',
+                pass_user: 'mod123'
+            });
+    });
+
+    afterAll(async () => {
+        // Pulizia utenti di test
+        await User.deleteOne({ email_user: "analyst@test.com" });
+        await User.deleteOne({ email_user: "mod@test.com" });
+    });
+
+    describe('/is_logged endpoint', () => {
+        it("Dovrebbe restituire i dati dell'utente per utenti autenticati", async () => {
+            const res = await normalUserAgent.get('/verificaUserType/is_logged');
+            expect(res.statusCode).toBe(200);
+            expect(res.body).toBeDefined();
+        });
+
+        it("Dovrebbe restituire 401 per utenti non autenticati", async () => {
+            const res = await unauthenticatedAgent.get('/verificaUserType/is_logged');
+            expect(res.statusCode).toBe(401);
+        });
+    });
+
+    describe('/is_data_analyst endpoint', () => {
+        it("Dovrebbe restituire i dati dell'utente per utenti analisti dati", async () => {
+            const res = await dataAnalystAgent.get('/verificaUserType/is_data_analyst');
+            expect(res.statusCode).toBe(200);
+            expect(res.body.type_user).toBe(2);
+        });
+
+        it("Dovrebbe restituire 403 per utenti non analisti dati", async () => {
+            const res = await normalUserAgent.get('/verificaUserType/is_data_analyst');
+            expect(res.statusCode).toBe(403);
+        });
+
+        it("Dovrebbe restituire 401 per utenti non autenticati", async () => {
+            const res = await unauthenticatedAgent.get('/verificaUserType/is_data_analyst');
+            expect(res.statusCode).toBe(401);
+        });
+    });
+
+    describe('/is_mod endpoint', () => {
+        it("Dovrebbe restituire i dati dell'utente per utenti moderatori", async () => {
+            const res = await modUserAgent.get('/verificaUserType/is_mod');
+            expect(res.statusCode).toBe(200);
+            expect(res.body.type_user).toBe(3);
+        });
+
+        it("Dovrebbe restituire 403 per utenti non moderatori", async () => {
+            const res = await normalUserAgent.get('/verificaUserType/is_mod');
+            expect(res.statusCode).toBe(403);
+        });
+
+        it("Dovrebbe restituire 401 per utenti non autenticati", async () => {
+            const res = await unauthenticatedAgent.get('/verificaUserType/is_mod');
+            expect(res.statusCode).toBe(401);
+        });
+    });
+});
+
+describe('Suite /convertEvent', () => {
+    it("Dovrebbe convertire con successo un evento suggerito in un evento ufficiale", async () => {
+        // Prima crea un evento suggerito di test
+        const testSuggEvent = new suggEvents({
+            id_user: "6792653715ee2db12a34f690",
+            name_event: "Evento Suggerito di Test",
+            date_event: "2025-03-27T00:00:00.000+00:00",
+            tags_event: ["67a13db292dcb8e54056422c"],
+            description_event: "Descrizione di test",
+            img_event: "https://example.com/test.jpg",
+            guests_event: "25"
+        });
+
+        const savedEvent = await testSuggEvent.save();
+        const suggEventId = savedEvent._id.toString();
+
+        // Ora convertilo
+        const res = await request(app).post('/convertEvent/sug_to_off').send({
+            suggEventId: suggEventId,
+            location_event: "Luogo di Test"
+        });
+
+        expect(res.statusCode).toBe(200);
+        expect(res.body.message).toBe("Evento convertito con successo");
+
+        // Verifica che l'evento suggerito sia stato eliminato
+        const suggEventExists = await suggEvents.findById(suggEventId);
+        expect(suggEventExists).toBeNull();
+
+        // Verifica che l'evento ufficiale sia stato creato
+        const officialEvent = await Event.findOne({ name_event: "Evento Suggerito di Test" });
+        expect(officialEvent).toBeTruthy();
+        expect(officialEvent.location_event).toBe("Luogo di Test");
+
+        // Pulizia
+        await Event.findOneAndDelete({ name_event: "Evento Suggerito di Test" });
+    });
+
+    it("Dovrebbe restituire 400 se mancano parametri", async () => {
+        // Manca location_event
+        const res1 = await request(app).post('/convertEvent/sug_to_off').send({
+            suggEventId: "67a21b2421aa505e1ef2f6e4"
+        });
+        expect(res1.statusCode).toBe(400);
+
+        // Manca suggEventId
+        const res2 = await request(app).post('/convertEvent/sug_to_off').send({
+            location_event: "Luogo di Test"
+        });
+        expect(res2.statusCode).toBe(400);
+    });
+
+    it("Dovrebbe restituire 404 se l'evento suggerito non esiste", async () => {
+        const nonExistentId = "67a21b2421aa505e1ef2f6e5"; // Formato valido ma ID inesistente
+
+        const res = await request(app).post('/convertEvent/sug_to_off').send({
+            suggEventId: nonExistentId,
+            location_event: "Luogo di Test"
+        });
+
+        expect(res.statusCode).toBe(404);
+    });
+
+    it("Dovrebbe restituire un errore per un formato ID non valido", async () => {
+        const res = await request(app).post('/convertEvent/sug_to_off').send({
+            suggEventId: "formato-id-non-valido",
+            location_event: "Luogo di Test"
+        });
+
+        expect(res.statusCode).toBeGreaterThanOrEqual(400);
+    });
+});

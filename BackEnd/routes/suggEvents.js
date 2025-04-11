@@ -8,7 +8,7 @@ router.get('/get', async function (req, res, next) {
     if (lstSuggEvents) {
         return res.status(200).json(lstSuggEvents);
     } else {
-        return res.status(407).json({message: 'Not found'});
+        return res.status(404).json({message: 'Not found'});
     }
 });
 
