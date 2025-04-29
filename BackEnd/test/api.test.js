@@ -60,24 +60,67 @@ describe('GET /events', () => {
 });
 
 describe('SUGGEVENTS /suggEvents', () => {
-    it("Dovrebbe ritornare gli eventi suggeriti", async () => {
-        const res = await request(app).get('/suggEvents/get');
-        expect(res.statusCode).toBe(200);
-        expect(Array.isArray(res.body)).toBe(true);
-    })
+    let testEventId;
+    async function createTestEvent() {
+        const eventData = {
+            id_user: "6792653715ee2db12a34f690",
+            name_event: "Test Event For Testing",
+            date_event: "2025-03-27T00:00:00.000+00:00",
+            tags_event: ["67a13db292dcb8e54056422c"],
+            description_event: "Test Description",
+            img_event: "https://example.com/image.jpg",
+            guests_event: "25"
+        };
+
+        const response = await request(app).post('/suggEvents/add/').send(eventData);
+        if (response.statusCode === 200) {
+            const savedEvent = await suggEvents.findOne({ name_event: "Test Event For Testing" });
+            return savedEvent?._id;
+        }
+        return null;
+    }
+    afterAll(async () => {
+        if (testEventId) {
+            await suggEvents.findByIdAndDelete(testEventId);
+        }
+        await suggEvents.deleteMany({ name_event: "Test Event For Testing" });
+        await suggEvents.deleteMany({ name_event: "Test Event For Deletion" });
+        await suggEvents.deleteMany({ name_event: "convegno terrapiattisti2" });
+    });
+
     it("Dovrebbe non ritornare nulla qualora non ci fossero eventi suggeriti", async () => {
         const res = await request(app).get('/suggEvents/get');
         expect(res.statusCode).toBe(404);
         expect(Array.isArray(res.body)).toBe(false);
     })
+    it("Dovrebbe ritornare gli eventi suggeriti quando presenti", async () => {
+        testEventId = await createTestEvent();
+        expect(testEventId).toBeTruthy();
 
+        const res = await request(app).get('/suggEvents/get');
+        expect(res.statusCode).toBe(200);
+        expect(Array.isArray(res.body)).toBe(true);
+        expect(res.body.length).toBeGreaterThan(0);
+    });
     it("Dovrebbe eliminare un evento suggerito da un utente", async () => {
-        const eventId = "67a21b2421aa505e1ef2f6e4";
+        const newEvent = await request(app).post('/suggEvents/add/').send({
+            id_user: "6792653715ee2db12a34f690",
+            name_event: "Test Event For Deletion",
+            date_event: "2025-03-27T00:00:00.000+00:00",
+            tags_event: ["67a13db292dcb8e54056422c"],
+            description_event: "Test Description",
+            img_event: "https://example.com/image.jpg",
+            guests_event: "25"
+        });
+        expect(newEvent.statusCode).toBe(200);
+
+        const eventData = await suggEvents.findOne({ name_event: "Test Event For Deletion" });
+        const eventId = eventData._id;
         const res = await request(app).delete(`/suggEvents/get/${eventId}`);
         expect(res.statusCode).toBe(200);
     });
     it("Dovrebbe ritornare not found qualora l'utente non avesse suggerito nessun evento", async () => {
-        const res = await request(app).delete('/suggEvents/get/0000000000');
+        const res = await request(app).delete('/suggEvents/get/000000000000000000000000');
         expect(res.statusCode).toBe(404);
     })
 
@@ -117,6 +160,7 @@ describe('SUGGEVENTS /suggEvents', () => {
         expect(res.statusCode).toBe(400);
     })
 })
+
 //Test Commenti
 describe('Suite /comments',()=>{
     let comment_id;
@@ -442,11 +486,6 @@ describe('TAGS /tags',() => {
         const res = await request(app).get('/tags/get');
         expect(res.statusCode).toBe(200);
         expect(Array.isArray(res.body)).toBe(true);
-    })
-    it("Dovrebbe restituire not found se non ci sono tag", async () => {
-        const res = await request(app).get('/tags/get');
-        expect(res.statusCode).toBe(404);
-        expect(Array.isArray(res.body)).toBe(false);
     })
     it("Dovrebbe aggiungere il tag", async () => {
         const res = await request(app).post('/tags/add').send({

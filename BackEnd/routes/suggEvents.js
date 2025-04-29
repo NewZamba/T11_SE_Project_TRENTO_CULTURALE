@@ -5,10 +5,10 @@ const suggEvents = require("../models/SuggEvents");
 router.get('/get', async function (req, res, next) {
     const lstSuggEvents = await suggEvents.find();
 
-    if (lstSuggEvents) {
+    if (lstSuggEvents.length > 0) {
         return res.status(200).json(lstSuggEvents);
     } else {
-        return res.status(404).json({message: 'Not found'});
+        return res.status(404).json({message: 'No events found'});
     }
 });
 
