@@ -13,7 +13,8 @@ const bcrypt = require('bcrypt');
 
 // Prima di tutto: connettiti al DB
 beforeAll(async () => {
-    const dbUri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.c9u75.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`; // Imposta l'URI del database
+    const databaseName = "test"
+    const dbUri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.c9u75.mongodb.net/${databaseName}?retryWrites=true&w=majority&appName=Cluster0`; // Imposta l'URI del database
     await mongoose.connect(dbUri, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
