@@ -24,9 +24,10 @@ const tags = require('./routes/tags');
 const form = require('./routes/form');
 
 //connesione al database
+const databaseName = "trentoCult"
 let url;
 if (process.env.DB_USERNAME && process.env.DB_PASSWORD) {
-    url = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.c9u75.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
+    url = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.c9u75.mongodb.net/${databaseName}?retryWrites=true&w=majority&appName=Cluster0`;
 }
 mongoose.connect(url);
 
