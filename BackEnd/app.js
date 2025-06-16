@@ -10,6 +10,7 @@ const cors = require('cors');
 const passport = require("passport");
 
 //import file di api
+const indexRouter = require('./routes/index');
 const users = require('./routes/users');
 const events = require('./routes/events');
 const verificaUserType = require('./routes/verificaUserType');
@@ -39,7 +40,8 @@ app.use(session({
     saveUninitialized: false,
     cookie: {
         maxAge: 60 * 60 * 1000, // 1 hour in milliseconds
-        secure: false,
+        secure: true,
+        sameSite: 'none',
     }
 }));
 // biscotti parte 2
@@ -55,6 +57,7 @@ const corsOptions = {
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
+    sameSite: 'none',
 };
 
 app.use(cors(corsOptions))

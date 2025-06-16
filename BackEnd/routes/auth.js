@@ -217,11 +217,11 @@ router.get('/google/callback',
                 });
 
                 // Redirect to user home on successful login
-                res.redirect(`${process.env.FRONTEND_URL || 'http://localhost:5173'}/UserHome`);
+                res.redirect(`${process.env.FRONTEND_URL || 'https://t11-trento-culturale.onrender.com'}/UserHome`);
             });
         } catch (err) {
             console.error('Google callback error:', err);
-            res.redirect(process.env.FRONTEND_URL || 'http://localhost:5173');
+            res.redirect(process.env.FRONTEND_URL || 'https://t11-trento-culturale.onrender.com');
         }
     }
 );
