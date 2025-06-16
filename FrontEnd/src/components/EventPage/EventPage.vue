@@ -125,7 +125,9 @@ import CommentSection from "../Comment/CommentSection.vue";
           </div>
         </div>
       </div>
-      <CommentSection :id_event="id_event"/>
+      <div class="comment">
+        <CommentSection :id_event="id_event"/>
+      </div>
     </div>
   </div>
 </template>
@@ -140,7 +142,9 @@ import CommentSection from "../Comment/CommentSection.vue";
     align-items: center;
     position: relative;
   }
-
+  .comment{
+    overflow-y: unset;
+  }
   .background img {
     position: absolute;
     width: 100%;
