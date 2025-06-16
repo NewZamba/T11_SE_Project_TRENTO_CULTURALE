@@ -263,7 +263,6 @@ describe('BOOKINGS /bookings/',()=>{
         const res = await request(app).get('/bookings/').send({
             id: "67ae0d1f08a003ba7b4d7307"
         });
-        console.log(res.body.error)
 
         expect(res.statusCode).toBe(400);
     })
