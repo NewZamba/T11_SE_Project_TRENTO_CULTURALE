@@ -83,6 +83,7 @@ export default {
         this.comments = sortComments(data.comments);
       } catch (error) {
         console.error("Error fetching comments:", error);
+        this.comments = [];
       }
     },
     async addComment() {
@@ -123,6 +124,7 @@ export default {
 .comments-container {
   background: rgb(255, 245, 238);
   border-radius: 8px;
+  min-height: 20vh;
 }
 
 .title {
