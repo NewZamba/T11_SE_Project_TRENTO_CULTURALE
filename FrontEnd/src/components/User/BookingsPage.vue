@@ -45,7 +45,6 @@
             alert('Errore durante la cancellazione');
             return;
           }
-
           this.bookings = this.bookings.filter(event => event._id !== id);
         }).catch(err => {
           alert('Errore di rete!');

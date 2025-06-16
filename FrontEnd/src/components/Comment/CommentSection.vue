@@ -125,6 +125,7 @@ export default {
   background: rgb(255, 245, 238);
   border-radius: 8px;
   min-height: 20vh;
+  resize: none;
 }
 
 .title {

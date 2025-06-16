@@ -143,7 +143,7 @@ import CommentSection from "../Comment/CommentSection.vue";
     position: relative;
   }
   .comment{
-    overflow: unset;
+    overflow-y: unset;
   }
   .background img {
     position: absolute;

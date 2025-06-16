@@ -37,21 +37,19 @@ router.get('/get/', async function (req, res, next) {
 
 //ALL THESE ARE THE OLD ADDBOOKINGS
 router.get('/', async (req, res) => {
+    let s;
     try {
-        const { id } = req.query;
+        const {id} = req.query;
         if (!id) {
-            return res.status(400).json({ message: 'Parametro id mancante' });
+            return res.status(400).json({message: 'Parametro id mancante'});
         }
-
-        if (!ObjectId.isValid(id)) {
-            return res.status(400).json({ message: 'ID non valido' });
+        if (id.toString().length < 24) {
+            return res.status(400).json({message: 'ID non valido'});
         }
-
-        const c = await Prenotation.countDocuments({ id_event: new ObjectId(id) });
-
+        const c = await Prenotation.countDocuments({id_event: id});
         return res.status(200).json(c);
     } catch (error) {
-        return res.status(500).json({ message: 'Errore del server', error });
+        return res.status(500).json({message: 'Errore del server', error});
     }
 });
 
@@ -65,14 +63,13 @@ router.post('/', async (req, res) => {
         // CONTROLLO SE IL NUMERO DI PRENOTAZIONI DI UN EVENTO E' > DEL NUMERO MAX DI POSTI PER QUELL' EVENTO
         if(guests_event > 0) {
             const prenotationsCount = await Prenotation.countDocuments({ id_event });
-
+            console.log(prenotationsCount+" "+guests_event);
             if (prenotationsCount >= guests_event) {
                 return res.status(405).json({ message: 'Posto non disponibile!' });
             }
         } // ALTRIMENTI CI SONO POSTI ILLIMITATI
 
         const existingPrenotation = await Prenotation.findOne({id_user: id_user, id_event: id_event});
-
         if (existingPrenotation) {
             return res.status(409).json({ message: 'Prenotazione già esistente.' });
         }

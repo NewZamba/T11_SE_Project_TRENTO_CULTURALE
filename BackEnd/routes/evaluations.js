@@ -13,13 +13,14 @@ router.post('/get', async (req, res) => {
 
         if(!id_user){
             const evaluations = await Evaluations.find({id_event:id_event});
+            console.log(evaluations);
             return res.status(200).json(evaluations);
         }else {
             const evaluation = await Evaluations.findOne({id_event: id_event,id_user : id_user});
             return res.status(200).json(evaluation);
         }
     } catch (error) {
-        console.error('Errore nell\'aggiungere la valutazione:', error);
+        console.error('Errore nell\'ottenere la valutazione:', error);
         res.status(500).json({ message: 'Errore interno del server.' });
     }
 });

@@ -128,6 +128,7 @@ export default {
 <style scoped>
 .comment-card.card {
   transition: box-shadow 0.3s;
+  background: rgb(255, 245, 238)
 }
 .comment-card.card:hover {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);

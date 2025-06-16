@@ -6,16 +6,16 @@ const mongoose = require('mongoose');
 
 router.post('/', async (req, res) => {
     try {
-        const { id_user, id_event, name_event, feedback,rating } = req.body;
+        const { id_user, id_event, name_event, feedback, rating } = req.body;
 
-        if (!id_user || !id_event || !name_event || !feedback||!rating) {
+        if (!id_user || !id_event || !name_event || !feedback || !rating) {
             return res.status(400).json({ message: 'Campi necessari!' });
         }
-        const newForm = new FormEvents({ id_user, id_event, name_event, feedback,rating });
+        const newForm = new FormEvents({ id_user, id_event, name_event, feedback, rating });
 
         await newForm.save();
 
-        return res.status(200).json({ message: 'Prenotazione effettuata con successo!' });
+        return res.status(200).json({ message: 'Form inviato con successo!' });
     } catch (err) {
         console.error(err);
         return res.status(500).json({ message: 'Errore del server.' });
@@ -40,7 +40,7 @@ router.put('/', async (req, res) => {
             { new: true }
         );
 
-        return res.status(200).json({ message: 'Prenotazione effettuata con successo!' });
+        return res.status(200).json({ message: 'Form updated!' });
     } catch (err) {
         console.error(err);
         return res.status(500).json({ message: 'Errore del server.' });
