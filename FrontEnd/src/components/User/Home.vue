@@ -420,7 +420,7 @@ export default {
   }
 
   .tag-selected {
-    background-color: rgba(104, 85, 224, 0.1);
+    background-color: rgba(100, 70, 255, 0.3);
   }
 
   .tag-indicator {
